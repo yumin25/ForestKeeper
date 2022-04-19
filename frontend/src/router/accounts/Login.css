@@ -1,0 +1,12 @@
+.input {
+  width: 17rem;
+  height: 2rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.input:focus {
+  border-color: #37CD8D;
+  outline: none;
+}
