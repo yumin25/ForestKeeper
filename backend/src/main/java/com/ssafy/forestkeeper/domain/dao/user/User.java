@@ -3,8 +3,7 @@ package com.ssafy.forestkeeper.domain.dao.user;
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 @Builder
@@ -13,7 +12,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
-
     @Column(name = "user_name")
     private String name;
 
@@ -29,6 +27,13 @@ public class User extends BaseEntity {
     @Column(name = "user_is_deleted")
     private boolean delete;
 
+    public User(String name, String nickname, String email, String password){
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+    }
+
     // 닉네임 변경
     public void changeNickname(String nickname) {
         this.nickname = nickname;
@@ -43,5 +48,4 @@ public class User extends BaseEntity {
     public void changeDelete() {
         this.delete = true;
     }
-
 }
