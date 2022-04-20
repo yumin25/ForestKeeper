@@ -36,4 +36,23 @@ public class CommunityServiceImpl implements CommunityService {
 
     }
 
+    @Override
+    public CommunityResponseDTO getCommunity(String communityId) {
+
+        Community community = communityRepository.findByIdAndDelete(communityId, false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        community.increaseViews();
+
+        communityRepository.save(community);
+
+        return CommunityResponseDTO.builder()
+                .title(community.getTitle())
+                .description(community.getDescription())
+                .views(community.getViews())
+                .createTime(community.getCreateTime())
+                .build();
+
+    }
+
 }

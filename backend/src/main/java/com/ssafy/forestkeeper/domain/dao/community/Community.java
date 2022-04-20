@@ -51,7 +51,7 @@ public class Community extends BaseEntity {
     }
 
     // 조회수 증가
-    public void changeViews() {
+    public void increaseViews() {
         this.views += 1;
     }
 

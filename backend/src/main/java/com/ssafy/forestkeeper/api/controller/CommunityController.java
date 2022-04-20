@@ -45,4 +45,28 @@ public class CommunityController {
 
     }
 
+    @ApiOperation(value = "글 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "글 조회에 성공했습니다."),
+            @ApiResponse(code = 409, message = "글 조회에 실패했습니다.")
+    })
+    @GetMapping("/{communityId}")
+    public ResponseEntity<? extends BaseResponseDTO> get(
+            @ApiParam(value = "커뮤니티 ID", required = true) @PathVariable @NotBlank String communityId
+    ) {
+
+        CommunityResponseDTO communityResponseDTO = null;
+
+        try {
+            communityResponseDTO = communityService.getCommunity(communityId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 조회에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(CommunityResponseDTO.of("글 조회에 성공했습니다.", 200, communityResponseDTO));
+
+    }
+
 }
