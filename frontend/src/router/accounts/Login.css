@@ -4,6 +4,8 @@
   border-top: none;
   border-left: none;
   border-right: none;
+  border-color: #ACACAC;
+  border-width: 1px;
 }
 
 .input:focus {
