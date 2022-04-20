@@ -24,6 +24,7 @@ public class Community extends BaseEntity {
     private String title;
 
     @Column(name = "community_description")
+    @Lob
     private String description;
 
     @Column(name = "community_create_time")
