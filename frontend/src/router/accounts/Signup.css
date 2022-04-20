@@ -1,0 +1,19 @@
+.input {
+  width: 17rem;
+  height: 2rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-color: #acacac;
+  border-width: 1px;
+}
+
+.input:focus {
+  border-color: #37cd8d;
+  outline: none;
+}
+
+input::placeholder {
+  color: #acacac;
+  font-size: 0.2rem;
+}
