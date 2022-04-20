@@ -11,6 +11,7 @@ public interface CommunityService {
     // 글 목록 조회
 
     // 글 조회
+    CommunityResponseDTO getCommunity(String communityId);
 
     // 글 수정
 
