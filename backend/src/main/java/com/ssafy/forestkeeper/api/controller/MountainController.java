@@ -1,25 +1,19 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
 import com.ssafy.forestkeeper.application.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
