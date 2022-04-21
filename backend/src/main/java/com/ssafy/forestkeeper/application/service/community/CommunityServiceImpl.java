@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.application.service.community;
 
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
-import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -62,7 +62,7 @@ public class CommunityServiceImpl implements CommunityService {
                                         .createTime(community.getCreateTime())
                                         .comments(commentRepository.countByCommunityAndDelete(community, false))
                                         .build()
-            )
+                        )
         );
 
         return CommunityGetListWrapperResponseDTO.builder()
@@ -88,6 +88,30 @@ public class CommunityServiceImpl implements CommunityService {
                 .views(community.getViews())
                 .createTime(community.getCreateTime())
                 .build();
+
+    }
+
+    @Override
+    public void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO) {
+
+        Community community = communityRepository.findById(communityModifyPatchDTO.getCommunityId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        community.changeCommunity(communityModifyPatchDTO.getTitle(), communityModifyPatchDTO.getDescription());
+
+        communityRepository.save(community);
+
+    }
+
+    @Override
+    public void deleteCommunity(String communityId) {
+
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        community.changeDelete();
+
+        communityRepository.save(community);
 
     }
 
