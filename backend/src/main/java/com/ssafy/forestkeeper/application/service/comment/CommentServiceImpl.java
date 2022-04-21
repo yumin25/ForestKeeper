@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.comment;
 
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWrapperResponseDTO;
@@ -58,6 +59,18 @@ public class CommentServiceImpl implements CommentService {
         return CommentGetListWrapperResponseDTO.builder()
                 .commentGetListResponseDTOList(commentGetListResponseDTOList)
                 .build();
+
+    }
+
+    @Override
+    public void modifyComment(CommentModifyPatchDTO commentModifyPatchDTO) {
+
+        Comment comment = commentRepository.findByIdAndDelete(commentModifyPatchDTO.getCommentId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+
+        comment.changeComment(commentModifyPatchDTO.getDescription());
+
+        commentRepository.save(comment);
 
     }
 
