@@ -16,5 +16,6 @@ public interface CommentService {
     void modifyComment(CommentModifyPatchDTO commentModifyPatchDTO);
 
     // 댓글 삭제
+    void deleteComment(String commentId);
 
 }
