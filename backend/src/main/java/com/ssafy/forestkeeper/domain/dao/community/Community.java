@@ -24,6 +24,7 @@ public class Community extends BaseEntity {
     private String title;
 
     @Column(name = "community_description")
+    @Lob
     private String description;
 
     @Column(name = "community_create_time")
@@ -50,7 +51,7 @@ public class Community extends BaseEntity {
     }
 
     // 조회수 증가
-    public void changeViews() {
+    public void increaseViews() {
         this.views += 1;
     }
 
