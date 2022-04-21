@@ -2,8 +2,10 @@ package com.ssafy.forestkeeper.api.controller;
 
 import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
 import com.ssafy.forestkeeper.application.service.community.CommunityService;
+import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Api(value = "Community API", tags = {"Community"})
 @CrossOrigin
@@ -42,6 +45,29 @@ public class CommunityController {
         }
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성에 성공했습니다.", 201));
+
+    }
+
+    @ApiOperation(value = "글 목록 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "글 목록 조회에 성공했습니다."),
+            @ApiResponse(code = 409, message = "글 목록 조회에 실패했습니다.")
+    })
+    @GetMapping
+    public ResponseEntity<? extends BaseResponseDTO> getList(
+            @ApiParam(value = "커뮤니티 코드", required = true) @RequestParam @NotNull CommunityCode communityCode,
+            @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+    ) {
+
+        CommunityGetListWrapperResponseDTO communityGetListWrapperResponseDTO = null;
+
+        try {
+            communityGetListWrapperResponseDTO = communityService.getCommunityList(communityCode, page);
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 목록 조회에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 목록 조회에 성공했습니다.", 200, communityGetListWrapperResponseDTO));
 
     }
 
