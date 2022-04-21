@@ -53,7 +53,7 @@ public class CommentController {
     })
     @GetMapping("/community/{communityId}")
     public ResponseEntity<? extends BaseResponseDTO> getList(
-            @ApiParam(value = "글 Id", required = true) @PathVariable @NotBlank String communityId
+            @ApiParam(value = "글 ID", required = true) @PathVariable @NotBlank String communityId
     ) {
 
         CommentGetListWrapperResponseDTO commentGetListWrapperResponseDTO;
