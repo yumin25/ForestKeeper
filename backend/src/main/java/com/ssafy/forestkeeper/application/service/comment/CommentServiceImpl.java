@@ -74,4 +74,16 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    @Override
+    public void deleteComment(String commentId) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+
+        comment.changeDelete();
+
+        commentRepository.save(comment);
+
+    }
+
 }

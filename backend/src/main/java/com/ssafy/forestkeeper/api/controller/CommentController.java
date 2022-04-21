@@ -94,4 +94,27 @@ public class CommentController {
 
     }
 
+    @ApiOperation(value = "댓글 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 삭제에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 댓글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "댓글 삭제에 실패했습니다.")
+    })
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<? extends BaseResponseDTO> delete(
+            @ApiParam(value = "댓글 ID", required = true) @PathVariable @NotBlank String commentId
+    ) {
+
+        try {
+            commentService.deleteComment(commentId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 삭제에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("댓글 삭제에 성공했습니다.", 200));
+
+    }
+
 }
