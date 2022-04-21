@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../res/img/logo.png";
+import logo from "../../../res/img/logo.png";
 
 function MyPage() {
   const [menu, setMenu] = useState("1");
@@ -14,9 +14,11 @@ function MyPage() {
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row-reverse", margin: "1vh" }}>
-        <span className="material-icons-outlined" style={{ fontSize: "2rem", color: "#8E8E92" }}>
-          settings
-        </span>
+        <Link to="/accounts/mypage/settings" style={{ textDecoration: "none" }}>
+          <span className="material-icons-outlined" style={{ fontSize: "2rem", color: "#8E8E92" }}>
+            settings
+          </span>
+        </Link>
       </div>
       {/* 개인정보 */}
       <div style={{ display: "flex", justifyContent: "center" }}>
