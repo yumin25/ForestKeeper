@@ -94,7 +94,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO) {
 
-        Community community = communityRepository.findById(communityModifyPatchDTO.getCommunityId())
+        Community community = communityRepository.findByIdAndDelete(communityModifyPatchDTO.getCommunityId(), false)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         community.changeCommunity(communityModifyPatchDTO.getTitle(), communityModifyPatchDTO.getDescription());
