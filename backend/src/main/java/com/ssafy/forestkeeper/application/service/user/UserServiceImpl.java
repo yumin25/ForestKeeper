@@ -4,6 +4,7 @@ import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private final UserRepository userRepository;
 
     // 회원가입
@@ -21,9 +23,19 @@ public class UserServiceImpl implements UserService {
     public Integer signUp(UserSignUpDTO userDTO) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-        User user = new User(userDTO.getName(), userDTO.getNickname(), userDTO.getEmail(), userDTO.getPassword());
-        userRepository.save(user);
+        userRepository.save(User.builder()
+                .name(userDTO.getName())
+                .nickname(userDTO.getNickname())
+                .email(userDTO.getEmail())
+                .password(userDTO.getPassword())
+                .roles("ROLE_USER")
+                .build());
         return 201;
+    }
+
+    @Override
+    public User getUser(String email) {
+        return userRepository.findByEmailEquals(email);
     }
 
     @Override
