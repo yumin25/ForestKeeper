@@ -15,7 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.List;
 
-//http://localhost:8080/swagger-ui/
+// http://localhost:8080/swagger-ui/
 
 @Configuration
 public class SwaggerConfig {
@@ -56,6 +56,7 @@ public class SwaggerConfig {
     private List<SecurityReference> defaultAuth() {
 
         AuthorizationScope authorizationScope = new AuthorizationScope(AUTHORIZATION_SCOPE_GLOBAL, AUTHORIZATION_SCOPE_GLOBAL_DESC);
+
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
 
