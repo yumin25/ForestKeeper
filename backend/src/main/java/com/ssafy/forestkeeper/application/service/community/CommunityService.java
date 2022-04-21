@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.community;
 
+import com.ssafy.forestkeeper.application.dto.request.comment.CommunityModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -17,6 +18,7 @@ public interface CommunityService {
     CommunityResponseDTO getCommunity(String communityId);
 
     // 글 수정
+    void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO);
 
     // 글 삭제
 
