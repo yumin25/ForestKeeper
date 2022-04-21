@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.api.controller;
 
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
@@ -74,11 +75,12 @@ public class CommunityController {
     @ApiOperation(value = "글 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "글 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 글을 찾을 수 없습니다."),
             @ApiResponse(code = 409, message = "글 조회에 실패했습니다.")
     })
     @GetMapping("/{communityId}")
     public ResponseEntity<? extends BaseResponseDTO> get(
-            @ApiParam(value = "커뮤니티 ID", required = true) @PathVariable @NotBlank String communityId
+            @ApiParam(value = "글 ID", required = true) @PathVariable @NotBlank String communityId
     ) {
 
         CommunityResponseDTO communityResponseDTO = null;
@@ -92,6 +94,52 @@ public class CommunityController {
         }
 
         return ResponseEntity.ok(CommunityResponseDTO.of("글 조회에 성공했습니다.", 200, communityResponseDTO));
+
+    }
+
+    @ApiOperation(value = "글 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "글 수정에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "글 수정에 실패했습니다.")
+    })
+    @PatchMapping
+    public ResponseEntity<? extends BaseResponseDTO> modify(
+            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityModifyPatchDTO communityModifyPatchDTO
+    ) {
+
+        try {
+            communityService.modifyCommunity(communityModifyPatchDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 수정에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("글 수정에 성공했습니다.", 200));
+
+    }
+
+    @ApiOperation(value = "글 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "글 삭제에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "글 삭제에 실패했습니다.")
+    })
+    @DeleteMapping("/{communityId}")
+    public ResponseEntity<? extends BaseResponseDTO> delete(
+            @ApiParam(value = "글 ID", required = true) @PathVariable @NotBlank String communityId
+    ) {
+
+        try {
+            communityService.deleteCommunity(communityId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 삭제에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("글 삭제에 성공했습니다.", 200));
 
     }
 
