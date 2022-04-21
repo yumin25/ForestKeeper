@@ -1,4 +1,4 @@
-package com.ssafy.forestkeeper.application.dto.request.comment;
+package com.ssafy.forestkeeper.application.dto.request.community;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
