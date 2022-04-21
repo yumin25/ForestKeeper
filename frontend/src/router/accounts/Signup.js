@@ -2,13 +2,15 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import add from "../../res/img/add.png";
+import plus from "../../res/img/plus.png";
 import "./Signup.css";
 import { checkId, checkEmail, checkName, checkNickname } from "./ValidCheck";
 
 function Signup() {
   const titleStyle = {
     color: "#69696C",
-    marginBottom: "8%",
+    marginBottom: "1vh",
+    marginTop: "2vh",
   };
   const inputStyle = {
     width: "100%",
@@ -47,19 +49,6 @@ function Signup() {
   const onNicknameHandler = (event) => {
     setNickname(event.currentTarget.value);
   };
-
-  function CheckId() {
-    checkId(email, url);
-  }
-  function CheckEmail() {
-    checkEmail(email);
-  }
-  function CheckName() {
-    checkName(name);
-  }
-  function CheckNickname() {
-    checkNickname(nickname, url);
-  }
 
   const onImageHandler = (e) => {
     if (e.target.files[0]) {
@@ -101,16 +90,25 @@ function Signup() {
     } else {
       console.log(email, password, name, nickname);
       let formData = new FormData();
-      axios
-        .post(url + `/user`, {
-          email: email,
-          password: password,
-          nickname: nickname,
-          name: name,
+      formData.append("image", image));
+      let signupData = {
+        email: email,
+        name: name,
+        nickname: nickname,
+        password: password,
+      };
+      formData.append(
+        "signupData",
+        new Blob([JSON.stringify(signupData)], {
+          type: "application/json",
         })
+      );
+
+      axios
+        .post(url + `/api/user`, formData)
         .then(function (response) {
           console.log(response);
-          if (response.status === 200) {
+          if (response.status === 201) {
             setEmail("");
             setPassword("");
             setPasswordConfirm("");
@@ -129,31 +127,19 @@ function Signup() {
   return (
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
-        {/* <div id="topBlank" style={{ height: "10vh", background: "blue" }} /> */}
         <div id="image" style={{ height: "16vh", marginTop: "10vh" }}>
           <Avatar
             src={image}
-            sx={{ width: "30vw", height: "15vh" }}
+            sx={{ width: "30vw", height: "30vw" }}
             style={{
-              marginLeft: "32.5%",
-              marginRight: "32.5%",
+              marginLeft: "35vw",
+              marginRight: "35vw",
               position: "relative",
             }}
             onClick={() => {
               fileInput.current.click();
             }}
           />
-
-          <img
-            src={add}
-            style={{
-              position: "absolute",
-              marginLeft: "34%",
-              top: "25%",
-              width: "8%",
-              height: "4%",
-            }}
-          ></img>
 
           <input
             ref={fileInput}
@@ -165,30 +151,67 @@ function Signup() {
             name="file"
             onChange={onImageHandler}
           />
+          <div
+            style={{
+              textAlign: "center",
+              color: "#acacac",
+              fontSize: "0.5rem",
+              marginTop: "1vh",
+            }}
+          >
+            사진을 업로드해주세요
+          </div>
         </div>
 
         <div
           id="form"
           style={{
-            // background: "red",
-            marginTop: "10%",
-            marginLeft: "12%",
-            marginRight: "12%",
-            width: "76%",
-            height: "50vh",
+            position: "relative",
+            marginLeft: "12vw",
+            marginRight: "12vw",
+            width: "76vw",
           }}
         >
           <div id="email">
             <div id="title" style={titleStyle}>
               이메일
             </div>
-            <div id="input">
+            <div style={{ display: "flex" }}>
               <input
                 type="email"
                 className="input"
-                placeholder="forest@keeper.com"
+                placeholder="forest @ keeper.com"
                 onChange={onEmailHandler}
+                style={{ width: "55vw", height: "3vh" }}
+                onBlur={() => checkEmail(email)}
               />
+              <button
+                className="duplicateBtn"
+                onClick={() => checkId(email, url)}
+              >
+                중복확인
+              </button>
+            </div>
+          </div>
+
+          <div id="nickname">
+            <div id="title" style={titleStyle}>
+              닉네임
+            </div>
+            <div style={{ display: "flex" }}>
+              <input
+                type="text"
+                className="input"
+                placeholder="2자 이상 10자 이하"
+                onChange={onNicknameHandler}
+                style={{ width: "55vw", height: "3vh" }}
+              />
+              <button
+                className="duplicateBtn"
+                onClick={() => checkNickname(nickname, url)}
+              >
+                중복확인
+              </button>
             </div>
           </div>
 
@@ -202,20 +225,8 @@ function Signup() {
                 className="input"
                 placeholder="2자 이상 10자 이하(한글만 허용됩니다)"
                 onChange={onNameHandler}
-              />
-            </div>
-          </div>
-
-          <div id="nickname">
-            <div id="title" style={titleStyle}>
-              닉네임
-            </div>
-            <div id="input">
-              <input
-                type="text"
-                className="input"
-                placeholder="2자 이상 10자 이하"
-                onChange={onNicknameHandler}
+                onBlur={() => checkName(name)}
+                style={{ width: "76vw", height: "3vh" }}
               />
             </div>
           </div>
@@ -230,17 +241,45 @@ function Signup() {
                 className="input"
                 placeholder="영문자, 숫자, 특수문자 !@#$%\^&*() 포함 8자 이상"
                 onChange={onPasswordHandler}
+                style={{ width: "76vw", height: "3vh" }}
               />
             </div>
           </div>
 
-          <div id="name"></div>
-          <div id="nickname"></div>
-          <div id="password"></div>
-          <div id="passwordConfirm"></div>
+          <div id="passwordConfirm">
+            <div id="title" style={titleStyle}>
+              비밀번호 확인
+            </div>
+            <div id="input">
+              <input
+                type="password"
+                className="input"
+                placeholder="비밀번호를 한번 더 입력해주세요"
+                onChange={onPasswordConfirmHandler}
+                style={{ width: "76vw", height: "3vh" }}
+              />
+            </div>
+          </div>
         </div>
-        <div id="button" style={{ background: "yellow", height: "25vh" }}>
-          dd
+        <div id="button">
+          <button
+            onClick={() => onCreate()}
+            style={{
+              boxShadow: "0px 8px 8px 0px #CDCDCD",
+              border: "none",
+              textAlign: "center",
+              lineHeight: "5.5vh",
+              color: "white",
+              background: "#37CD8D",
+              marginTop: "3vh",
+              marginLeft: "15vw",
+              width: "70vw",
+              height: "5.5vh",
+              borderRadius: 40,
+            }}
+          >
+            회원가입
+          </button>
         </div>
       </div>
     </>
