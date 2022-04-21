@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class CommentRegisterPostDTO {
 
-    @ApiModelProperty(name = "커뮤니티 ID")
+    @ApiModelProperty(name = "글 ID")
     @NotBlank
     private String communityId;
 
