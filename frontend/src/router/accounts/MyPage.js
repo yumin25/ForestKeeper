@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../../res/img/logo.png";
 
 function MyPage() {
@@ -109,29 +110,31 @@ function MyPage() {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "2vh 1vw 0 1vw", height: "50vh" }}>
         {menu === "1" ? (
           <>
-            <div
-              style={{
-                marginBottom: "2vh",
-                width: "80vw",
-                height: "100px",
-                backgroundColor: "#EAF9E6",
-                borderRadius: "10px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
-                <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-                  <p style={{ margin: 0, fontSize: "6vw", color: "#8ABC9A", fontWeight: "700" }}>2022.04.15</p>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>아차산</div>
-                    <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>7.72 km</div>
-                    <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>42 : 15</div>
+            <Link to="/accounts/mypage/recorddetail" style={{ textDecoration: "none" }}>
+              <div
+                style={{
+                  marginBottom: "2vh",
+                  width: "80vw",
+                  height: "100px",
+                  backgroundColor: "#EAF9E6",
+                  borderRadius: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
+                  <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
+                  <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+                    <p style={{ margin: 0, fontSize: "6vw", color: "#8ABC9A", fontWeight: "700" }}>2022.04.15</p>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>아차산</div>
+                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>7.72 km</div>
+                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>42 : 15</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </>
         ) : (
           <>
