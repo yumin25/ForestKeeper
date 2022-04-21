@@ -1,10 +1,11 @@
 package com.ssafy.forestkeeper.application.service.user;
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserRegisterPostDTO;
+
+import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 
 public interface UserService {
-
-    // 회원가입
-    Integer registerUser(UserRegisterPostDTO userRegisterPostDTO);
-
+    Integer signUp(UserSignUpDTO userSignUpDTO);
+    boolean isValidPassword(String password);
+    boolean isValidName(String name);
+    boolean isValidNickname(String nickname);
 }
