@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class Comment extends BaseEntity {
 
     @Column(name = "comment_description")
+    @Lob
     private String description;
 
     @Column(name = "comment_create_time")
