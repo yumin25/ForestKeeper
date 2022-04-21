@@ -13,4 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
 
     Optional<List<Comment>> findByCommunityAndDeleteOrderByCreateTime(Community community, boolean delete);
 
+    long countByCommunityAndDelete(Community community, boolean delete);
+
 }
