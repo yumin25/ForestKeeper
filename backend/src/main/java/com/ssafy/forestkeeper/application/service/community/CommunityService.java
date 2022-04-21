@@ -1,7 +1,9 @@
 package com.ssafy.forestkeeper.application.service.community;
 
 import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
+import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 
 public interface CommunityService {
 
@@ -9,6 +11,7 @@ public interface CommunityService {
     void registerCommunity(CommunityRegisterPostDTO communityRegisterPostDTO);
 
     // 글 목록 조회
+    CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page);
 
     // 글 조회
     CommunityResponseDTO getCommunity(String communityId);
