@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 public class CommunityResponseDTO extends BaseResponseDTO {
 
-    @ApiModelProperty(name = "유저 닉네임")
+    @ApiModelProperty(name = "작성자 닉네임")
     private String nickname;
 
     @ApiModelProperty(name = "제목")
