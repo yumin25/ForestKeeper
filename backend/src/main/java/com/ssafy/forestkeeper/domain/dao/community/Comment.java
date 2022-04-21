@@ -33,6 +33,11 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "community_id")
     private Community community;
 
+    // 댓글 수정
+    public void changeComment(String description) {
+        this.description = description;
+    }
+
     // 댓글 삭제
     public void changeDelete() {
         this.delete = true;
