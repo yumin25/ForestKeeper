@@ -14,6 +14,7 @@ import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,9 @@ public class CommunityServiceImpl implements CommunityService {
                 .title(communityRegisterPostDTO.getTitle())
                 .description(communityRegisterPostDTO.getDescription())
                 .createTime(LocalDateTime.now())
-                .user(null)
+                .user(userRepository.findByEmailAndDelete(
+                        SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
                 .mountain(null)
 //                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
 //                        .orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다.")))
@@ -114,7 +117,7 @@ public class CommunityServiceImpl implements CommunityService {
         communityRepository.save(community);
 
         return CommunityResponseDTO.builder()
-//                .nickname(community.getUser().getNickname())
+                .nickname(community.getUser().getNickname())
                 .title(community.getTitle())
                 .description(community.getDescription())
                 .views(community.getViews())
@@ -163,7 +166,7 @@ public class CommunityServiceImpl implements CommunityService {
         communityList.forEach(community ->
                         communityGetListResponseDTOList.add(
                                 CommunityGetListResponseDTO.builder()
-//                                        .nickname(community.getUser().getNickname())
+                                        .nickname(community.getUser().getNickname())
                                         .title(community.getTitle())
                                         .createTime(community.getCreateTime())
                                         .comments(commentRepository.countByCommunityAndDelete(community, false))

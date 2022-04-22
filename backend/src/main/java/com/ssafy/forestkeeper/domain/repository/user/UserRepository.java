@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByNicknameAndDelete(String nickname, boolean delete);
 
+    Optional<User> findByEmailAndDelete(String email, boolean delete);
+
 }
