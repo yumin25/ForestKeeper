@@ -41,8 +41,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .title(communityRegisterPostDTO.getTitle())
                 .description(communityRegisterPostDTO.getDescription())
                 .createTime(LocalDateTime.now())
-                .user(userRepository.findByEmailAndDelete(
-                        SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
                 .mountain(null)
 //                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
@@ -164,14 +163,14 @@ public class CommunityServiceImpl implements CommunityService {
         List<CommunityGetListResponseDTO> communityGetListResponseDTOList = new ArrayList<>();
 
         communityList.forEach(community ->
-                        communityGetListResponseDTOList.add(
-                                CommunityGetListResponseDTO.builder()
-                                        .nickname(community.getUser().getNickname())
-                                        .title(community.getTitle())
-                                        .createTime(community.getCreateTime())
-                                        .comments(commentRepository.countByCommunityAndDelete(community, false))
-                                        .build()
-                        )
+                communityGetListResponseDTOList.add(
+                        CommunityGetListResponseDTO.builder()
+                                .nickname(community.getUser().getNickname())
+                                .title(community.getTitle())
+                                .createTime(community.getCreateTime())
+                                .comments(commentRepository.countByCommunityAndDelete(community, false))
+                                .build()
+                )
         );
 
         return CommunityGetListWrapperResponseDTO.builder()
