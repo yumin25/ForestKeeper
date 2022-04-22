@@ -6,7 +6,6 @@ import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,8 @@ public class UserServiceImpl implements UserService {
         if(!isValidName(userDTO.getName())) return 4091;
         else if(!isValidNickname(userDTO.getNickname())) return 4092;
         else if(!isValidPassword(userDTO.getPassword())) return 4093;
+        else if(checkEmail(userDTO.getEmail())) return 4094;
+        else if(checkNickname(userDTO.getNickname())) return 4095;
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
@@ -54,6 +55,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkNickname(String nickname) {
         User user = userRepository.findByNicknameEquals(nickname);
+        if(user == null) return false;
+        return true;
+    }
+
+    @Override
+    public boolean checkEmail(String email) {
+        User user = userRepository.findByEmailEquals(email);
         if(user == null) return false;
         return true;
     }
