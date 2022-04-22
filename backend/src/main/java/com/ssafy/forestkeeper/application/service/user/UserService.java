@@ -8,7 +8,7 @@ import com.ssafy.forestkeeper.domain.dao.user.User;
 public interface UserService {
     Integer signUp(UserSignUpDTO userSignUpDTO);
     String login(UserLoginDTO userLoginDTO);
-    User getUser(String email);
+    boolean checkNickname(String nickname);
     boolean isValidPassword(String password);
     boolean isValidName(String name);
     boolean isValidNickname(String nickname);
