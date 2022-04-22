@@ -8,7 +8,9 @@ import com.ssafy.forestkeeper.domain.dao.community.Comment;
 import com.ssafy.forestkeeper.domain.dao.community.Community;
 import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
 import com.ssafy.forestkeeper.domain.repository.community.CommunityRepository;
+import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,13 +25,16 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommunityRepository communityRepository;
 
+    private final UserRepository userRepository;
+
     @Override
     public void registerComment(CommentRegisterPostDTO commentRegisterPostDTO) {
 
         Comment comment = Comment.builder()
                 .description(commentRegisterPostDTO.getDescription())
                 .createTime(LocalDateTime.now())
-                .user(null)
+                .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
                 .community(communityRepository.findById(commentRegisterPostDTO.getCommunityId())
                         .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다.")))
                 .build();
@@ -50,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
                 .forEach(comment ->
                         commentGetListResponseDTOList.add(
                                 CommentGetListResponseDTO.builder()
-//                                        .nickname(comment.getUser().getNickname())
+                                        .nickname(comment.getUser().getNickname())
                                         .description(comment.getDescription())
                                         .createTime(comment.getCreateTime())
                                         .build()
