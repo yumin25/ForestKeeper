@@ -1,0 +1,16 @@
+.input {
+  background: "#EFEFEF";
+  width: "90vw";
+  height: "5vh";
+  left: "5vw";
+  right: "5vw";
+  top: "4vh";
+  border-radius: 10;
+  border: "none";
+}
+/* .input.placeholder: {
+  color: "#8E8E92";
+} */
+.input:focus {
+  outline: none;
+}
