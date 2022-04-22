@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.api.controller;
 
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWrapperResponseDTO;
@@ -67,6 +68,52 @@ public class CommentController {
         }
 
         return ResponseEntity.ok(CommentGetListWrapperResponseDTO.of("댓글 목록 조회에 성공했습니다.", 200, commentGetListWrapperResponseDTO));
+
+    }
+
+    @ApiOperation(value = "댓글 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 수정에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 댓글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "댓글 수정에 실패했습니다.")
+    })
+    @PatchMapping
+    public ResponseEntity<? extends BaseResponseDTO> modify(
+            @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentModifyPatchDTO commentModifyPatchDTO
+    ) {
+
+        try {
+            commentService.modifyComment(commentModifyPatchDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 수정에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("댓글 수정에 성공했습니다.", 200));
+
+    }
+
+    @ApiOperation(value = "댓글 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 삭제에 성공했습니다."),
+            @ApiResponse(code = 404, message = "해당 댓글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "댓글 삭제에 실패했습니다.")
+    })
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<? extends BaseResponseDTO> delete(
+            @ApiParam(value = "댓글 ID", required = true) @PathVariable @NotBlank String commentId
+    ) {
+
+        try {
+            commentService.deleteComment(commentId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 삭제에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("댓글 삭제에 성공했습니다.", 200));
 
     }
 
