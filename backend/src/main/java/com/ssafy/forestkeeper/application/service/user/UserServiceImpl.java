@@ -1,9 +1,12 @@
 package com.ssafy.forestkeeper.application.service.user;
 
+import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +18,44 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final JwtAuthenticationProvider jwtProvider;
 
     // 회원가입
     @Override
     public Integer signUp(UserSignUpDTO userDTO) {
+        if(!isValidName(userDTO.getName())) return 4091;
+        else if(!isValidNickname(userDTO.getNickname())) return 4092;
+        else if(!isValidPassword(userDTO.getPassword())) return 4093;
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-        User user = new User(userDTO.getName(), userDTO.getNickname(), userDTO.getEmail(), userDTO.getPassword());
-        userRepository.save(user);
+        userRepository.save(User.builder()
+                .name(userDTO.getName())
+                .nickname(userDTO.getNickname())
+                .email(userDTO.getEmail())
+                .password(userDTO.getPassword())
+                .roles("ROLE_USER")
+                .build());
         return 201;
+    }
+
+    //로그인
+    @Override
+    public String login(UserLoginDTO userLoginDTO) {
+        User user = userRepository.findByEmailEquals(userLoginDTO.getEmail());
+        if (user == null) return "401";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(!encoder.matches(userLoginDTO.getPassword(), user.getPassword())) return "401";
+        String token = jwtProvider.createToken(userLoginDTO.getEmail());
+        System.out.println(token);
+        return token;
+    }
+
+    @Override
+    public boolean checkNickname(String nickname) {
+        User user = userRepository.findByNicknameEquals(nickname);
+        if(user == null) return false;
+        return true;
     }
 
     @Override
