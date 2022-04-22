@@ -46,15 +46,16 @@ public class CommentServiceImpl implements CommentService {
 
         List<CommentGetListResponseDTO> commentGetListResponseDTOList = new ArrayList<>();
 
-        for (Comment comment : commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false).orElse(null)) {
-            commentGetListResponseDTOList.add(
-                    CommentGetListResponseDTO.builder()
-//                            .nickname(comment.getUser().getNickname())
-                            .description(comment.getDescription())
-                            .createTime(comment.getCreateTime())
-                            .build()
-            );
-        }
+        commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false).orElse(null)
+                .forEach(comment ->
+                        commentGetListResponseDTOList.add(
+                                CommentGetListResponseDTO.builder()
+//                                        .nickname(comment.getUser().getNickname())
+                                        .description(comment.getDescription())
+                                        .createTime(comment.getCreateTime())
+                                        .build()
+                        )
+                );
 
         return CommentGetListWrapperResponseDTO.builder()
                 .commentGetListResponseDTOList(commentGetListResponseDTOList)
