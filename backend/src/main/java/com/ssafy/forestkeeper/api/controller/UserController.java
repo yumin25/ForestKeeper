@@ -58,4 +58,13 @@ public class UserController {
         if (result.equals("401")) return ResponseEntity.status(401).body(BaseResponseDTO.of("아이디 또는 비밀번호를 잘못 입력하였습니다.", 401));
         return ResponseEntity.status(200).body(UserLoginResponseDTO.of(result, "로그인 하였습니다.", 200));
     }
+
+    @ApiOperation(value = "닉네임 중복 확인")
+    @GetMapping("/check/nickname")
+    public ResponseEntity<?> checkNickname(@RequestParam("nickname") String nickname) {
+        if(userService.checkNickname(nickname)){
+            return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 200));
+        }
+        return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 닉네임입니다.", 200));
+    }
 }

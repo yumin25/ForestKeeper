@@ -52,8 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String email) {
-        return userRepository.findByEmailEquals(email);
+    public boolean checkNickname(String nickname) {
+        User user = userRepository.findByNicknameEquals(nickname);
+        if(user == null) return false;
+        return true;
     }
 
     @Override
