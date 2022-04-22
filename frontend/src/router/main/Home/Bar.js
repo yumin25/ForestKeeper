@@ -77,7 +77,7 @@ function NavBar() {
         </div>
         <div id="user" style={{ width: "33vw" }} onClick={() => goUser()}>
           {now == "USER" ? (
-            <NavLink to="/user">
+            <NavLink to="/accounts/mypage">
               <img
                 style={{
                   marginTop: "2vh",
@@ -89,7 +89,7 @@ function NavBar() {
               />
             </NavLink>
           ) : (
-            <NavLink to="/user">
+            <NavLink to="/accounts/mypage">
               <img
                 style={{
                   marginTop: "2vh",

@@ -23,10 +23,8 @@ function NaverMapAPI() {
 function Home() {
   return (
     <>
-      <div>
-        <div
-          style={{ display: "flex", marginTop: "3.5vh", marginBottom: "0.5vh" }}
-        >
+      <div style={{ height: "7vh" }}>
+        <div style={{ display: "flex", marginTop: "3.5vh", marginBottom: "0.5vh" }}>
           <div>
             <input
               className="input"
