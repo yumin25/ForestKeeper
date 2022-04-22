@@ -24,29 +24,20 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    private JwtAuthenticationProvider jwtProvider;
-
     @ApiOperation(value = "회원가입")
     @PostMapping
     public ResponseEntity<?> register(@RequestBody UserSignUpDTO userSignUpDTO) {
         try {
-            if(!userService.isValidName(userSignUpDTO.getName())){
-                return ResponseEntity.status(409).body(BaseResponseDTO.of("이름 형식이 잘못되었습니다.", 409));
-            }
-            if(!userService.isValidNickname(userSignUpDTO.getNickname())){
-                return ResponseEntity.status(409).body(BaseResponseDTO.of("닉네임 형식이 잘못되었습니다.", 409));
-            }
-            if(!userService.isValidPassword(userSignUpDTO.getPassword())){
-                return ResponseEntity.status(409).body(BaseResponseDTO.of("비밀번호 형식이 잘못되었습니다.", 409));
-            }
+            Integer result = userService.signUp(userSignUpDTO);
 
-            Integer statusCode = userService.signUp(userSignUpDTO);
+            if(result == 4091) return ResponseEntity.status(409).body(BaseResponseDTO.of("이름 형식이 잘못되었습니다.", 409));
+            else if (result == 4092) return ResponseEntity.status(409).body(BaseResponseDTO.of("닉네임 형식이 잘못되었습니다.", 409));
+            else if (result == 4093) return ResponseEntity.status(409).body(BaseResponseDTO.of("비밀번호 형식이 잘못되었습니다.", 409));
 
-            if (statusCode == 409) {    //이메일 중복 검사 api
+            if (result == 409) {    //이메일 중복 검사 api
                 return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 이메일로 가입된 계정이 이미 존재합니다.", 409));
             }
-            else if (statusCode == 409) {    //닉네임 중복 검사 api
+            else if (result == 409) {    //닉네임 중복 검사 api
                 return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
             }
         } catch (Exception e) {
@@ -58,20 +49,13 @@ public class UserController {
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO){
-        User user;
+        String result;
         try{
-            user = userService.getUser(userLoginDTO.getEmail());
+            result = userService.login(userLoginDTO);
         } catch (Exception exception) {
             return ResponseEntity.status(500).body(BaseResponseDTO.of("로그인에 실패하였습니다.", 500));
         }
-        if (user == null) {
-            return ResponseEntity.status(401).body(BaseResponseDTO.of("아이디 또는 비밀번호를 잘못 입력하였습니다.", 401));
-        }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (!encoder.matches(userLoginDTO.getPassword(), user.getPassword())){
-            return ResponseEntity.status(401).body(BaseResponseDTO.of("아이디 또는 비밀번호를 잘못 입력하였습니다", 401));
-        }
-        String token = jwtProvider.createToken(userLoginDTO.getEmail());
-        return ResponseEntity.status(200).body(UserLoginResponseDTO.of(token, "로그인 하였습니다.", 200));
+        if (result.equals("401")) return ResponseEntity.status(401).body(BaseResponseDTO.of("아이디 또는 비밀번호를 잘못 입력하였습니다.", 401));
+        return ResponseEntity.status(200).body(UserLoginResponseDTO.of(result, "로그인 하였습니다.", 200));
     }
 }
