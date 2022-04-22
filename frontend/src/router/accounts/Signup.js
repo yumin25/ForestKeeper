@@ -90,7 +90,7 @@ function Signup() {
     } else {
       console.log(email, password, name, nickname);
       let formData = new FormData();
-      formData.append("image", image));
+      formData.append("image", image);
       let signupData = {
         email: email,
         name: name,
