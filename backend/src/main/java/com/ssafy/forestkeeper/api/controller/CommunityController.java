@@ -52,6 +52,7 @@ public class CommunityController {
     @ApiOperation(value = "글 목록 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "글 목록 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "글 목록을 찾을 수 없습니다."),
             @ApiResponse(code = 409, message = "글 목록 조회에 실패했습니다.")
     })
     @GetMapping
@@ -64,11 +65,42 @@ public class CommunityController {
 
         try {
             communityGetListWrapperResponseDTO = communityService.getCommunityList(communityCode, page);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("글 목록 조회에 실패했습니다.", 409));
         }
 
         return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 목록 조회에 성공했습니다.", 200, communityGetListWrapperResponseDTO));
+
+    }
+
+    @ApiOperation(value = "글 검색")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "글 검색에 성공했습니다."),
+            @ApiResponse(code = 404, message = "글을 찾을 수 없습니다. / 해당 사용자를 찾을 수 없습니다. / 해당 사용자가 작성한 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "글 검색에 실패했습니다.")
+    })
+    @GetMapping("/search")
+    public ResponseEntity<? extends BaseResponseDTO> search(
+            @ApiParam(value = "커뮤니티 코드", required = true) @RequestParam @NotNull CommunityCode communityCode,
+            @ApiParam(value = "검색 유형", required = true) @RequestParam @NotBlank String type,
+            @ApiParam(value = "검색어", required = true) @RequestParam @NotBlank String keyword,
+            @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+    ) {
+
+        CommunityGetListWrapperResponseDTO communityGetListWrapperResponseDTO = null;
+
+        try {
+            communityGetListWrapperResponseDTO = communityService.searchCommunity(communityCode, type, keyword, page);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 검색에 실패했습니다.", 409));
+        }
+
+
+        return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 검색에 성공했습니다.", 200, communityGetListWrapperResponseDTO));
 
     }
 

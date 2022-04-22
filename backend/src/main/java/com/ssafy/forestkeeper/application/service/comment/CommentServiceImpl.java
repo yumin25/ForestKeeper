@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.comment;
 
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWrapperResponseDTO;
@@ -45,19 +46,44 @@ public class CommentServiceImpl implements CommentService {
 
         List<CommentGetListResponseDTO> commentGetListResponseDTOList = new ArrayList<>();
 
-        for (Comment comment : commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false).orElse(null)) {
-            commentGetListResponseDTOList.add(
-                    CommentGetListResponseDTO.builder()
-//                            .nickname(comment.getUser().getNickname())
-                            .description(comment.getDescription())
-                            .createTime(comment.getCreateTime())
-                            .build()
-            );
-        }
+        commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false).orElse(null)
+                .forEach(comment ->
+                        commentGetListResponseDTOList.add(
+                                CommentGetListResponseDTO.builder()
+//                                        .nickname(comment.getUser().getNickname())
+                                        .description(comment.getDescription())
+                                        .createTime(comment.getCreateTime())
+                                        .build()
+                        )
+                );
 
         return CommentGetListWrapperResponseDTO.builder()
                 .commentGetListResponseDTOList(commentGetListResponseDTOList)
                 .build();
+
+    }
+
+    @Override
+    public void modifyComment(CommentModifyPatchDTO commentModifyPatchDTO) {
+
+        Comment comment = commentRepository.findByIdAndDelete(commentModifyPatchDTO.getCommentId(), false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+
+        comment.changeComment(commentModifyPatchDTO.getDescription());
+
+        commentRepository.save(comment);
+
+    }
+
+    @Override
+    public void deleteComment(String commentId) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+
+        comment.changeDelete();
+
+        commentRepository.save(comment);
 
     }
 
