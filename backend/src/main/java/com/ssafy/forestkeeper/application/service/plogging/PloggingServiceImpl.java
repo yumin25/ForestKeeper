@@ -1,14 +1,21 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
+import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
+import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
+import com.ssafy.forestkeeper.domain.enums.RegionCode;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
+import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +29,8 @@ public class PloggingServiceImpl implements PloggingService{
     private final UserRepository userRepository;
 	
 	private final MountainRepository mountainRepository;
+	
+	private final TrashCanRepository trashCanRepository;
 
 	@Override
 	public void register(PloggingRegisterDTO ploggingRegisterDTO) {
@@ -55,6 +64,23 @@ public class PloggingServiceImpl implements PloggingService{
 				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
 		plogging.setExp(expRegisterDTO.getExp());
 		ploggingRepository.save(plogging);
+	}
+
+	@Override
+	public TrashCanListWrapperResponseDTO getTrashCanList(String regionName) {
+		List<TrashCanDTO> trashCanDTOList = new ArrayList<>();
+		trashCanRepository.findByRegionCode(RegionCode.valueOf(regionName)).get().forEach(tc ->{
+			trashCanDTOList.add(TrashCanDTO.builder()
+					.address(tc.getAddress())
+					.latitude(tc.getLatitude())
+					.longitude(tc.getLongitude())
+					.type(tc.getType())
+					.build());
+		});
+		
+		return TrashCanListWrapperResponseDTO.builder()
+				.list(trashCanDTOList)
+				.build();
 	}
 
 }
