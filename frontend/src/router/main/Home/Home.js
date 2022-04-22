@@ -23,7 +23,7 @@ function NaverMapAPI() {
 function Home() {
   return (
     <>
-      <div>
+      <div style={{ height: "7vh" }}>
         <div
           style={{ display: "flex", marginTop: "3vh", marginBottom: "0.5vh" }}
         >
