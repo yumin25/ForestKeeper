@@ -117,7 +117,8 @@ function MyPage() {
                 style={{
                   marginBottom: "2vh",
                   width: "80vw",
-                  height: "100px",
+                  height: "12vh",
+                  minHeight: "100px",
                   backgroundColor: "#EAF9E6",
                   borderRadius: "10px",
                   display: "flex",
@@ -127,11 +128,11 @@ function MyPage() {
                 <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
                   <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
                   <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-                    <p style={{ margin: 0, fontSize: "6vw", color: "#8ABC9A", fontWeight: "700" }}>2022.04.15</p>
+                    <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>2022.04.15</p>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>아차산</div>
-                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>7.72 km</div>
-                      <div style={{ margin: 0, fontSize: "4vw", fontWeight: "700", color: "#8E8E92" }}>42 : 15</div>
+                      <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>아차산</div>
+                      <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>7.72 km</div>
+                      <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>42 : 15</div>
                     </div>
                   </div>
                 </div>
@@ -153,7 +154,7 @@ function MyPage() {
             >
               <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
                 <div style={{ margin: "0 auto", width: "45vw" }}>
-                  <p style={{ margin: 0, fontSize: "8vw", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>관악산</p>
+                  <p style={{ margin: 0, fontSize: "4vh", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>관악산</p>
                 </div>
               </div>
             </div>
