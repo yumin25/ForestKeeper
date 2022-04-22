@@ -5,6 +5,7 @@ import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegiste
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.community.Comment;
 import com.ssafy.forestkeeper.domain.dao.community.Community;
 import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
@@ -112,6 +113,15 @@ public class CommunityServiceImpl implements CommunityService {
         community.changeDelete();
 
         communityRepository.save(community);
+
+        List<Comment> commentList = commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false)
+                .orElse(null);
+
+        commentList.forEach(comment -> {
+            comment.changeDelete();
+
+            commentRepository.save(comment);
+        });
 
     }
 
