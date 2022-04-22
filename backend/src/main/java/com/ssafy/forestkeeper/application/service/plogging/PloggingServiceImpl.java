@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.application.service.plogging;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
@@ -37,7 +38,8 @@ public class PloggingServiceImpl implements PloggingService{
 
 	@Override
 	public PloggingDetailResponseDTO get(String ploggingId) {
-		Plogging plogging = ploggingRepository.getById(ploggingId);
+		Plogging plogging = ploggingRepository.findById(ploggingId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
@@ -45,6 +47,14 @@ public class PloggingServiceImpl implements PloggingService{
 				.time("소요시간")
 				.exp(plogging.getExp())
 				.build();
+	}
+
+	@Override
+	public void registerExp(ExpRegisterDTO expRegisterDTO) {
+		Plogging plogging = ploggingRepository.findById(expRegisterDTO.getPloggingId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
+		plogging.setExp(expRegisterDTO.getExp());
+		ploggingRepository.save(plogging);
 	}
 
 }
