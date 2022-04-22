@@ -11,6 +11,7 @@ import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
 import com.ssafy.forestkeeper.domain.repository.community.CommunityRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
+import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class CommunityServiceImpl implements CommunityService {
     private final MountainRepository mountainRepository;
 
     private final CommentRepository commentRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public void registerCommunity(CommunityRegisterPostDTO communityRegisterPostDTO) {
@@ -53,22 +56,46 @@ public class CommunityServiceImpl implements CommunityService {
         List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 10))
                 .orElse(null);
 
-        List<CommunityGetListResponseDTO> communityGetListResponseDTOList = new ArrayList<>();
+        return convertCommunityListToDTO(communityList);
 
-        communityList.forEach(community ->
-                        communityGetListResponseDTOList.add(
-                                CommunityGetListResponseDTO.builder()
-//                                        .nickname(community.getUser().getNickname())
-                                        .title(community.getTitle())
-                                        .createTime(community.getCreateTime())
-                                        .comments(commentRepository.countByCommunityAndDelete(community, false))
-                                        .build()
+    }
+
+    @Override
+    public CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page) {
+
+        List<Community> communityList = new ArrayList<>();
+
+        switch (type) {
+            case "td":
+                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
+                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 10)
                         )
-        );
+                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                break;
+            case "t":
+                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
+                                communityCode, false, keyword, PageRequest.of(page - 1, 10)
+                        )
+                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                break;
+            case "d":
+                communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
+                                communityCode, false, keyword, PageRequest.of(page - 1, 10)
+                        )
+                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                break;
+            case "n":
+                communityList = communityRepository.findByCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
+                                communityCode, false,
+                                userRepository.findByNicknameAndDelete(keyword, false)
+                                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")),
+                                PageRequest.of(page - 1, 10)
+                        )
+                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 작성한 글을 찾을 수 없습니다."));
+                break;
+        }
 
-        return CommunityGetListWrapperResponseDTO.builder()
-                .communityGetListResponseDTOList(communityGetListResponseDTOList)
-                .build();
+        return convertCommunityListToDTO(communityList);
 
     }
 
@@ -122,6 +149,27 @@ public class CommunityServiceImpl implements CommunityService {
 
             commentRepository.save(comment);
         });
+
+    }
+
+    private CommunityGetListWrapperResponseDTO convertCommunityListToDTO(List<Community> communityList) {
+
+        List<CommunityGetListResponseDTO> communityGetListResponseDTOList = new ArrayList<>();
+
+        communityList.forEach(community ->
+                        communityGetListResponseDTOList.add(
+                                CommunityGetListResponseDTO.builder()
+//                                        .nickname(community.getUser().getNickname())
+                                        .title(community.getTitle())
+                                        .createTime(community.getCreateTime())
+                                        .comments(commentRepository.countByCommunityAndDelete(community, false))
+                                        .build()
+                        )
+        );
+
+        return CommunityGetListWrapperResponseDTO.builder()
+                .communityGetListResponseDTOList(communityGetListResponseDTOList)
+                .build();
 
     }
 
