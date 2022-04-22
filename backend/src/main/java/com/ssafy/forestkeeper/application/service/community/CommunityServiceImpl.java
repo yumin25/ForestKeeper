@@ -54,7 +54,7 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
 
         List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 10))
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
         return convertCommunityListToDTO(communityList);
 
@@ -71,18 +71,21 @@ public class CommunityServiceImpl implements CommunityService {
                                 communityCode, false, keyword, keyword, PageRequest.of(page - 1, 10)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+
                 break;
             case "t":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
                                 communityCode, false, keyword, PageRequest.of(page - 1, 10)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+
                 break;
             case "d":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
                                 communityCode, false, keyword, PageRequest.of(page - 1, 10)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+
                 break;
             case "n":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
@@ -92,6 +95,7 @@ public class CommunityServiceImpl implements CommunityService {
                                 PageRequest.of(page - 1, 10)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 작성한 글을 찾을 수 없습니다."));
+
                 break;
         }
 

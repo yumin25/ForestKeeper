@@ -52,6 +52,7 @@ public class CommunityController {
     @ApiOperation(value = "글 목록 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "글 목록 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "글 목록을 찾을 수 없습니다."),
             @ApiResponse(code = 409, message = "글 목록 조회에 실패했습니다.")
     })
     @GetMapping
@@ -64,6 +65,8 @@ public class CommunityController {
 
         try {
             communityGetListWrapperResponseDTO = communityService.getCommunityList(communityCode, page);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("글 목록 조회에 실패했습니다.", 409));
         }
