@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class Comment extends BaseEntity {
 
     @Column(name = "comment_description")
+    @Lob
     private String description;
 
     @Column(name = "comment_create_time")
@@ -31,6 +32,11 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_id")
     private Community community;
+
+    // 댓글 수정
+    public void changeComment(String description) {
+        this.description = description;
+    }
 
     // 댓글 삭제
     public void changeDelete() {
