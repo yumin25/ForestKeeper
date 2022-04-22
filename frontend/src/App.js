@@ -9,11 +9,6 @@ function App() {
     <>
       <Router>
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/" element={<Index />} />
-          <Route path="/accounts/login" element={<Login />} />
-          <Route path="/plogging" element={<Plogging />} />
-          <Route path="/user" element={<User />}></Route> */}
           <Route path="/accounts/login" element={<Login />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
