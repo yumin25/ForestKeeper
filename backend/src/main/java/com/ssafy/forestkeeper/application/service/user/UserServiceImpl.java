@@ -53,6 +53,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserEmail(String token) {
+        return jwtProvider.getUserPk(token);
+    }
+
+    @Override
+    public boolean modifyNickname(String nickname, String email) {
+        User user = userRepository.findByEmailEquals(email);
+        user.setNickname(nickname);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
     public boolean checkNickname(String nickname) {
         User user = userRepository.findByNicknameEquals(nickname);
         if(user == null) return false;
