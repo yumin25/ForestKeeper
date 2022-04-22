@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Api(value = "User API", tags = {"User"})
 @CrossOrigin("*")
 @RestController
@@ -66,5 +68,15 @@ public class UserController {
             return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 이메일입니다.", 409));
         }
         return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 이메일입니다.", 200));
+    }
+
+    @ApiOperation(value = "닉네임 변경")
+    @GetMapping("/modify/nickname")
+    public ResponseEntity<?> modifyNickname(@RequestParam("nickname") String nickname, HttpServletRequest request) {
+        String email = userService.getUserEmail(request.getHeader("X-AUTH-TOKEN"));
+        if(userService.modifyNickname(nickname, email)){
+            return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
+        }
+        return ResponseEntity.status(500).body(BaseResponseDTO.of("닉네임 변경에 실패하였습니다.", 500));
     }
 }
