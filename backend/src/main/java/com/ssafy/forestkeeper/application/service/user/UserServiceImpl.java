@@ -58,11 +58,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean modifyNickname(String nickname, String email) {
+    public Integer modifyNickname(String nickname, String email) {
+        if(checkNickname(nickname)) return 4091;
+        if(!isValidNickname(nickname)) return 4092;
         User user = userRepository.findByEmailEquals(email);
         user.setNickname(nickname);
         userRepository.save(user);
-        return true;
+        return 201;
+    }
+
+    @Override
+    public Integer modifyPassword(String past_password, String new_password, String email) {
+        User user = userRepository.findByEmailEquals(email);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(!encoder.matches(past_password, user.getPassword())) return 4091;
+        if(!isValidPassword(new_password)) return 4092;
+        user.setPassword(encoder.encode(new_password));
+        userRepository.save(user);
+        return 201;
     }
 
     @Override
