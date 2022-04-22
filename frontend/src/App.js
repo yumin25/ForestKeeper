@@ -12,7 +12,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/accounts/signup" element={<Signup />} />
-
           <Route path="/accounts/login" element={<Login />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />

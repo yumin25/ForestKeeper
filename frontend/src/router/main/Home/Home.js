@@ -25,7 +25,7 @@ function Home() {
     <>
       <div>
         <div
-          style={{ display: "flex", marginTop: "3.5vh", marginBottom: "0.5vh" }}
+          style={{ display: "flex", marginTop: "3vh", marginBottom: "0.5vh" }}
         >
           <div>
             <input
