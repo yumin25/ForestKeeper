@@ -8,7 +8,8 @@ public interface UserService {
     Integer signUp(UserSignUpDTO userSignUpDTO);
     String login(UserLoginDTO userLoginDTO);
     String getUserEmail(String token);
-    boolean modifyNickname(String nickname, String email);
+    Integer modifyNickname(String nickname, String email);
+    Integer modifyPassword(String past_password, String new_password, String email);
     boolean checkNickname(String nickname);
     boolean checkEmail(String email);
     boolean isValidPassword(String password);
