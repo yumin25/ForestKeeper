@@ -4,10 +4,14 @@ import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,11 +31,14 @@ public class User extends BaseEntity {
     @Column(name = "user_is_deleted")
     private boolean delete;
 
-    public User(String name, String nickname, String email, String password){
-        this.name = name;
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
+    @Column(updatable = false, length = 10)
+    private String roles; // USER, ADMIN
+
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
     }
 
     // 닉네임 변경
