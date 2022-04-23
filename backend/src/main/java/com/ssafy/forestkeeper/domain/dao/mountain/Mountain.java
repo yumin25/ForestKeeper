@@ -30,16 +30,16 @@ public class Mountain extends BaseEntity {
     @Column(name = "mountain_admin_tel")
     private String tel;
 
-    @Column(name = "mountain_description")
+    @Column(name = "mountain_description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "mountain_height")
     private double height;
 
     @Column(name = "is_famous")
-    private boolean isFamous;
+    private short isFamous;
 
-    @Column(name = "famous_description")
+    @Column(name = "famous_description", columnDefinition = "TEXT")
     private boolean famousDescription;
 
     @Column(name = "latitude")
