@@ -21,16 +21,31 @@ public class Mountain extends BaseEntity {
     @Column(name = "mountain_name")
     private String name;
 
-    @Column(name = "mountain_height")
-    private long height;
+    @Column(name = "mountain_address")
+    private String address;
+
+    @Column(name = "mountain_admin")
+    private String admin;
+
+    @Column(name = "mountain_admin_tel")
+    private String tel;
 
     @Column(name = "mountain_description")
     private String description;
 
-    @Column(name = "mountain_address")
-    private String address;
+    @Column(name = "mountain_height")
+    private double height;
 
-    @Column(name = "mountain_region_code")
-    private RegionCode regionCode;
+    @Column(name = "is_famous")
+    private boolean isFamous;
+
+    @Column(name = "famous_description")
+    private boolean famousDescription;
+
+    @Column(name = "latitude")
+    private double lat;
+
+    @Column(name = "longitude")
+    private double lng;
 
 }
