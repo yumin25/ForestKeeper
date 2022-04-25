@@ -40,7 +40,7 @@ public class Mountain extends BaseEntity {
     private short isFamous;
 
     @Column(name = "famous_description", columnDefinition = "TEXT")
-    private boolean famousDescription;
+    private String famousDescription;
 
     @Column(name = "latitude")
     private double lat;
