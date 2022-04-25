@@ -7,22 +7,41 @@ function SearchInput({ keyword, keywordHandler, onSubmit, goSearch }) {
           style={{ display: "flex", marginTop: "3.5vh", marginBottom: "0.5vh" }}
         >
           <div>
-            <input
-              className="input"
-              value={keyword}
-              onKeyPress={onSubmit}
-              onChange={keywordHandler}
-              style={{
-                background: "#EFEFEF",
-                width: "77vw",
-                height: "5vh",
-                borderRadius: 10,
-                border: "none",
-                paddingLeft: "5vw",
-                marginBottom: "1vh",
-                marginLeft: "4.5vw",
-              }}
-            ></input>
+            {keyword === "" ? (
+              <input
+                className="input"
+                placeholder="산 이름 검색하기"
+                onKeyPress={onSubmit}
+                onChange={keywordHandler}
+                style={{
+                  background: "#EFEFEF",
+                  width: "77vw",
+                  height: "5vh",
+                  borderRadius: 10,
+                  border: "none",
+                  paddingLeft: "5vw",
+                  marginBottom: "1vh",
+                  marginLeft: "4.5vw",
+                }}
+              ></input>
+            ) : (
+              <input
+                className="input"
+                value={keyword}
+                onKeyPress={onSubmit}
+                onChange={keywordHandler}
+                style={{
+                  background: "#EFEFEF",
+                  width: "77vw",
+                  height: "5vh",
+                  borderRadius: 10,
+                  border: "none",
+                  paddingLeft: "5vw",
+                  marginBottom: "1vh",
+                  marginLeft: "4.5vw",
+                }}
+              ></input>
+            )}
           </div>
           <div onClick={goSearch}>
             <img
