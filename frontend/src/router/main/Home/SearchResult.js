@@ -36,24 +36,6 @@ function SearchResult({ getLocation, myLocation }) {
     <>
       <div id="map">
         <button
-          onClick={() => (document.location.href = "/recommend")}
-          style={{
-            position: "absolute",
-            height: "5vh",
-            width: "28vw",
-            borderRadius: 15,
-            border: "none",
-            boxShadow: "0px 5px 10px 2px darkgray",
-            background: "#37CD8D",
-            color: "white",
-            marginTop: "1.5vh",
-            marginLeft: "5vw",
-            zIndex: 2,
-          }}
-        >
-          추천 등산로
-        </button>
-        <button
           onClick={getLocation}
           style={{
             position: "absolute",
@@ -65,7 +47,7 @@ function SearchResult({ getLocation, myLocation }) {
             background: "white",
             color: "#37CD8D",
             marginTop: "1.5vh",
-            marginLeft: "35vw",
+            marginLeft: "5vw",
             zIndex: 2,
           }}
         >
