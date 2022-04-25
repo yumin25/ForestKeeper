@@ -57,7 +57,7 @@ public class UserController {
     @GetMapping("/check/nickname")
     public ResponseEntity<?> checkNickname(@RequestParam("nickname") String nickname) {
         if(userService.checkNickname(nickname)){
-            return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 409));
         }
         return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 닉네임입니다.", 200));
     }
@@ -66,7 +66,7 @@ public class UserController {
     @GetMapping("/check/email")
     public ResponseEntity<?> checkEmail(@RequestParam("email") String email) {
         if(userService.checkEmail(email)){
-            return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 이메일입니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("사용 중인 이메일입니다.", 409));
         }
         return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 이메일입니다.", 200));
     }
@@ -96,5 +96,13 @@ public class UserController {
         if(result == 4091) return ResponseEntity.status(201).body(BaseResponseDTO.of("입력한 비밀번호가 일치하지 않습니다.", 409));
         if(result == 4092) return ResponseEntity.status(201).body(BaseResponseDTO.of("새로운 비밀번호의 형식이 올바르지 않습니다.", 409));
         return ResponseEntity.status(500).body(BaseResponseDTO.of("비밀번호 변경에 실패하였습니다.", 500));
+    }
+
+    @ApiOperation(value = "탈퇴")
+    @GetMapping("/modify/withdraw")
+    public ResponseEntity<?> withdraw(HttpServletRequest request) {
+        String email = userService.getUserEmail(request.getHeader("X-AUTH-TOKEN"));
+        if(userService.withdraw(email)) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
+        return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
     }
 }
