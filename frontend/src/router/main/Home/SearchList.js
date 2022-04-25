@@ -6,6 +6,7 @@ import SearchInput from "./SearchInput";
 function ResultItem({ result }) {
   return <>{result.name}</>;
 }
+
 function SearchList({
   keyword,
   keywordHandler,
@@ -13,7 +14,6 @@ function SearchList({
   mountainCodeHandler,
 }) {
   let useParam = useParams(); //여기 안에 keyword, category 존재함
-  //const [keyword, setKeyword] = useState(useParam.keyword);
 
   const [searchList, setSearchList] = useState([
     {
@@ -51,7 +51,6 @@ function SearchList({
       console.log(keyword);
       if (keyword !== "" && keyword !== undefined) {
         getResult();
-        // document.location.href = `/search/${keyword}`;
       } else {
         alert("검색어를 입력해주세요.");
       }
@@ -64,6 +63,7 @@ function SearchList({
     mountainCodeHandler(mountainCode);
     pageStateHandler("result");
   }
+  
   useEffect(() => {
     getResult();
   }, []);

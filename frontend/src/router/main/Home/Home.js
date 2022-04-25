@@ -82,7 +82,18 @@ function Home() {
           mountainCodeHandler={mountainCodeHandler}
         ></SearchList>
       ) : (
-        <SearchResult></SearchResult>
+        <>
+          <SearchInput
+            keyword={keyword}
+            keywordHandler={keywordHandler}
+            onSubmit={onSubmit}
+            goSearch={goSearch}
+          ></SearchInput>
+          <SearchResult
+            getLocation={getLocation}
+            myLocation={myLocation}
+          ></SearchResult>
+        </>
       )}
     </>
   );
