@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     //로그인
     @Override
     public String login(UserLoginDTO userLoginDTO) {
-        User user = userRepository.findByEmailEquals(userLoginDTO.getEmail());
+        User user = userRepository.findUserByEmailAndDelete(userLoginDTO.getEmail(), false);
         if (user == null) return "401";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!encoder.matches(userLoginDTO.getPassword(), user.getPassword())) return "401";
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public Integer modifyNickname(String nickname, String email) {
         if(checkNickname(nickname)) return 4091;
         if(!isValidNickname(nickname)) return 4092;
-        User user = userRepository.findByEmailEquals(email);
+        User user = userRepository.findUserByEmailAndDelete(email, false);
         user.setNickname(nickname);
         userRepository.save(user);
         return 201;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer modifyPassword(String past_password, String new_password, String email) {
-        User user = userRepository.findByEmailEquals(email);
+        User user = userRepository.findUserByEmailAndDelete(email, false);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!encoder.matches(past_password, user.getPassword())) return 4091;
         if(!isValidPassword(new_password)) return 4092;
@@ -79,15 +79,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean withdraw(String email) {
+        User user = userRepository.findUserByEmailAndDelete(email, false);
+        user.setDelete(true);
+        userRepository.save(user);
+        return true;
+    }
+
+
+    @Override
     public boolean checkNickname(String nickname) {
-        User user = userRepository.findByNicknameEquals(nickname);
+        User user = userRepository.findUserByNicknameAndDelete(nickname, false);
         if(user == null) return false;
         return true;
     }
 
     @Override
     public boolean checkEmail(String email) {
-        User user = userRepository.findByEmailEquals(email);
+        User user = userRepository.findUserByEmailAndDelete(email, false);
         if(user == null) return false;
         return true;
     }
