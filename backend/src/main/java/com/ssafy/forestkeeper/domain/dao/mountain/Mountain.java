@@ -1,7 +1,6 @@
 package com.ssafy.forestkeeper.domain.dao.mountain;
 
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
-import com.ssafy.forestkeeper.domain.enums.RegionCode;
 import lombok.*;
 
 import javax.persistence.Column;
