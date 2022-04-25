@@ -5,7 +5,7 @@ import Login from "./router/accounts/Login";
 import RecordDetail from "./router/accounts/mypage/RecordDetail";
 import Settings from "./router/accounts/mypage/Settings";
 import Index from "./router/main/Home/Index";
-
+import Search from "./router/main/Home/Search";
 function App() {
   return (
     <>
@@ -13,8 +13,12 @@ function App() {
         <Routes>
           <Route path="/accounts/signup" element={<Signup />} />
           <Route path="/accounts/login" element={<Login />} />
-          <Route path="/accounts/mypage/recorddetail" element={<RecordDetail />} />
+          <Route
+            path="/accounts/mypage/recorddetail"
+            element={<RecordDetail />}
+          />
           <Route path="/accounts/mypage/settings" element={<Settings />} />
+          <Route path="/search/:keyword" element={<Search />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
             <Route path="plogging" />
