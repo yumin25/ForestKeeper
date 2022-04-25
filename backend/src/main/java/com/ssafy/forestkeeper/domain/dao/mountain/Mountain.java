@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Mountain extends BaseEntity {
 
-    @Column(name = "mountain_code")
+    @Column(name = "mountain_code", unique=true)
     private String code;
 
     @Column(name = "mountain_name")
