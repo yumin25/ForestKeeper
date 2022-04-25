@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MountainRepository extends JpaRepository<Mountain, String>{
     Mountain findByCode(String MountainCode);
-    List<Mountain> findByNameContains(String keyword);
 }
