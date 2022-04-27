@@ -1,25 +1,37 @@
 import { fontFamily } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import back from "../../../res/img/back.png";
-import check from "../../../res/img/check.png";
-import checked from "../../../res/img/checked.png";
-import Bar from "./Bar";
+import back from "../../../../res/img/back.png";
+import check from "../../../../res/img/check.png";
+import checked from "../../../../res/img/checked.png";
+import Bar from "../Bar";
 import Star from "./Star";
 import About from "./About";
+import Home from "./Home";
 
 function Detail() {
   const [isVisited, setIsVisited] = useState(false);
-  const [tab, setTab] = useState("star");
+  const [tab, setTab] = useState("home");
   const [Info, setInfo] = useState({
-    name: "관악산",
-    howMany: "589",
-    distance: "454225",
+    name: "북악산",
+    address: "서울특별시  종로구 청운동 ",
+    admin: "종로구청",
+    tel: "02-2148-1114",
+    description:
+      "북악산은 서울의 주산으로 경복궁 뒤쪽에... 전망도 빼어나다.\n\n.",
+    height: 342.5,
+    isFamous: 0,
+    famousDescription: "",
+    lat: 37.5930556,
+    lng: 126.9733333,
   });
   function getMountainInfo() {}
   return (
     <>
-      <div style={{ height: "92.5vh", marginLeft: "6vw", marginRight: "6vw" }}>
-        <div id="header" style={{ height: "8vh" }}>
+      <div style={{ height: "92.5vh" }}>
+        <div
+          id="header"
+          style={{ marginLeft: "6vw", marginRight: "6vw", height: "9vh" }}
+        >
           <div>
             <img
               style={{
@@ -33,19 +45,19 @@ function Detail() {
         </div>
 
         <div
+          id="mountainName"
           style={{
-            height: "6vh",
+            marginLeft: "6vw",
+            marginRight: "6vw",
+            height: "5vh",
             display: "flex",
-            marginBottom: "1vh",
           }}
         >
           <div
-            id="mountainName"
             style={{
               marginLeft: "3vw",
-              marginBottom: "2.5vh",
               fontSize: "3.5vh",
-              fontWeight: "light",
+              fontWeight: "500",
             }}
           >
             {Info.name}
@@ -65,6 +77,8 @@ function Detail() {
             ) : (
               <img
                 style={{
+                  marginLeft: "2vw",
+                  marginTop: "1.5vh",
                   width: "6vw",
                   height: "6vw",
                 }}
@@ -74,41 +88,38 @@ function Detail() {
           </div>
         </div>
 
-        {/* 15vh */}
         <div
-          id="banner"
+          id="address"
           style={{
-            height: "8vh",
-            background: "#EAF9E6",
-            borderRadius: 15,
-            marginBottom: "4vh",
-            paddingTop: "2vh",
-            paddingLeft: "5vw",
-            paddingRight: "5vw",
+            marginLeft: "9vw",
+            marginRight: "6vw",
+            marginBottom: "2.2vh",
+            fontSize: "1.8vh",
+            color: "#69696C",
           }}
         >
-          <div id="text" style={{ color: "#8ABC9A" }}>
-            <div style={{ fontSize: "1.5vh" }}>누적 방문자/거리</div>
-            <div
-              style={{ display: "flex", fontSize: "3.5vh", fontWeight: "bold" }}
-            >
-              <div style={{ marginRight: "5vw" }}>{Info.howMany} 명</div>
-              <div>{Info.distance} km</div>
-            </div>
-          </div>
+          {Info.address}
         </div>
 
-        <div id="tabs" style={{ marginLeft: "2vw", height: "60vh" }}>
+        <div id="tabs" style={{ height: "74vh" }}>
           {tab == "star" ? (
             <>
               <div
                 id="tab"
                 style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
                   marginBottom: "1.5vh",
                 }}
               >
+                <div
+                  style={{ marginRight: "2.5vw" }}
+                  onClick={() => setTab("home")}
+                >
+                  Home
+                </div>
                 <div
                   style={{
                     fontWeight: 900,
@@ -122,16 +133,24 @@ function Detail() {
               </div>
               <Star></Star>
             </>
-          ) : (
+          ) : tab == "about" ? (
             <>
               <div
                 id="tab"
                 style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
                   marginBottom: "1.5vh",
                 }}
               >
+                <div
+                  style={{ marginRight: "2.5vw" }}
+                  onClick={() => setTab("home")}
+                >
+                  Home
+                </div>
                 <div
                   onClick={() => setTab("star")}
                   style={{ marginRight: "2.5vw" }}
@@ -148,6 +167,38 @@ function Detail() {
                 </div>
               </div>
               <About></About>
+            </>
+          ) : (
+            <>
+              <div
+                id="tab"
+                style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
+                  fontSize: "2vh",
+                  display: "flex",
+                  marginBottom: "1.5vh",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: 900,
+                    color: "#002831",
+                    marginRight: "2.5vw",
+                  }}
+                  onClick={() => setTab("home")}
+                >
+                  Home
+                </div>
+                <div
+                  onClick={() => setTab("star")}
+                  style={{ marginRight: "2.5vw" }}
+                >
+                  명예의 전당
+                </div>
+                <div>About {Info.name}</div>
+              </div>
+              <Home lat={Info.lat} lng={Info.lng}></Home>
             </>
           )}
         </div>
