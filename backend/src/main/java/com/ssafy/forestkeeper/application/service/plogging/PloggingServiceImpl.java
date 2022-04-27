@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,20 +68,31 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public TrashCanListWrapperResponseDTO getTrashCanList(String regionName) {
-		List<TrashCanDTO> trashCanDTOList = new ArrayList<>();
-		trashCanRepository.findByRegionCode(RegionCode.valueOf(regionName)).get().forEach(tc ->{
-			trashCanDTOList.add(TrashCanDTO.builder()
-					.address(tc.getAddress())
-					.latitude(tc.getLatitude())
-					.longitude(tc.getLongitude())
-					.type(tc.getType())
-					.build());
-		});
-		
-		return TrashCanListWrapperResponseDTO.builder()
-				.list(trashCanDTOList)
-				.build();
+	public List<TrashCan> getTrashCanList() {
+
+		return trashCanRepository.findAll();
 	}
+
+	@Override
+	public TrashCanListWrapperResponseDTO getTrashCanList(String region) {
+		return null;
+	}
+
+//	@Override
+//	public TrashCanListWrapperResponseDTO getTrashCanList(String regionName) {
+//		List<TrashCanDTO> trashCanDTOList = new ArrayList<>();
+//		trashCanRepository.findByRegionCode(RegionCode.valueOf(regionName)).get().forEach(tc ->{
+//			trashCanDTOList.add(TrashCanDTO.builder()
+//					.address(tc.getAddress())
+//					.latitude(tc.getLatitude())
+//					.longitude(tc.getLongitude())
+//					.BEtype(tc.getType())
+//					.build());
+//		});
+//
+//		return TrashCanListWrapperResponseDTO.builder()
+//				.list(trashCanDTOList)
+//				.build();
+//	}
 
 }
