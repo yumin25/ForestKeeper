@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.application.service.user;
 
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.enums.UserCode;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
@@ -56,7 +57,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserEmail(String token) {
+        token = token.substring(7);
         return jwtProvider.getUserAccount(token);
+    }
+
+    @Override
+    public UserInfoDTO getUserDetail(String email) {
+        User user = userRepository.findByEmailAndDelete(email, false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+        return UserInfoDTO.builder()
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 
     @Override
