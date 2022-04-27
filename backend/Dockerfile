@@ -8,7 +8,7 @@ ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
 # jar 파일을 복사
-COPY build/libs/backend-0.0.1-SNAPSHOT.jar application.jar
+COPY build/libs/forestkeeper-0.0.1-SNAPSHOT.jar application.jar
 
 # 어플리케이션 포트
 EXPOSE 8080
