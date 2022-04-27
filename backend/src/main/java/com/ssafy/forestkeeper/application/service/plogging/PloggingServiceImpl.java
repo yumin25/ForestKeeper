@@ -1,22 +1,16 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
-import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
