@@ -135,6 +135,7 @@ function Star() {
     background: "#DAEDD7",
     color: "white",
     border: "none",
+    marginRight: "1vw",
   };
   return (
     <>
