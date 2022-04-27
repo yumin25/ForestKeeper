@@ -1,10 +1,12 @@
 import axios from "axios";
 
+let Token = localStorage.getItem("idToken").replace(`"`, " ").replace(`"`, " ");
+
 const instance = axios.create({
   baseURL: "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
-    token: localStorage.getItem("idToken"),
+    Authorization: "Bearer" + Token,
   },
 });
 

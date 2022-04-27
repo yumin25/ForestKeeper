@@ -3,9 +3,11 @@ import "./Login.css";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { save } from "../../store/user";
+import { useNavigate } from "react-router-dom";
 import Send from "../../config/Send";
 
 function Login({ saveUser, userSlice }) {
+  const history = useNavigate();
   const [email, setEmail] = useState("");
   const onEmailHandler = (e) => {
     setEmail(e.target.value);
@@ -31,17 +33,12 @@ function Login({ saveUser, userSlice }) {
         }
         window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
         console.log(res.data);
-        // Send.get(`userinfo/seq/${res.data.userSeq}`).then((response) => {
-        //   saveUser(response.data);
-        // });
-        // history({
-        //   pathname: "/",
-        //   props: {
-        //     userId: data.userId,
-        //     userSeq: res.data.userSeq,
-        //     userCreatableCount: res.data.userCreatableCount,
-        //   },
-        // });
+        Send.get(`/user/userinfo`).then((response) => {
+          saveUser(response.data);
+        });
+        history({
+          pathname: "/",
+        });
       })
       .catch((e) => console.log(e));
   };

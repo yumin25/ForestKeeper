@@ -12,10 +12,10 @@ const userSlice = createSlice({
   initialState: initialUserState,
   reducers: {
     save: (state, action) => {
-      state.userId = action.payload.id;
-      state.userEmail = action.payload.user_email;
-      state.userNickname = action.payload.user_nickname;
-      state.userName = action.payload.user_name;
+      // state.userId = action.payload.id;
+      state.userEmail = action.payload.email;
+      state.userNickname = action.payload.nickname;
+      state.userName = action.payload.name;
     },
     update: (state, action) => {
       state.userNickname = action.payload.nickname;
