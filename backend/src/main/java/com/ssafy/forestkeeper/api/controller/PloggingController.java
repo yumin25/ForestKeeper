@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.api.controller;
 
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
@@ -86,7 +88,31 @@ public class PloggingController {
             TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = TrashCanListWrapperResponseDTO.builder()
                 .list(list).build();
 
-            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("플로깅 조회에 성공했습니다.", 200,
+            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("전체 쓰레기통 조회에 성공했습니다.", 200,
+                trashCanListWrapperResponseDTO));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
+        }
+    }
+
+    @ApiOperation(value = "특정 지역구 쓰레기통 목록")
+    @GetMapping("/trash/{region}")
+    public ResponseEntity<?> getTrashCanList(@PathVariable("region") String region) {
+
+        try {
+
+            Optional<List<TrashCan>> list = ploggingService.getTrashCanList(region);
+
+            if (!list.isPresent() || list.get().size() == 0) {
+                return ResponseEntity.status(404)
+                    .body(BaseResponseDTO.of("쓰레기통 데이터가 존재하지 않습니다.", 404));
+            }
+
+            TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = TrashCanListWrapperResponseDTO.builder()
+                .list(list.get()).build();
+
+            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("지역구 쓰레기통 조회에 성공했습니다.", 200,
                 trashCanListWrapperResponseDTO));
 
         } catch (Exception e) {

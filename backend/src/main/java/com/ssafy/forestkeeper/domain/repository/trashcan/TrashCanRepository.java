@@ -12,5 +12,5 @@ import com.ssafy.forestkeeper.domain.enums.RegionCode;
 @Repository
 public interface TrashCanRepository extends JpaRepository<TrashCan, String>{
 //	Optional<List<TrashCan>> findByRegionCode(RegionCode regionCode);
-    List<TrashCan> findByRegion(String region);
+    Optional<List<TrashCan>> findByRegion(String region);
 }
