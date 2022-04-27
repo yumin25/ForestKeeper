@@ -100,33 +100,4 @@ public class PloggingServiceImpl implements PloggingService{
 				.list(trashCanDTOList)
 				.build();
 	}
-
-	@Override
-	public PloggingListWrapperResponseDTO getPloggingList(int page) {
-        List<Plogging> ploggingList = ploggingRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),PageRequest.of(page - 1, 10))
-                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
-
-    	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
-
-    	ploggingList.forEach(plogging ->
-    		ploggingListResponseDTOList.add(
-                        PloggingListResponseDTO.builder()
-                        		.date(plogging.getStartTime().toLocalDate().toString())
-                        		.ploggingId(plogging.getId())
-                        		.distance(plogging.getDistance())
-                        		.time(plogging.getDurationTime())
-                        		.exp(plogging.getExp())
-                        		.mountainName(plogging.getMountain().getName())
-                                .build()
-                )
-        );
-
-        return PloggingListWrapperResponseDTO.builder()
-                .list(ploggingListResponseDTOList)
-                .build();
-    	
-	}
-	
-
-
 }

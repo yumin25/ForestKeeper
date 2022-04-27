@@ -11,4 +11,5 @@ import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 public interface PloggingRepository  extends JpaRepository<Plogging, String>{
 
 	Optional<List<Plogging>> findByUserId(String userId, Pageable pageable);
+	Optional<List<Plogging>> findByUserId(String userId);
 }

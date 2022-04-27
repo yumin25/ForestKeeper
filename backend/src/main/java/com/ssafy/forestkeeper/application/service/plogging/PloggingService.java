@@ -8,7 +8,6 @@ import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrap
 
 public interface PloggingService {
 	
-	PloggingListWrapperResponseDTO getPloggingList(int page);
 	PloggingDetailResponseDTO get(String ploggingId);
     void register(PloggingRegisterDTO ploggingRegisterDTO);
     void registerExp(ExpRegisterDTO expRegisterDTO);
