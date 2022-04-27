@@ -20,7 +20,7 @@ function NavBar() {
   }
   return (
     <div>
-      <div style={{ background: "yellow", display: "flex", height: "7.5vh" }}>
+      <div style={{ display: "flex", height: "7.5vh" }}>
         <div id="home" style={{ width: "33vw" }} onClick={() => goHome()}>
           {now == "HOME" ? (
             <NavLink to={"/"}>
