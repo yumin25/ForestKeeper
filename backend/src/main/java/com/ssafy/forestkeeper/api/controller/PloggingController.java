@@ -1,5 +1,7 @@
 package com.ssafy.forestkeeper.api.controller;
 
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,8 @@ public class PloggingController {
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(@RequestBody PloggingRegisterDTO ploggingRegisterDTO) {
+    public ResponseEntity<?> registerPlogging(
+        @RequestBody PloggingRegisterDTO ploggingRegisterDTO) {
         try {
             ploggingService.register(ploggingRegisterDTO);
         } catch (Exception e) {
@@ -46,19 +49,21 @@ public class PloggingController {
         }
         return ResponseEntity.status(201).body(BaseResponseDTO.of("플로깅 등록에 성공했습니다.", 201));
     }
-    
+
     @ApiOperation(value = "플로깅 상세 조회")
     @GetMapping("/{ploggingId}")
-    public ResponseEntity<?> getPloggingDetail(@ApiParam(value = "플로깅 ID", required = true) @PathVariable @NotBlank String ploggingId) {
-    	PloggingDetailResponseDTO ploggingDetailResponseDTO = null;
+    public ResponseEntity<?> getPloggingDetail(
+        @ApiParam(value = "플로깅 ID", required = true) @PathVariable @NotBlank String ploggingId) {
+        PloggingDetailResponseDTO ploggingDetailResponseDTO = null;
         try {
-        	ploggingDetailResponseDTO = ploggingService.get(ploggingId);
+            ploggingDetailResponseDTO = ploggingService.get(ploggingId);
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
-        return ResponseEntity.ok(PloggingDetailResponseDTO.of("플로깅 조회에 성공했습니다.", 200, ploggingDetailResponseDTO));
+        return ResponseEntity.ok(
+            PloggingDetailResponseDTO.of("플로깅 조회에 성공했습니다.", 200, ploggingDetailResponseDTO));
     }
-    
+
     @ApiOperation(value = "경험치 부여")
     @PatchMapping
     public ResponseEntity<?> registerExp(@RequestBody ExpRegisterDTO expRegisterDTO) {
@@ -69,16 +74,23 @@ public class PloggingController {
         }
         return ResponseEntity.status(201).body(BaseResponseDTO.of("경험치 부여에 성공했습니다.", 201));
     }
-    
-    @ApiOperation(value = "쓰레기통 목록")
-    @GetMapping("/trash/{regionName}")
-    public ResponseEntity<?> getTrashCanList(@ApiParam(value = "지역구 명", required = true) @PathVariable @NotBlank String regionName) {
-    		TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = null;
+
+    @ApiOperation(value = "쓰레기통 전체 목록")
+    @GetMapping("/trash")
+    public ResponseEntity<?> getTrashCanList() {
+
         try {
-        	trashCanListWrapperResponseDTO = ploggingService.getTrashCanList(regionName);
+
+            List<TrashCan> list = ploggingService.getTrashCanList();
+
+            TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = TrashCanListWrapperResponseDTO.builder()
+                .list(list).build();
+
+            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("플로깅 조회에 성공했습니다.", 200,
+                trashCanListWrapperResponseDTO));
+
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
-        return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("플로깅 조회에 성공했습니다.", 200, trashCanListWrapperResponseDTO));
     }
 }
