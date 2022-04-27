@@ -32,7 +32,6 @@ function Login({ saveUser, userSlice }) {
           return;
         }
         window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
-        console.log(res.data);
         Send.get(`/user/userinfo`).then((response) => {
           saveUser(response.data);
         });
