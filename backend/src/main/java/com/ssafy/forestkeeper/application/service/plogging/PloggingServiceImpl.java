@@ -1,19 +1,16 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
-import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
-import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
-import com.ssafy.forestkeeper.domain.enums.RegionCode;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
@@ -74,8 +71,9 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public TrashCanListWrapperResponseDTO getTrashCanList(String region) {
-		return null;
+	public Optional<List<TrashCan>> getTrashCanList(String region) {
+
+		return trashCanRepository.findByRegion(region);
 	}
 
 //	@Override

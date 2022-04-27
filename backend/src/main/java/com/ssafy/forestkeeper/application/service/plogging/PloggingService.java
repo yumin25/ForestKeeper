@@ -6,6 +6,7 @@ import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailRe
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.List;
+import java.util.Optional;
 
 public interface PloggingService {
 	
@@ -13,5 +14,5 @@ public interface PloggingService {
     void register(PloggingRegisterDTO ploggingRegisterDTO);
     void registerExp(ExpRegisterDTO expRegisterDTO);
     List<TrashCan> getTrashCanList();
-    TrashCanListWrapperResponseDTO getTrashCanList(String region);
+    Optional<List<TrashCan>> getTrashCanList(String region);
 }
