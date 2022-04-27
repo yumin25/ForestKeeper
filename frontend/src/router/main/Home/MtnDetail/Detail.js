@@ -111,7 +111,7 @@ function Detail() {
                   marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
-                  marginBottom: "1.5vh",
+                  marginBottom: "2vh",
                 }}
               >
                 <div
@@ -142,7 +142,7 @@ function Detail() {
                   marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
-                  marginBottom: "1.5vh",
+                  marginBottom: "2vh",
                 }}
               >
                 <div
