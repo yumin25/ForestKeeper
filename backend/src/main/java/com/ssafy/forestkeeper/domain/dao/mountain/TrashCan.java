@@ -24,10 +24,12 @@ public class TrashCan extends BaseEntity {
     @Column(name = "trash_can_address")
     private String address;
 
-    @Column(name = "trash_can_region_code")
-    private RegionCode regionCode;
+    @Column(name = "trash_can_region")
+    private String region;
+
+    @Column(name = "address_detail")
+    private String detail;
 
     @Column(name = "trash_can_type")
-    private String type;
-
+    private short type;
 }
