@@ -18,7 +18,6 @@ import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrap
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
-import com.ssafy.forestkeeper.domain.enums.RegionCode;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
@@ -85,19 +84,32 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public TrashCanListWrapperResponseDTO getTrashCanList(String regionName) {
-		List<TrashCanDTO> trashCanDTOList = new ArrayList<>();
-		trashCanRepository.findByRegionCode(RegionCode.valueOf(regionName)).get().forEach(tc ->{
-			trashCanDTOList.add(TrashCanDTO.builder()
-					.address(tc.getAddress())
-					.latitude(tc.getLatitude())
-					.longitude(tc.getLongitude())
-					.type(tc.getType())
-					.build());
-		});
-		
-		return TrashCanListWrapperResponseDTO.builder()
-				.list(trashCanDTOList)
-				.build();
+	public List<TrashCan> getTrashCanList() {
+
+		return trashCanRepository.findAll();
 	}
+
+	@Override
+	public Optional<List<TrashCan>> getTrashCanList(String region) {
+
+		return trashCanRepository.findByRegion(region);
+	}
+
+//	@Override
+//	public TrashCanListWrapperResponseDTO getTrashCanList(String regionName) {
+//		List<TrashCanDTO> trashCanDTOList = new ArrayList<>();
+//		trashCanRepository.findByRegionCode(RegionCode.valueOf(regionName)).get().forEach(tc ->{
+//			trashCanDTOList.add(TrashCanDTO.builder()
+//					.address(tc.getAddress())
+//					.latitude(tc.getLatitude())
+//					.longitude(tc.getLongitude())
+//					.BEtype(tc.getType())
+//					.build());
+//		});
+//
+//		return TrashCanListWrapperResponseDTO.builder()
+//				.list(trashCanDTOList)
+//				.build();
+//	}
+
 }
