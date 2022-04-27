@@ -11,6 +11,6 @@ WORKDIR $APP_HOME
 COPY build/libs/forestkeeper-0.0.1-SNAPSHOT.jar application.jar
 
 # 어플리케이션 포트
-EXPOSE 8080
+EXPOSE 8443
 
 CMD ["java", "-jar", "application.jar"]
