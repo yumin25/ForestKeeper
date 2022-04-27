@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.dto.response.plogging;
 
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.List;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
@@ -17,7 +18,7 @@ import lombok.ToString;
 public class TrashCanListWrapperResponseDTO extends BaseResponseDTO{
 
     @ApiModelProperty(name = "쓰레기통 목록")
-    private List<TrashCanDTO> list;
+    private List<TrashCan> list;
 
     public static TrashCanListWrapperResponseDTO of(String message, Integer statusCode, TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO) {
 
