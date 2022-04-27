@@ -9,4 +9,5 @@ public interface UserInfoService {
 
 	PloggingListWrapperResponseDTO getPloggingList(int page);
     Optional<List<String>> getMountainList(int page);
+    PloggingListWrapperResponseDTO getPloggingInMountain(String mountainName);
 }
