@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./router/main/Home/Home";
+import Plogging from "./router/main/plogging/Plogging";
 import Signup from "./router/accounts/Signup";
 import Login from "./router/accounts/Login";
 import RecordDetail from "./router/accounts/mypage/RecordDetail";
@@ -22,7 +23,7 @@ function App() {
           <Route path="/detail/:keyword" element={<Detail />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
-            <Route path="plogging" />
+            <Route path="plogging" element={<Plogging />} />
             <Route path="accounts/mypage" />
           </Route>
         </Routes>
