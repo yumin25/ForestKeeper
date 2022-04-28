@@ -15,18 +15,70 @@ function ReviewItem({ nickname, content }) {
       <div style={{ fontWeight: "bold", marginBottom: "0.5vh" }}>
         {nickname}
       </div>
-      <div>{content}</div>
+      <div style={{ color: "#69696C" }}>{content}</div>
     </div>
   );
 }
-function QnaItem() {
-  return <></>;
+function QnaItem({ nickname, content, title }) {
+  return (
+    <>
+      <div
+        style={{
+          // height: "9vh",
+          borderBottom: "1px solid #CDCDCD",
+          fontSize: "1.5vh",
+        }}
+      >
+        <div
+          style={{
+            marginTop: "1.5vh",
+            fontWeight: "bold",
+            marginBottom: "0.5vh",
+          }}
+        >
+          {nickname}
+        </div>
+        <div style={{ marginBottom: "0.5vh" }}>{title}</div>
+        <div style={{ color: "#8E8E92", marginBottom: "1.5vh" }}>{content}</div>
+      </div>
+    </>
+  );
+}
+
+function WriteItem() {
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            marginTop: "0.5vh",
+            textAlign: "right",
+            fontSize: "1.5vh",
+            color: "#8E8E92",
+            marginLeft: "65vw",
+          }}
+        >
+          글쓰기
+        </div>
+        <div>
+          <img
+            style={{
+              marginLeft: "2vw",
+              width: "2vh",
+              height: "2vh",
+            }}
+            src={edit}
+          />
+        </div>
+      </div>
+    </>
+  );
 }
 
 function About() {
   const nickname = "익명숲지기";
-  const content =
-    "처음 가보는 산이었는데 역시 괜히 ‘악’산이 아니었습니다...정말 죽음을 맛봤습니다..^^..";
+  const title = "여기 꼭 아이젠 필요할까요??";
+  const content = "제가 어쩌고 저쩌고요 이러쿵 저러쿵 배고프다";
   const [tab, setTab] = useState("review");
   const ClickedStyle = {
     borderRadius: 3,
@@ -69,34 +121,18 @@ function About() {
         <div id="List" style={{ height: "62vh" }}>
           {tab == "review" ? (
             <>
-              <div style={{ display: "flex" }}>
-                <div
-                  style={{
-                    marginTop: "0.5vh",
-                    textAlign: "right",
-                    fontSize: "1.5vh",
-                    color: "#8E8E92",
-                    marginLeft: "65vw",
-                    marginBottom: "1vh",
-                  }}
-                >
-                  글쓰기
-                </div>
-                <div>
-                  <img
-                    style={{
-                      marginLeft: "2vw",
-                      width: "2vh",
-                      height: "2vh",
-                    }}
-                    src={edit}
-                  />
-                </div>
-              </div>
+              <WriteItem />
               <ReviewItem nickname={nickname} content={content} />
             </>
           ) : (
-            <></>
+            <>
+              <WriteItem />
+              <QnaItem
+                nickname={nickname}
+                content={content}
+                title={title}
+              ></QnaItem>
+            </>
           )}
         </div>
       </div>
