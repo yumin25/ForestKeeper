@@ -20,7 +20,7 @@ function App() {
             element={<RecordDetail />}
           />
           <Route path="/accounts/mypage/settings" element={<Settings />} />
-          <Route path="/detail/:keyword" element={<Detail />} />
+          <Route path="/detail/:mountainCode" element={<Detail />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
             <Route path="plogging" element={<Plogging />} />
