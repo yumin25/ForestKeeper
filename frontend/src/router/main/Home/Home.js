@@ -7,7 +7,6 @@ import { Route, Routes } from "react-router-dom";
 import SearchInput from "./SearchInput";
 import Map from "./Map";
 import SearchList from "./SearchList";
-import SearchResult from "./SearchResult";
 
 function Home() {
   const [pageState, setPageState] = useState("home");
@@ -74,26 +73,13 @@ function Home() {
           ></SearchInput>
           <Map getLocation={getLocation} myLocation={myLocation}></Map>
         </>
-      ) : pageState == "searchList" ? (
+      ) : (
         <SearchList
           keyword={keyword}
           keywordHandler={keywordHandler}
           pageStateHandler={pageStateHandler}
           mountainCodeHandler={mountainCodeHandler}
         ></SearchList>
-      ) : (
-        <>
-          <SearchInput
-            keyword={keyword}
-            keywordHandler={keywordHandler}
-            onSubmit={onSubmit}
-            goSearch={goSearch}
-          ></SearchInput>
-          <SearchResult
-            getLocation={getLocation}
-            myLocation={myLocation}
-          ></SearchResult>
-        </>
       )}
     </>
   );
