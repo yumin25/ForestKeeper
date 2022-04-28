@@ -78,8 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/user/userinfo").permitAll()
                 .antMatchers("/api/user/modify/**").hasRole("USER")
-                .anyRequest().hasRole("USER")
+                .anyRequest().permitAll()
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

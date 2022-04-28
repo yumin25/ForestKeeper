@@ -2,7 +2,9 @@ package com.ssafy.forestkeeper.application.service.user;
 
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
 import com.ssafy.forestkeeper.domain.dao.user.User;
+import com.ssafy.forestkeeper.domain.enums.UserCode;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +24,16 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public Integer signUp(UserSignUpDTO userDTO) {
-        if(!isValidName(userDTO.getName())) return 4091;
-        else if(!isValidNickname(userDTO.getNickname())) return 4092;
-        else if(!isValidPassword(userDTO.getPassword())) return 4093;
-        else if(checkEmail(userDTO.getEmail())) return 4094;
-        else if(checkNickname(userDTO.getNickname())) return 4095;
+        if (!isValidName(userDTO.getName())) return 4091;
+        else if (!isValidNickname(userDTO.getNickname())) return 4092;
+        else if (!isValidPassword(userDTO.getPassword())) return 4093;
+        else if (checkEmail(userDTO.getEmail())) return 4094;
+        else if (checkNickname(userDTO.getNickname())) return 4095;
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         userRepository.save(User.builder()
+                .userCode(UserCode.USER)
                 .name(userDTO.getName())
                 .nickname(userDTO.getNickname())
                 .email(userDTO.getEmail())
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserByEmailAndDelete(userLoginDTO.getEmail(), false);
         if (user == null) return "401";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(!encoder.matches(userLoginDTO.getPassword(), user.getPassword())) return "401";
+        if (!encoder.matches(userLoginDTO.getPassword(), user.getPassword())) return "401";
         String token = jwtProvider.createToken(userLoginDTO.getEmail());
         System.out.println(token);
         return token;
@@ -54,13 +57,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserEmail(String token) {
-        return jwtProvider.getUserPk(token);
+        token = token.substring(7);
+        return jwtProvider.getUserAccount(token);
+    }
+
+    @Override
+    public UserInfoDTO getUserDetail(String email) {
+        User user = userRepository.findByEmailAndDelete(email, false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+        return UserInfoDTO.builder()
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 
     @Override
     public Integer modifyNickname(String nickname, String email) {
-        if(checkNickname(nickname)) return 4091;
-        if(!isValidNickname(nickname)) return 4092;
+        if (checkNickname(nickname)) return 4091;
+        if (!isValidNickname(nickname)) return 4092;
         User user = userRepository.findUserByEmailAndDelete(email, false);
         user.setNickname(nickname);
         userRepository.save(user);
@@ -71,8 +85,8 @@ public class UserServiceImpl implements UserService {
     public Integer modifyPassword(String past_password, String new_password, String email) {
         User user = userRepository.findUserByEmailAndDelete(email, false);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(!encoder.matches(past_password, user.getPassword())) return 4091;
-        if(!isValidPassword(new_password)) return 4092;
+        if (!encoder.matches(past_password, user.getPassword())) return 4091;
+        if (!isValidPassword(new_password)) return 4092;
         user.setPassword(encoder.encode(new_password));
         userRepository.save(user);
         return 201;
@@ -90,35 +104,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkNickname(String nickname) {
         User user = userRepository.findUserByNicknameAndDelete(nickname, false);
-        if(user == null) return false;
+        if (user == null) return false;
         return true;
     }
 
     @Override
     public boolean checkEmail(String email) {
         User user = userRepository.findUserByEmailAndDelete(email, false);
-        if(user == null) return false;
+        if (user == null) return false;
         return true;
     }
 
     @Override
     public boolean isValidPassword(String password) {
         Matcher m = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$").matcher(password); //영문자, 숫자, 특수문자 포함 8자 이상
-        if(!m.matches()) return false;
+        if (!m.matches()) return false;
         return true;
     }
 
     @Override
     public boolean isValidName(String name) {
-        if(name.length() <2 || name.length()>10) return false;  //2자 이상 10자 이하
-        if(!Pattern.matches("^[ㄱ-ㅎ가-힣]*$", name)) return false; //한글만 입력 허용
+        if (name.length() < 2 || name.length() > 10) return false;  //2자 이상 10자 이하
+        if (!Pattern.matches("^[ㄱ-ㅎ가-힣]*$", name)) return false; //한글만 입력 허용
         return true;
     }
 
     @Override
     public boolean isValidNickname(String nickname) {
         if (nickname.length() < 2 || nickname.length() > 10) return false;  //2자 이상 10자 이하
-        if(!Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname)) return false; //영어, 한글, 숫자만 입력 허용
+        if (!Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname)) return false; //영어, 한글, 숫자만 입력 허용
         return true;
     }
 }

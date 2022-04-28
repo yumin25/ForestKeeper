@@ -1,11 +1,11 @@
 import search from "../../../res/img/search.png";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 function SearchInput({ keyword, keywordHandler, onSubmit, goSearch }) {
   return (
     <>
       <div id="searchBar" style={{ height: "7vh" }}>
-        <div
-          style={{ display: "flex", marginTop: "3.5vh", marginBottom: "0.5vh" }}
-        >
+        <div style={{ display: "flex", marginTop: "3.5vh" }}>
           <div>
             {keyword === "" ? (
               <input
