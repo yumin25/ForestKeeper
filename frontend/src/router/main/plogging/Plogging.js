@@ -24,7 +24,7 @@ import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 //     </NaverMap>
 //   );
 // }
-console.log(window);
+// console.log(window);
 function Plogging() {
   const navermaps = window.naver.maps;
   const [myLocation, setMyLocation] = useState("");
