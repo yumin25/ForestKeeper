@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import logo from "../../../res/img/logo.png";
 
 function MyPage({ userSlice }) {
+  const navigate = useNavigate();
   const [menu, setMenu] = useState("1");
   const menuHandlerOne = (e) => {
     setMenu("1");
@@ -11,6 +13,11 @@ function MyPage({ userSlice }) {
   const menuHandlerTwo = (e) => {
     setMenu("2");
   };
+  useEffect(() => {
+    if (!localStorage.getItem("idToken")) {
+      navigate("/accounts/login");
+    }
+  });
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row-reverse", margin: "1vh", height: "5vh" }}>

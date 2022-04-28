@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const token = localStorage.getItem("idToken");
+
 const instance = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://k6a306.p.ssafy.io/api/",
   headers: {
     "Content-Type": "application/json",
-    Authorization: localStorage.getItem("idToken") ? "Bearer" + localStorage.getItem("idToken").replace(`"`, " ").replace(`"`, " ") : null,
+    Authorization: token ? "Bearer" + token.replace(`"`, " ").replace(`"`, " ") : null,
   },
 });
 
