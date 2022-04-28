@@ -4,11 +4,16 @@
   border-top: none;
   border-left: none;
   border-right: none;
-  border-color: #ACACAC;
+
+  border-color: #acacac;
   border-width: 1px;
 }
 
 .input:focus {
-  border-color: #37CD8D;
+  border-color: #37cd8d;
   outline: none;
+}
+
+input::placeholder {
+  color: #acacac;
 }

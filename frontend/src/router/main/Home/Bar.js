@@ -20,7 +20,7 @@ function NavBar() {
   }
   return (
     <div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", height: "7.5vh" }}>
         <div id="home" style={{ width: "33vw" }} onClick={() => goHome()}>
           {now == "HOME" ? (
             <NavLink to={"/"}>
@@ -77,7 +77,7 @@ function NavBar() {
         </div>
         <div id="user" style={{ width: "33vw" }} onClick={() => goUser()}>
           {now == "USER" ? (
-            <NavLink to="/user">
+            <NavLink to="/accounts/mypage">
               <img
                 style={{
                   marginTop: "2vh",
@@ -89,7 +89,7 @@ function NavBar() {
               />
             </NavLink>
           ) : (
-            <NavLink to="/user">
+            <NavLink to="/accounts/mypage">
               <img
                 style={{
                   marginTop: "2vh",
