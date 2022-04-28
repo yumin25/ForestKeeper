@@ -73,10 +73,17 @@ public class MountainController {
 
     @ApiOperation(value = "산 검색")
     @GetMapping("")
-    public ResponseEntity<?> searchMountain(@RequestParam("keyword") String keyword) {
+    public ResponseEntity<?> searchMountain(@RequestParam("keyword") String keyword,
+        @RequestParam(required = false, value = "page") Integer page) {
 
         try {
-            Optional<List<Mountain>> mountainList = mountainService.searchMountain(keyword);
+            if (page == null || page < 1) {
+                page = 1;
+            }
+
+            page -= 1;
+
+            Optional<List<Mountain>> mountainList = mountainService.searchMountain(keyword, page);
 
             if (!mountainList.isPresent() || mountainList.get().size() == 0) {
                 return ResponseEntity.status(404).body(BaseResponseDTO.of("데이터가 존재하지 않습니다.", 404));
