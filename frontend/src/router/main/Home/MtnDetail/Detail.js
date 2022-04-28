@@ -186,7 +186,6 @@ function Detail() {
                     color: "#002831",
                     marginRight: "2.5vw",
                   }}
-                  onClick={() => setTab("home")}
                 >
                   Home
                 </div>
@@ -196,8 +195,9 @@ function Detail() {
                 >
                   명예의 전당
                 </div>
-                <div>About {Info.name}</div>
+                <div onClick={() => setTab("home")}>About {Info.name}</div>
               </div>
+
               <Home lat={Info.lat} lng={Info.lng}></Home>
             </>
           )}
