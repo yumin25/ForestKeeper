@@ -1,0 +1,29 @@
+.input {
+
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-color: #acacac;
+  border-width: 1px;
+}
+
+.input:focus {
+  border-color: #37cd8d;
+  outline: none;
+}
+
+input::placeholder {
+  color: #acacac;
+  font-size: 1.5vh;
+}
+
+.duplicateBtn{
+  font-size: 1.5vh;
+  width: 20vw;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  border-radius: 50px;
+  border: none;
+  background-color: #B8DEB3;
+  color: white;
+} 
