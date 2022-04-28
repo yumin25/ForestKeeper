@@ -39,7 +39,10 @@ function Login({ saveUser, userSlice }) {
           pathname: "/",
         });
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        window.alert("이메일과 비밀번호를 확인해주십시오");
+      });
   };
   const handleEnter = (e) => {
     if (e.key === "Enter") {
