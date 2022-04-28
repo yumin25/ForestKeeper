@@ -2,6 +2,13 @@ import { useNavigate } from "react-router-dom";
 
 function RecordDetail() {
   const navigate = useNavigate();
+  const Logout = () => {
+    window.localStorage.clear();
+    navigate({
+      pathname: "/accounts/login",
+    });
+  };
+
   return (
     <>
       <div style={{ display: "flex", margin: "1vh", justifyContent: "space-between" }}>
@@ -37,7 +44,9 @@ function RecordDetail() {
       <div style={{ visibility: "hidden" }}></div>
       <hr />
       {/* 로그아웃 and 탈퇴 */}
-      <div style={{ margin: "1vh", height: "5vh", minHeight: "25px", display: "flex", alignItems: "center", fontWeight: "700" }}>로그아웃</div>
+      <div style={{ margin: "1vh", height: "5vh", minHeight: "25px", display: "flex", alignItems: "center", fontWeight: "700" }} onClick={Logout}>
+        로그아웃
+      </div>
       <hr />
       <div style={{ margin: "1vh", height: "5vh", minHeight: "25px", display: "flex", alignItems: "center", fontWeight: "700", color: "red" }}>
         회원탈퇴

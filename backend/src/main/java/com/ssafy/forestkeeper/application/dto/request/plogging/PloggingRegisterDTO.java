@@ -29,12 +29,8 @@ public class PloggingRegisterDTO {
     @ApiModelProperty(name = "플로깅 거리")
     @NotBlank
     private double distance;
-
-    @ApiModelProperty(name = "유저 id")
-    @NotBlank
-    private String userId;
     
-    @ApiModelProperty(name = "산 id")
+    @ApiModelProperty(name = "산 이름")
     @NotBlank
-    private String mountainId;
+    private String mountainName;
 }
