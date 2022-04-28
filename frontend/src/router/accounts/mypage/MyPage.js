@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import logo from "../../../res/img/logo.png";
 
-function MyPage() {
+function MyPage({ userSlice }) {
   const [menu, setMenu] = useState("1");
   const menuHandlerOne = (e) => {
     setMenu("1");
@@ -10,7 +11,6 @@ function MyPage() {
   const menuHandlerTwo = (e) => {
     setMenu("2");
   };
-
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row-reverse", margin: "1vh", height: "5vh" }}>
@@ -39,7 +39,7 @@ function MyPage() {
             />
             <div style={{ margin: "auto 0", marginLeft: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "3vw" }}>
-                <p style={{ fontSize: "4.5vw", margin: "0 2vw 0 0", color: "#8E8E92" }}>지키미킴지키미킴지키</p>
+                <p style={{ fontSize: "4.5vw", margin: "0 2vw 0 0", color: "#8E8E92" }}>{userSlice.userNickname}</p>
                 <button
                   style={{
                     backgroundColor: "#B8DEB3",
@@ -57,7 +57,7 @@ function MyPage() {
                   </span>
                 </button>
               </div>
-              <p style={{ fontSize: "4.5vw", margin: 0, color: "#8E8E92" }}>forest@keeper.com</p>
+              <p style={{ fontSize: "4.5vw", margin: 0, color: "#8E8E92" }}>{userSlice.userEmail}</p>
             </div>
           </div>
         </div>
@@ -167,4 +167,8 @@ function MyPage() {
   );
 }
 
-export default MyPage;
+function mapStateToProps(state) {
+  return { userSlice: state.user };
+}
+
+export default connect(mapStateToProps)(MyPage);

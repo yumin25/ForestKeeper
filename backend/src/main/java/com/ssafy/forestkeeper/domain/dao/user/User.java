@@ -1,9 +1,11 @@
 package com.ssafy.forestkeeper.domain.dao.user;
 
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
+import com.ssafy.forestkeeper.domain.enums.UserCode;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
+
+    @Column(name = "user_code")
+    private UserCode userCode;
+
     @Column(name = "user_name")
     private String name;
 
