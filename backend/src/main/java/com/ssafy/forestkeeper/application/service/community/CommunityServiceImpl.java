@@ -43,9 +43,8 @@ public class CommunityServiceImpl implements CommunityService {
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
-                .mountain(null)
-//                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
-//                        .orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다.")))
+                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다.")))
                 .build();
 
         communityRepository.save(community);
@@ -55,7 +54,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
 
-        List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 10))
+        List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 6))
                 .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
         return convertCommunityListToDTO(communityList);
@@ -70,21 +69,21 @@ public class CommunityServiceImpl implements CommunityService {
         switch (type) {
             case "td":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 10)
+                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 6)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
                 break;
             case "t":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 10)
+                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
                 break;
             case "d":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 10)
+                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
@@ -94,7 +93,7 @@ public class CommunityServiceImpl implements CommunityService {
                                 communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
                                         .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")),
-                                PageRequest.of(page - 1, 10)
+                                PageRequest.of(page - 1, 6)
                         )
                         .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 작성한 글을 찾을 수 없습니다."));
 
