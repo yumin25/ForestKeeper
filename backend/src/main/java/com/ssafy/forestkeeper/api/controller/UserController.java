@@ -3,6 +3,7 @@ package com.ssafy.forestkeeper.api.controller;
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
 import com.ssafy.forestkeeper.application.service.user.UserService;
 import io.swagger.annotations.Api;
@@ -53,11 +54,26 @@ public class UserController {
         return ResponseEntity.status(200).body(UserLoginResponseDTO.of(result, "로그인 하였습니다.", 200));
     }
 
+    @ApiOperation(value = "유저 정보 조회")
+    @GetMapping("/userinfo")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
+        String email = userService.getUserEmail(request.getHeader("Authorization"));
+        UserInfoDTO userInfoDTO;
+        try{
+            userInfoDTO = userService.getUserDetail(email);
+        } catch (IllegalStateException e){
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e){
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("사용자 정보 조회에 실패하였습니다.", 409));
+        }
+        return ResponseEntity.status(200).body(UserInfoDTO.of("사용자 정보 조회에 성공하였습니다.", 200, userInfoDTO));
+    }
+
     @ApiOperation(value = "닉네임 중복 확인")
     @GetMapping("/check/nickname")
     public ResponseEntity<?> checkNickname(@RequestParam("nickname") String nickname) {
         if(userService.checkNickname(nickname)){
-            return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 409));
         }
         return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 닉네임입니다.", 200));
     }
@@ -66,7 +82,7 @@ public class UserController {
     @GetMapping("/check/email")
     public ResponseEntity<?> checkEmail(@RequestParam("email") String email) {
         if(userService.checkEmail(email)){
-            return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 중인 이메일입니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("사용 중인 이메일입니다.", 409));
         }
         return ResponseEntity.status(200).body(BaseResponseDTO.of("사용 가능한 이메일입니다.", 200));
     }
@@ -74,7 +90,7 @@ public class UserController {
     @ApiOperation(value = "닉네임 변경")
     @GetMapping("/modify/nickname")
     public ResponseEntity<?> modifyNickname(@RequestParam("nickname") String nickname, HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("X-AUTH-TOKEN"));
+        String email = userService.getUserEmail(request.getHeader("Authorization"));
         Integer result = userService.modifyNickname(nickname, email);
 
         if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
@@ -87,7 +103,7 @@ public class UserController {
     @ApiOperation(value = "비밀번호 변경")
     @PatchMapping("/modify/password")
     public ResponseEntity<?> modifyPassword(@RequestBody Map<String,String> param, HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("X-AUTH-TOKEN"));
+        String email = userService.getUserEmail(request.getHeader("Authorization"));
         String past_password = param.get("past_password");
         String new_password = param.get("new_password");
         Integer result = userService.modifyPassword(past_password, new_password, email);
@@ -96,5 +112,13 @@ public class UserController {
         if(result == 4091) return ResponseEntity.status(201).body(BaseResponseDTO.of("입력한 비밀번호가 일치하지 않습니다.", 409));
         if(result == 4092) return ResponseEntity.status(201).body(BaseResponseDTO.of("새로운 비밀번호의 형식이 올바르지 않습니다.", 409));
         return ResponseEntity.status(500).body(BaseResponseDTO.of("비밀번호 변경에 실패하였습니다.", 500));
+    }
+
+    @ApiOperation(value = "탈퇴")
+    @GetMapping("/modify/withdraw")
+    public ResponseEntity<?> withdraw(HttpServletRequest request) {
+        String email = userService.getUserEmail(request.getHeader("Authorization"));
+        if(userService.withdraw(email)) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
+        return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
     }
 }

@@ -1,9 +1,10 @@
 import React from "react";
 import Home from "./Home";
-import Plogging from "./Plogging";
+import Plogging from "../plogging/Plogging";
 import MyPage from "../../accounts/mypage/MyPage";
 import Bar from "./Bar";
 import { Route, Routes } from "react-router-dom";
+
 function Index() {
   return (
     <>

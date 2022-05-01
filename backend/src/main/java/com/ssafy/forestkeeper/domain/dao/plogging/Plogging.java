@@ -34,6 +34,9 @@ public class Plogging extends BaseEntity {
 
     @Column(name = "plogging_end_time")
     private LocalDateTime endTime;
+    
+    @Column(name = "plogging_duration_time")
+    private String durationTime;
 
     @Column(name = "plogging_exp")
     private long exp;
