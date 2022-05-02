@@ -9,6 +9,9 @@ import com.ssafy.forestkeeper.domain.dao.community.Community;
 import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
 import com.ssafy.forestkeeper.domain.repository.community.CommunityRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import com.ssafy.forestkeeper.exception.CommentNotFoundException;
+import com.ssafy.forestkeeper.exception.CommunityNotFoundException;
+import com.ssafy.forestkeeper.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,9 +37,9 @@ public class CommentServiceImpl implements CommentService {
                 .description(commentRegisterPostDTO.getDescription())
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .community(communityRepository.findById(commentRegisterPostDTO.getCommunityId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다.")))
+                        .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다.")))
                 .build();
 
         commentRepository.save(comment);
@@ -47,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentGetListWrapperResponseDTO getCommentList(String communityId) {
 
         Community community = communityRepository.findByIdAndDelete(communityId, false)
-                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         List<CommentGetListResponseDTO> commentGetListResponseDTOList = new ArrayList<>();
 
@@ -72,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     public void modifyComment(CommentModifyPatchDTO commentModifyPatchDTO) {
 
         Comment comment = commentRepository.findByIdAndDelete(commentModifyPatchDTO.getCommentId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommentNotFoundException("댓글 정보가 존재하지 않습니다."));
 
         comment.changeComment(commentModifyPatchDTO.getDescription());
 
@@ -84,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(String commentId) {
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommentNotFoundException("댓글 정보가 존재하지 않습니다."));
 
         comment.changeDelete();
 
