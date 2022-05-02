@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.api.controller;
 
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.List;
@@ -115,11 +116,12 @@ public class PloggingController {
     @ApiOperation(value = "vision api로 분석 후 경험치 부여")
     @PostMapping("/ai")
     public ResponseEntity<?> detectObject(@RequestParam MultipartFile multipartFile, String ploggingId) {
+        PloggingExperienceResponseDTO ploggingExperienceResponseDTO;
         try {
-            ploggingAiService.detectLabels(multipartFile, ploggingId);
+            ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, ploggingId);
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("경험치 부여에 성공했습니다.", 201));
+        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 201, ploggingExperienceResponseDTO));
     }
 }
