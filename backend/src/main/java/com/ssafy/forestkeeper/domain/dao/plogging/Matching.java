@@ -3,7 +3,7 @@ package com.ssafy.forestkeeper.domain.dao.plogging;
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.user.User;
-import com.ssafy.forestkeeper.domain.enums.CommunityCode;
+import java.time.LocalDate;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,9 +28,9 @@ public class Matching extends BaseEntity {
     private LocalDateTime createTime;
 
     @Column(name = "plogging_date")
-    private LocalDateTime ploggingDate;
+    private LocalDate ploggingDate;
 
-    @Column(name = "community_views")
+    @Column(name = "views")
     private long views;
 
     @Column(name = "is_closed")
@@ -47,7 +47,7 @@ public class Matching extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mountain_id")
+    @JoinColumn(name = "mountain_code", referencedColumnName = "mountain_code")
     private Mountain mountain;
 
 //     글 수정
