@@ -69,8 +69,18 @@ public class MatchingController {
     public ResponseEntity<? extends BaseResponseDTO> joinMatching(
         @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
     ) {
-        if (matchingService.isFull(matchingJoinPostDTO.getMatchingId())) {
+        String matchingId = matchingJoinPostDTO.getMatchingId();
+
+        if (matchingService.isFull(matchingId)) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 가득 찬 매칭입니다.", 409));
+        }
+
+        if (matchingService.isClose(matchingId)) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 마감된 매칭입니다.", 409));
+        }
+
+        if(matchingUserService.isJoin(matchingId)){
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 참여중인 매칭입니다.", 409));
         }
 
         try {
@@ -98,15 +108,15 @@ public class MatchingController {
         @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
     ) {
         try {
-            matchingUserService.joinMatching(matchingJoinPostDTO.getMatchingId());
+            matchingService.closeMatching(matchingJoinPostDTO.getMatchingId());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             System.err.println(e);
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭에 실패했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 마감에 실패했습니다.", 409));
         }
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("매칭 합류에 성공했습니다.", 200));
+        return ResponseEntity.status(201).body(BaseResponseDTO.of("매칭 마감에 성공했습니다.", 200));
 
     }
 }

@@ -6,6 +6,7 @@ import com.ssafy.forestkeeper.domain.repository.matching.MatchingRepository;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingUserRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,20 @@ public class MatchingUserServiceImpl implements MatchingUserService {
             .build();
 
         matchingUserRepository.save(matchingUser);
+    }
+
+    @Override
+    public boolean isJoin(String matchingId) {
+        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatching(
+            matchingRepository.findById(matchingId).get()).get();
+
+        for (MatchingUser matchingUser : matchingUserList) {
+            if (matchingUser.getUser() == userRepository.findByEmailAndDelete(
+                SecurityContextHolder.getContext().getAuthentication().getName(), false).get()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
