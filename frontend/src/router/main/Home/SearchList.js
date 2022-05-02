@@ -1,9 +1,10 @@
 import { useOutlet, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import search from "../../../res/img/search.png";
 import Bar from "./Bar";
 import SearchInput from "./SearchInput";
 import axios from "axios";
+import { useInView } from "react-intersection-observer";
 function ResultItem({ result }) {
   return (
     <>
@@ -32,30 +33,42 @@ function ResultItem({ result }) {
   );
 }
 
-function SearchList({
-  keyword,
-  keywordHandler,
-  pageStateHandler,
-  mountainCodeHandler,
-}) {
-  let useParam = useParams(); //여기 안에 keyword, category 존재함
+function SearchList({ keyword, keywordHandler }) {
   const url = "https://k6a306.p.ssafy.io/api";
   const [searchList, setSearchList] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+
+  const getItems = useCallback(async () => {
+    setLoading(true);
+    getResult();
+    setLoading(false);
+  }, [pageNumber]);
 
   useEffect(() => {
-    getResult();
-  }, []);
+    getItems();
+  }, [getItems]);
+
+  useEffect(() => {
+    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
+    if (inView && !loading) {
+      setPageNumber((prevState) => prevState + 1);
+    }
+  }, [inView, loading]);
 
   function getResult() {
     axios
       .get(url + `/mountain`, {
         params: {
           keyword: keyword,
+          pageNumber: pageNumber,
         },
       })
       .then(function (response) {
         console.log(response);
-        setSearchList(response.data.searchlist);
+        setSearchList((prevState) => [...prevState, response.data.searchlist]);
+        // setSearchList(response.data.searchlist);
       })
       .catch(function (error) {
         console.log(error);
@@ -64,6 +77,7 @@ function SearchList({
 
   function goSearch() {
     if (keyword !== "" && keyword != undefined) {
+      setPageNumber(1);
       getResult();
     } else {
       alert("검색어를 입력해주세요.");
@@ -74,6 +88,7 @@ function SearchList({
     if (event.key === "Enter") {
       console.log(keyword);
       if (keyword !== "" && keyword !== undefined) {
+        setPageNumber(1);
         getResult();
       } else {
         alert("검색어를 입력해주세요.");
@@ -97,18 +112,28 @@ function SearchList({
       <div
         id="List"
         style={{
-          // background: "yellow",
           height: "81.9vh",
           borderTop: "1px solid #EFEFEF",
-          // borderBottom: "1px solid #EFEFEF",
           marginLeft: "5vw",
           width: "90vw",
         }}
       >
         {searchList &&
-          searchList.map((result) => (
-            <div onClick={() => goDetail(result.mountainCode)}>
-              <ResultItem result={result}></ResultItem>
+          searchList.map((result, idx) => (
+            <div key={idx}>
+              {searchList.length - 1 == idx ? (
+                <div
+                  className="list-item"
+                  ref={ref}
+                  onClick={() => goDetail(result.mountainCode)}
+                >
+                  <ResultItem result={result}></ResultItem>
+                </div>
+              ) : (
+                <div onClick={() => goDetail(result.mountainCode)}>
+                  <ResultItem result={result}></ResultItem>
+                </div>
+              )}
             </div>
           ))}
       </div>
