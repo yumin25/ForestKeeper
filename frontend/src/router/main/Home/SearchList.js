@@ -36,7 +36,6 @@ function ResultItem({ result }) {
 function SearchList({ keyword, keywordHandler }) {
   const url = "https://k6a306.p.ssafy.io/api";
   const [searchList, setSearchList] = useState();
-  const [temp, setTemp] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(false);
   const [ref, inView] = useInView();
@@ -69,6 +68,7 @@ function SearchList({ keyword, keywordHandler }) {
       .then(function (response) {
         console.log(response);
         setSearchList((prevState) => [...prevState, response.data.searchlist]);
+        // setSearchList(response.data.searchlist);
       })
       .catch(function (error) {
         console.log(error);
@@ -137,6 +137,7 @@ function SearchList({ keyword, keywordHandler }) {
             </div>
           ))}
       </div>
+      {/* <Bar></Bar> */}
     </>
   );
 }
