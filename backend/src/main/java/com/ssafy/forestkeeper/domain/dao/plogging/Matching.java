@@ -42,9 +42,6 @@ public class Matching extends BaseEntity {
     @Column(name = "total")
     private int total;
 
-    @Column(name = "participant")
-    private int participant;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

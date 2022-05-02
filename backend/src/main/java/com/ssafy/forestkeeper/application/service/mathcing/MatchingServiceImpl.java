@@ -3,6 +3,7 @@ package com.ssafy.forestkeeper.application.service.mathcing;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.community.Community;
 import com.ssafy.forestkeeper.domain.dao.plogging.Matching;
 import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
@@ -42,7 +43,6 @@ public class MatchingServiceImpl implements MatchingService {
             .createTime(LocalDateTime.now())
             .ploggingDate(LocalDate.parse(matchingRegisterPostDTO.getPloggingDate()))
             .total(matchingRegisterPostDTO.getTotal())
-            .participant(1)
             .user(userRepository.findByEmailAndDelete(
                     SecurityContextHolder.getContext().getAuthentication().getName(), false)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
@@ -80,13 +80,38 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
+    public MatchingResponseDTO getMatching(String matchingId) {
+        Matching matching = matchingRepository.findById(matchingId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        matching.increaseViews();
+        matchingRepository.save(matching);
+
+        return MatchingResponseDTO.builder()
+            .id(matchingId)
+            .nickname(matching.getUser().getNickname())
+            .title(matching.getTitle())
+            .content(matching.getContent())
+            .views(matching.getViews())
+            .createTime(matching.getCreateTime())
+            .ploggingDate(matching.getPloggingDate())
+            .total(matching.getTotal())
+            .participant(matchingUserService.getParticipant(matchingId))
+            .mountainName(matching.getMountain().getName())
+            .mountainCode(matching.getMountain().getCode())
+            .isClosed(matching.isClosed())
+            .build();
+    }
+
+    @Override
     public MatchingGetListWrapperResponseDTO getMatchingList(int page) {
 
         if (page < 1) {
             page = 1;
         }
 
-        List<Matching> matchingList = matchingRepository.findAllByOrderByCreateTimeDesc(PageRequest.of(page - 1, 6))
+        List<Matching> matchingList = matchingRepository.findAllByOrderByCreateTimeDesc(
+                PageRequest.of(page - 1, 6))
             .get();
 
         List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
@@ -94,6 +119,7 @@ public class MatchingServiceImpl implements MatchingService {
         matchingList.forEach(matching ->
             matchingGetListResponseDTOList.add(
                 MatchingGetListResponseDTO.builder()
+                    .id(matching.getId())
                     .nickname(matching.getUser().getNickname())
                     .title(matching.getTitle())
                     .createTime(matching.getCreateTime())
@@ -110,15 +136,6 @@ public class MatchingServiceImpl implements MatchingService {
             .build();
     }
 
-//    @Override
-//    public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
-//
-//        List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 6))
-//                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
-//
-//        return convertCommunityListToDTO(communityList);
-//
-//    }
 //
 //    @Override
 //    public CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page) {
