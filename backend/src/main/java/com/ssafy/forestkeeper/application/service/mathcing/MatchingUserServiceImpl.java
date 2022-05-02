@@ -19,11 +19,13 @@ public class MatchingUserServiceImpl implements MatchingUserService {
     private final UserRepository userRepository;
 
     @Override
-    public void joinMatching(String userId, Matching matching) {
+    public void joinMatching(String matchingId) {
+
         MatchingUser matchingUser = MatchingUser.builder().user(userRepository.findByEmailAndDelete(
                     SecurityContextHolder.getContext().getAuthentication().getName(), false)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
-            .matching(matching)
+            .matching(matchingRepository.findById(matchingId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 매칭 정보입니다")))
             .build();
 
         matchingUserRepository.save(matchingUser);

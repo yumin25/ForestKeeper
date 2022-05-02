@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MatchingRepository extends JpaRepository<Matching, String>{
 
-	Optional<Matching> findByMountain(Mountain mountain);
 }
