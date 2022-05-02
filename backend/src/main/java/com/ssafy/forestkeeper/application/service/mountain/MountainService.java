@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface MountainService {
 
     Optional<Mountain> getMountainInfo(String mountainCode);
-    Optional<List<Mountain>> searchMountain(String keyword);
+    Optional<List<Mountain>> searchMountain(String keyword, int page);
 }
