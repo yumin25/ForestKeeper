@@ -1,6 +1,5 @@
 package com.ssafy.forestkeeper.domain.repository.matching;
 
-import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.Matching;
 import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
 import java.util.List;
