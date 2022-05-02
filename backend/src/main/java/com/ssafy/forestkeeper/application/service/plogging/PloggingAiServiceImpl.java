@@ -2,8 +2,10 @@ package com.ssafy.forestkeeper.application.service.plogging;
 
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -63,8 +66,21 @@ public class PloggingAiServiceImpl implements PloggingAiService {
     }
 
     @Override
-    public void detectLabels(MultipartFile multipartFile, String ploggingId) throws IOException {
-        int score = 0;
+    public PloggingExperienceResponseDTO detectLabels(MultipartFile multipartFile, String ploggingId) throws IOException {
+        int exp = 0;
+        HashMap<String, Integer> experience = new HashMap<>();
+        experience.put("Plastic Bag", 600);
+        experience.put("Litter", 600);
+        experience.put("Plastic", 600);
+        experience.put("Packing Materials", 600);
+        experience.put("Waste Container", 500);
+        experience.put("Bottle", 500);
+        experience.put("Tin Can", 500);
+        experience.put("Box", 500);
+        experience.put("Plastic bottle", 400);
+        experience.put("Water bottle", 400);
+        experience.put("Plastic Wrap", 400);
+
         List<AnnotateImageRequest> requests = new ArrayList<>();
         byte []byteArr = multipartFile.getBytes();
         InputStream inputStream = new ByteArrayInputStream(byteArr);
@@ -83,37 +99,27 @@ public class PloggingAiServiceImpl implements PloggingAiService {
             for (AnnotateImageResponse res : responses) {
                 if (res.hasError()) {
                     System.out.format("Error: %s%n", res.getError().getMessage());
-                    return;
+                    return PloggingExperienceResponseDTO.builder().exp(0).build();
                 }
 
                 for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-                    int tmpScore = 0;
-                    if(annotation.getDescription().equals("Plastic Bag")) tmpScore = 600;
-                    else if(annotation.getDescription().equals("Litter")) tmpScore = 600;
-                    else if(annotation.getDescription().equals("Plastic")) tmpScore = 600;
-                    else if(annotation.getDescription().equals("Packing Materials")) tmpScore = 600;
-                    else if(annotation.getDescription().equals("Waste Container")) tmpScore = 500;
-                    else if(annotation.getDescription().equals("Bottle")) tmpScore = 500;
-                    else if(annotation.getDescription().equals("Tin Can")) tmpScore = 500;
-                    else if(annotation.getDescription().equals("Box")) tmpScore = 500;
-                    else if(annotation.getDescription().equals("Plastic bottle")) tmpScore = 400;
-                    else if(annotation.getDescription().equals("Water bottle")) tmpScore = 400;
-                    else if(annotation.getDescription().equals("Plastic Wrap")) tmpScore = 400;
-
+                    if(!experience.containsKey(annotation.getDescription())) continue;
+                    int tmpScore = experience.get(annotation.getDescription());
                     tmpScore *= annotation.getScore();
                     System.out.println(tmpScore);
-                    score += tmpScore;
+                    exp += tmpScore;
                     System.out.format("%s : %f%n", annotation.getDescription(), annotation.getScore());
                 }
             }
         }
 
-        if(score<1000) score = 1000;
-        System.out.format("Score : %d%n", score);
+        if(exp<1000) exp = 1000;
+        System.out.format("Score : %d%n", exp);
 
         Plogging plogging = ploggingRepository.findById(ploggingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-        plogging.setExp(score);
+        plogging.setExp(exp);
         ploggingRepository.save(plogging);
+        return PloggingExperienceResponseDTO.builder().exp(exp).build();
     }
 }
