@@ -54,7 +54,7 @@ function SearchList({ keyword, keywordHandler }) {
   useEffect(() => {
     // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
     if (inView && !loading) {
-      setPageNumber((prevState) => prevState + 1);
+      setPageNumber((pageNumber += 1));
     }
   }, [inView, loading]);
 
@@ -68,7 +68,7 @@ function SearchList({ keyword, keywordHandler }) {
       })
       .then(function (response) {
         console.log(response);
-        setSearchList((prevState) => [...prevState, response.data.searchlist]);
+        setSearchList([...searchList, response.data.searchlist]);
       })
       .catch(function (error) {
         console.log(error);
