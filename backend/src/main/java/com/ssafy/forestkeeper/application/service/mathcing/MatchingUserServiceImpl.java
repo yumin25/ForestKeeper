@@ -1,10 +1,8 @@
 package com.ssafy.forestkeeper.application.service.mathcing;
 
-import com.ssafy.forestkeeper.domain.dao.plogging.Matching;
 import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingRepository;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingUserRepository;
-import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,8 @@
 package com.ssafy.forestkeeper.application.dto.request.matching;
 
-import com.ssafy.forestkeeper.domain.enums.CommunityCode;
-import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.ToString;
 
