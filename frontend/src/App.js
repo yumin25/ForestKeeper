@@ -7,7 +7,7 @@ import RecordDetail from "./router/accounts/mypage/RecordDetail";
 import Settings from "./router/accounts/mypage/Settings";
 import Index from "./router/main/Home/Index";
 import SearchList from "./router/main/Home/SearchList";
-import Detail from "./router/main/Home/Detail";
+import Detail from "./router/main/Home/MtnDetail/Detail";
 function App() {
   return (
     <>
