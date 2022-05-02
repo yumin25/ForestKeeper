@@ -2,7 +2,7 @@ package com.ssafy.forestkeeper.application.service.mathcing;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 
-public interface MathcingService {
+public interface MatchingService {
 
     // 글 작성
     void registerMatching(MatchingRegisterPostDTO matchingRegisterPostDTO);

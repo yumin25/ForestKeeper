@@ -2,9 +2,9 @@ package com.ssafy.forestkeeper.application.service.mathcing;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Matching;
-import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
-import com.ssafy.forestkeeper.domain.repository.community.CommunityRepository;
+import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingRepository;
+import com.ssafy.forestkeeper.domain.repository.matching.MatchingUserRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import java.time.LocalDate;
@@ -15,13 +15,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MathcingServiceImpl implements MathcingService {
+public class MatchingServiceImpl implements MatchingService {
 
     private final MountainRepository mountainRepository;
 
     private final UserRepository userRepository;
 
     private final MatchingRepository matchingRepository;
+
+    private final MatchingUserRepository matchingUserRepository;
 
     @Override
     public void registerMatching(MatchingRegisterPostDTO matchingRegisterPostDTO) {
@@ -42,6 +44,10 @@ public class MathcingServiceImpl implements MathcingService {
 
         matchingRepository.save(matching);
 
+        matchingUserRepository.save(MatchingUser.builder().user(userRepository.findByEmailAndDelete(
+                    SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
+            .matching(matching).build());
     }
 
 //    @Override

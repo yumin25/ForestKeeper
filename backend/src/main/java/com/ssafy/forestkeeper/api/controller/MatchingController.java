@@ -2,7 +2,7 @@ package com.ssafy.forestkeeper.api.controller;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.application.service.mathcing.MathcingService;
+import com.ssafy.forestkeeper.application.service.mathcing.MatchingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/match")
 public class MatchingController {
 
-    private final MathcingService mathcingService;
+    private final MatchingService mathcingService;
 
     @ApiOperation(value = "매칭 글 등록")
     @ApiResponses({
@@ -37,6 +37,10 @@ public class MatchingController {
     public ResponseEntity<? extends BaseResponseDTO> register(
         @ApiParam(value = "매칭 글 정보", required = true) @RequestBody @Valid MatchingRegisterPostDTO matchingRegisterPostDTO
     ) {
+
+        if(matchingRegisterPostDTO.getTotal()==0){
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원은 1명 이상이어야 합니다.", 409));
+        }
 
         try {
             mathcingService.registerMatching(matchingRegisterPostDTO);

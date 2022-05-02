@@ -4,6 +4,8 @@ import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,6 +51,9 @@ public class Matching extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_code", referencedColumnName = "mountain_code")
     private Mountain mountain;
+
+    @OneToMany(mappedBy = "matching", fetch = FetchType.LAZY)
+    private List<MatchingUser> matchingUsers = new ArrayList<>();
 
 //     글 수정
     public void changeMatch(String title, String content) {
