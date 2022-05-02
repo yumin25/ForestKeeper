@@ -137,7 +137,6 @@ function SearchList({ keyword, keywordHandler }) {
             </div>
           ))}
       </div>
-      {/* <Bar></Bar> */}
     </>
   );
 }
