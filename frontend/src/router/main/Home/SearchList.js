@@ -35,7 +35,8 @@ function ResultItem({ result }) {
 
 function SearchList({ keyword, keywordHandler }) {
   const url = "https://k6a306.p.ssafy.io/api";
-  const [searchList, setSearchList] = useState();
+  const [searchList, setSearchList] = useState([]);
+
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(false);
   const [ref, inView] = useInView();
@@ -53,7 +54,7 @@ function SearchList({ keyword, keywordHandler }) {
   useEffect(() => {
     // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
     if (inView && !loading) {
-      setPageNumber((prevState) => prevState + 1);
+      setPageNumber((pageNumber += 1));
     }
   }, [inView, loading]);
 
@@ -62,13 +63,16 @@ function SearchList({ keyword, keywordHandler }) {
       .get(url + `/mountain`, {
         params: {
           keyword: keyword,
-          pageNumber: pageNumber,
+          page: pageNumber,
         },
       })
       .then(function (response) {
         console.log(response);
-        setSearchList((prevState) => [...prevState, response.data.searchlist]);
-        // setSearchList(response.data.searchlist);
+        if (searchList.length == 0) {
+          setSearchList(response.data.searchlist);
+        } else {
+          setSearchList([...searchList, response.data.searchlist]);
+        }
       })
       .catch(function (error) {
         console.log(error);
