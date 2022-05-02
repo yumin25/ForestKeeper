@@ -69,6 +69,10 @@ dependencies {
     // QueryDsl
     implementation("com.querydsl:querydsl-jpa:5.0.0")
     implementation("com.querydsl:querydsl-apt:5.0.0")
+
+    //vision api
+    implementation platform('com.google.cloud:libraries-bom:25.1.0')
+    implementation 'com.google.cloud:google-cloud-vision'
 }
 
 test {
