@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.application.service.mathcing;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
 
 public interface MatchingService {
 
@@ -14,15 +15,16 @@ public interface MatchingService {
 
     boolean isClose(String matchingId);
 
+    // 매칭 글 조회
+    MatchingResponseDTO getMatching(String matchingId);
+
     // 글 목록 조회
     MatchingGetListWrapperResponseDTO getMatchingList(int page);
-//
+
 //    // 글 검색
 //    CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page);
 //
-//    // 글 조회
-//    CommunityResponseDTO getCommunity(String communityId);
-//
+
 //    // 글 수정
 //    void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO);
 //

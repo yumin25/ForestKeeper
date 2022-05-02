@@ -5,6 +5,7 @@ import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterP
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
 import com.ssafy.forestkeeper.application.service.mathcing.MatchingService;
 import com.ssafy.forestkeeper.application.service.mathcing.MatchingUserService;
 import com.ssafy.forestkeeper.domain.enums.CommunityCode;
@@ -14,12 +15,14 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -134,7 +137,7 @@ public class MatchingController {
         @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
     })
     @GetMapping
-    public ResponseEntity<? extends BaseResponseDTO> getMatching(
+    public ResponseEntity<? extends BaseResponseDTO> getMatchingList(
         @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
@@ -150,6 +153,32 @@ public class MatchingController {
 
         return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
             matchingGetListWrapperResponseDTO));
+
+    }
+
+    @ApiOperation(value = "매칭 글 조회")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
+        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+    })
+    @GetMapping("/{matchingId}")
+    public ResponseEntity<? extends BaseResponseDTO> getMatching(
+        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+    ) {
+
+        MatchingResponseDTO matchingResponseDTO = null;
+
+        try {
+            matchingResponseDTO = matchingService.getMatching(matchingId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 글 조회에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(MatchingResponseDTO.of("매칭 글조회에 성공했습니다.", 200,
+            matchingResponseDTO));
 
     }
 }
