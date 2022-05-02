@@ -69,7 +69,6 @@ function SearchList({ keyword, keywordHandler }) {
       .then(function (response) {
         console.log(response);
         setSearchList((prevState) => [...prevState, response.data.searchlist]);
-        // setSearchList(response.data.searchlist);
       })
       .catch(function (error) {
         console.log(error);
