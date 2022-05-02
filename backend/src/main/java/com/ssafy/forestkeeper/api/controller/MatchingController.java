@@ -3,21 +3,27 @@ package com.ssafy.forestkeeper.api.controller;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingJoinPostDTO;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.service.mathcing.MatchingService;
 import com.ssafy.forestkeeper.application.service.mathcing.MatchingUserService;
+import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "Matching API", tags = {"Mathcing"})
@@ -79,7 +85,7 @@ public class MatchingController {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 마감된 매칭입니다.", 409));
         }
 
-        if(matchingUserService.isJoin(matchingId)){
+        if (matchingUserService.isJoin(matchingId)) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 참여중인 매칭입니다.", 409));
         }
 
@@ -117,6 +123,33 @@ public class MatchingController {
         }
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("매칭 마감에 성공했습니다.", 200));
+
+    }
+
+
+    @ApiOperation(value = "매칭 목록 조회")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
+        @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
+    })
+    @GetMapping
+    public ResponseEntity<? extends BaseResponseDTO> getMatching(
+        @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+    ) {
+
+        MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
+
+        try {
+            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(page);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 목록 조회에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
+            matchingGetListWrapperResponseDTO));
 
     }
 }

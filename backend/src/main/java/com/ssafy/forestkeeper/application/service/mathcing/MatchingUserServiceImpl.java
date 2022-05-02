@@ -46,4 +46,10 @@ public class MatchingUserServiceImpl implements MatchingUserService {
 
         return false;
     }
+
+    @Override
+    public int getParticipant(String matchingId) {
+        return matchingUserRepository.findByMatching(
+            matchingRepository.findById(matchingId).get()).get().size();
+    }
 }
