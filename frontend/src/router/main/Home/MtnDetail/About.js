@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import temp from "../../../../res/img/temp.png";
+import axios from "axios";
 import edit from "../../../../res/img/edit.png";
 function ReviewItem({ nickname, content }) {
   return (
