@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.mathcing;
 
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
@@ -58,6 +59,20 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
+    public void modifyMatching(MatchingModifyPatchDTO matchingModifyPatchDTO) {
+        Matching matching = matchingRepository.findByIdAndDelete(
+                matchingModifyPatchDTO.getMatchingId(), false)
+            .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        matching.changeMatching(matchingModifyPatchDTO.getTitle(),
+            matchingModifyPatchDTO.getContent(), LocalDate.parse(matchingModifyPatchDTO.getPloggingDate()),
+            matchingModifyPatchDTO.getTotal(),
+            mountainRepository.findByCode(matchingModifyPatchDTO.getMountainCode()).get());
+
+        matchingRepository.save(matching);
+    }
+
+    @Override
     public void closeMatching(String matchingId) {
         Matching matching = matchingRepository.findById(matchingId).get();
 
@@ -69,7 +84,16 @@ public class MatchingServiceImpl implements MatchingService {
     @Override
     public boolean isFull(String matchingId) {
         Matching matching = matchingRepository.findById(matchingId).get();
-        return matching.getMatchingUsers().size() == matching.getTotal();
+        List<MatchingUser> list = matching.getMatchingUsers();
+
+        int total = 0;
+
+        for (MatchingUser matchingUser : list) {
+            if (!matchingUser.isDelete()) {
+                total++;
+            }
+        }
+        return total == matching.getTotal();
     }
 
     @Override
@@ -79,8 +103,14 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
+    public boolean isDelete(String matchingId) {
+
+        return matchingRepository.findById(matchingId).get().isDelete();
+    }
+
+    @Override
     public MatchingResponseDTO getMatching(String matchingId) {
-        Matching matching = matchingRepository.findById(matchingId)
+        Matching matching = matchingRepository.findByIdAndDelete(matchingId, false)
             .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         matching.increaseViews();
@@ -109,7 +139,7 @@ public class MatchingServiceImpl implements MatchingService {
             page = 1;
         }
 
-        List<Matching> matchingList = matchingRepository.findAllByOrderByCreateTimeDesc(
+        List<Matching> matchingList = matchingRepository.findByDeleteOrderByCreateTimeDesc(false,
                 PageRequest.of(page - 1, 6))
             .get();
 
@@ -133,5 +163,66 @@ public class MatchingServiceImpl implements MatchingService {
         return MatchingGetListWrapperResponseDTO.builder()
             .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
             .build();
+    }
+
+    @Override
+    public MatchingGetListWrapperResponseDTO getMyMatching(int page) {
+
+        if (page < 1) {
+            page = 1;
+        }
+
+        List<MatchingUser> myMatching = matchingUserRepository.findByUserIdAndDelete(
+            userRepository.findByEmailAndDelete(
+                    SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")).getId(),
+            false, PageRequest.of(page - 1, 6)).get();
+
+        List<Matching> matchingList = new ArrayList<>();
+
+        myMatching.forEach(matchingUser -> matchingList.add(matchingUser.getMatching()));
+
+        List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
+
+        matchingList.forEach(matching ->
+            matchingGetListResponseDTOList.add(
+                MatchingGetListResponseDTO.builder()
+                    .id(matching.getId())
+                    .nickname(matching.getUser().getNickname())
+                    .title(matching.getTitle())
+                    .createTime(matching.getCreateTime())
+                    .ploggingDate(matching.getPloggingDate())
+                    .total(matching.getTotal())
+                    .participant(matchingUserService.getParticipant(matching.getId()))
+                    .mountainName(matching.getMountain().getName())
+                    .build()
+            )
+        );
+
+        return MatchingGetListWrapperResponseDTO.builder()
+            .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
+            .build();
+    }
+
+
+    @Override
+    public void deleteMatching(String matchingId) {
+
+        Matching matching = matchingRepository.findById(matchingId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 매칭 글을 찾을 수 없습니다."));
+
+        matching.changeDelete();
+        matchingRepository.save(matching);
+
+        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatchingAndDelete(
+                matching, false)
+            .orElse(null);
+
+        matchingUserList.forEach(matchingUser -> {
+            matchingUser.changeDelete();
+
+            matchingUserRepository.save(matchingUser);
+        });
+
     }
 }
