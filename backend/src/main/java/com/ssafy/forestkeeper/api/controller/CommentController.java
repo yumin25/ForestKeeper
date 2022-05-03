@@ -34,13 +34,7 @@ public class CommentController {
             @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentRegisterPostDTO commentRegisterPostDTO
     ) {
 
-        try {
-            commentService.registerComment(commentRegisterPostDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 작성에 실패했습니다.", 409));
-        }
+        commentService.registerComment(commentRegisterPostDTO);
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("댓글 작성에 성공했습니다.", 201));
 
@@ -57,17 +51,7 @@ public class CommentController {
             @ApiParam(value = "글 ID", required = true) @PathVariable @NotBlank String communityId
     ) {
 
-        CommentGetListWrapperResponseDTO commentGetListWrapperResponseDTO;
-
-        try {
-            commentGetListWrapperResponseDTO = commentService.getCommentList(communityId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 목록 조회에 실패했습니다.", 409));
-        }
-
-        return ResponseEntity.ok(CommentGetListWrapperResponseDTO.of("댓글 목록 조회에 성공했습니다.", 200, commentGetListWrapperResponseDTO));
+        return ResponseEntity.ok(CommentGetListWrapperResponseDTO.of("댓글 목록 조회에 성공했습니다.", 200, commentService.getCommentList(communityId)));
 
     }
 
@@ -82,13 +66,7 @@ public class CommentController {
             @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentModifyPatchDTO commentModifyPatchDTO
     ) {
 
-        try {
-            commentService.modifyComment(commentModifyPatchDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 수정에 실패했습니다.", 409));
-        }
+        commentService.modifyComment(commentModifyPatchDTO);
 
         return ResponseEntity.ok(BaseResponseDTO.of("댓글 수정에 성공했습니다.", 200));
 
@@ -105,13 +83,7 @@ public class CommentController {
             @ApiParam(value = "댓글 ID", required = true) @PathVariable @NotBlank String commentId
     ) {
 
-        try {
-            commentService.deleteComment(commentId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("댓글 삭제에 실패했습니다.", 409));
-        }
+        commentService.deleteComment(commentId);
 
         return ResponseEntity.ok(BaseResponseDTO.of("댓글 삭제에 성공했습니다.", 200));
 
