@@ -35,7 +35,7 @@ function ResultItem({ result }) {
 
 function SearchList({ keyword, keywordHandler }) {
   const url = "https://k6a306.p.ssafy.io/api";
-  const [searchList, setSearchList] = useState();
+  const [searchList, setSearchList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(false);
 
