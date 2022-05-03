@@ -4,8 +4,6 @@ import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterP
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.community.Comment;
-import com.ssafy.forestkeeper.domain.dao.community.Community;
 import com.ssafy.forestkeeper.domain.dao.plogging.Matching;
 import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingRepository;
@@ -129,6 +127,45 @@ public class MatchingServiceImpl implements MatchingService {
         List<Matching> matchingList = matchingRepository.findByDeleteOrderByCreateTimeDesc(false,
                 PageRequest.of(page - 1, 6))
             .get();
+
+        List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
+
+        matchingList.forEach(matching ->
+            matchingGetListResponseDTOList.add(
+                MatchingGetListResponseDTO.builder()
+                    .id(matching.getId())
+                    .nickname(matching.getUser().getNickname())
+                    .title(matching.getTitle())
+                    .createTime(matching.getCreateTime())
+                    .ploggingDate(matching.getPloggingDate())
+                    .total(matching.getTotal())
+                    .participant(matchingUserService.getParticipant(matching.getId()))
+                    .mountainName(matching.getMountain().getName())
+                    .build()
+            )
+        );
+
+        return MatchingGetListWrapperResponseDTO.builder()
+            .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
+            .build();
+    }
+
+    @Override
+    public MatchingGetListWrapperResponseDTO getMyMatching(int page) {
+
+        if (page < 1) {
+            page = 1;
+        }
+
+        List<MatchingUser> myMatching = matchingUserRepository.findByUserIdAndDelete(
+            userRepository.findByEmailAndDelete(
+                    SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")).getId(),
+            false, PageRequest.of(page - 1, 6)).get();
+
+        List<Matching> matchingList = new ArrayList<>();
+
+        myMatching.forEach(matchingUser -> matchingList.add(matchingUser.getMatching()));
 
         List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
 
