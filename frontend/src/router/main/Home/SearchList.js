@@ -89,6 +89,7 @@ function SearchList({ keyword, keywordHandler }) {
   function goSearch() {
     if (keyword !== "" && keyword != undefined) {
       setPageNumber(1);
+      setSearchList([]);
       getResult();
     } else {
       alert("검색어를 입력해주세요.");
@@ -100,6 +101,7 @@ function SearchList({ keyword, keywordHandler }) {
       console.log(keyword);
       if (keyword !== "" && keyword !== undefined) {
         setPageNumber(1);
+        setSearchList([]);
         getResult();
       } else {
         alert("검색어를 입력해주세요.");
