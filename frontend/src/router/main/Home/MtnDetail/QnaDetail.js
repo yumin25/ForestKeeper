@@ -37,12 +37,24 @@ function QnaDetail() {
       >
         <div
           id="header"
-          style={{ height: "3.5vh", fontSize: "1.8vh", marginBottom: "4.5vh" }}
+          style={{
+            position: "relative",
+            height: "3.5vh",
+            fontSize: "1.8vh",
+            marginBottom: "4.5vh",
+          }}
         >
           <div style={{ fontWeight: "bolder" }}>익명숲지기</div>
           <div style={{ color: "#ACACAC" }}>04/18 16:30</div>
         </div>
-        <div id="contents" style={{ height: "32vh", marginBottom: "5.5vh" }}>
+        <div
+          id="contents"
+          style={{
+            position: "relative",
+            height: "32vh",
+            marginBottom: "5.5vh",
+          }}
+        >
           <div
             id="title"
             style={{
@@ -61,6 +73,7 @@ function QnaDetail() {
         <div id="comments">
           <div
             style={{
+              position: "relative",
               fontWeight: "regular",
               fontSize: "2vh",
               marginBottom: "2vh",
@@ -68,7 +81,7 @@ function QnaDetail() {
           >
             댓글
           </div>
-          <div id="comment">
+          {/* <div id="comment">
             {comments &&
               comments.map((comment) => (
                 //   10.5vh
@@ -87,7 +100,7 @@ function QnaDetail() {
                   </div>
                 </div>
               ))}
-          </div>
+          </div> */}
         </div>
       </div>
       <Bar></Bar>
