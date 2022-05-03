@@ -13,7 +13,7 @@ import Home from "./Home";
 function Detail() {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
-  const [Info, setInfo] = useState();
+  const [Info, setInfo] = useState([]);
   let useParam = useParams();
   const url = "https://k6a306.p.ssafy.io/api";
   useEffect(() => {
@@ -202,7 +202,7 @@ function Detail() {
                 >
                   명예의 전당
                 </div>
-                <div onClick={() => setTab("home")}>About {Info.name}</div>
+                <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
 
               <Home lat={Info.lat} lng={Info.lng}></Home>
