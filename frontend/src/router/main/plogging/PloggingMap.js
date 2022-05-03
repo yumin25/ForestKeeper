@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
+import ReactTimerStopwatch from "react-stopwatch-timer";
 import location from "../../../res/img/location.png";
 import play from "../../../res/img/play.png";
 import stop from "../../../res/img/stop.png";
@@ -42,6 +44,8 @@ function MapAPI({ myLocation }) {
 }
 
 function PloggingMap({ getLocation, myLocation }) {
+  const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
+  const [isOn, setIsOn] = useState(false);
   const startRecording = () => {
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "stretch 1s both";
@@ -49,6 +53,10 @@ function PloggingMap({ getLocation, myLocation }) {
   const endRecording = () => {
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "reverse-stretch 1s both";
+  };
+  const timeRecord = () => {
+    const timeValue = document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText;
+    // console.log(timeValue);
   };
   return (
     <>
@@ -79,14 +87,28 @@ function PloggingMap({ getLocation, myLocation }) {
           src={play}
           alt=""
           style={{ zIndex: 3, height: "3.5vh", width: "3.5vh", marginTop: "0.5vh", marginLeft: "1.4vw" }}
-          onClick={startRecording}
+          onClick={() => {
+            startRecording();
+            setIsOn(true);
+          }}
         />
       </button>
       <button id="stop" className="btn-recording">
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: "0.5vh", marginBottom: 0 }}>1:15:11</p>
-          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: "0.5vh", marginBottom: 0 }}>11.5km</p>
-          <img src={stop} alt="" style={{ zIndex: 3, height: "3.5vh", width: "3.5vh" }} onClick={endRecording} />
+        <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+          <div>
+            <ReactTimerStopwatch id="timer" isOn={isOn} className="react-stopwatch-timer__table" watchType="stopwatch" fromTime={fromTime} />
+          </div>
+          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>11.5km</p>
+          <img
+            src={stop}
+            alt=""
+            style={{ zIndex: 3, height: "3.5vh", width: "3.5vh" }}
+            onClick={() => {
+              endRecording();
+              setIsOn(false);
+              timeRecord();
+            }}
+          />
         </div>
       </button>
       <RenderAfterNavermapsLoaded
