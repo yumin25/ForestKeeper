@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
@@ -88,6 +89,18 @@ public class PloggingController {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
         return ResponseEntity.status(201).body(BaseResponseDTO.of("경험치 부여에 성공했습니다.", 201));
+    }
+    
+    @ApiOperation(value = "산 누적 방문자 및 거리 조회")
+    @GetMapping
+    public ResponseEntity<?> getCumulative(@RequestParam String mountainName) {
+    	PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO;
+        try {
+        	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainName);
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 누적치 조회에 실패했습니다.", 409));
+        }
+        return ResponseEntity.status(200).body(PloggingCumulativeResponseDTO.of("산별 누적치 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
     }
 
     @ApiOperation(value = "쓰레기통 전체 목록")
