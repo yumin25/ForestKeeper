@@ -140,9 +140,11 @@ function SearchList({ keyword, keywordHandler }) {
               <ResultItem result={result}></ResultItem>
             </div>
           ))}
-        <button onClick={loadMore} ref={pageEnd}>
+
+        <div style={{ height: "2vh", background: "red" }} ref={pageEnd}></div>
+        {/* <button onClick={loadMore} ref={pageEnd}>
           더보기
-        </button>
+        </button> */}
       </div>
 
       {/* <Bar></Bar> */}
