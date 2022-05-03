@@ -1,6 +1,8 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,8 +12,10 @@ import org.springframework.stereotype.Service;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
+import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
@@ -30,10 +34,13 @@ public class PloggingServiceImpl implements PloggingService{
 	private final MountainRepository mountainRepository;
 	
 	private final TrashCanRepository trashCanRepository;
+	
+	private final ImageRepository imageRepository;
 
 	@Override
-	public void register(PloggingRegisterDTO ploggingRegisterDTO) {
-		Duration duration = Duration.between(ploggingRegisterDTO.getStartTime(), ploggingRegisterDTO.getEndTime());
+	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
 		StringBuilder sb = new StringBuilder();
 		String HM = duration.toString().split("T")[1];
 		if(duration.toString().contains("H")) {
@@ -46,14 +53,14 @@ public class PloggingServiceImpl implements PloggingService{
 		}
 		Plogging plogging = Plogging.builder()
 								.distance(ploggingRegisterDTO.getDistance())
-								.startTime(ploggingRegisterDTO.getStartTime())
-								.endTime(ploggingRegisterDTO.getEndTime())
+								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))
+								.endTime(LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter))
 								.exp(0L)
 								.durationTime(sb.toString())
 								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
 								.mountain(mountainRepository.findByName(ploggingRegisterDTO.getMountainName()))
 								.build();
-		ploggingRepository.save(plogging);
+		return ploggingRepository.save(plogging);
 	}
 
 	@Override
@@ -106,4 +113,12 @@ public class PloggingServiceImpl implements PloggingService{
 //				.build();
 //	}
 
+	@Override
+	public void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging) {
+    	imageRepository.save(Image.builder()
+				.originalFileName(originalFileName)
+				.savedFileName(savedFileName)
+				.plogging(plogging)
+				.build());
+	}
 }

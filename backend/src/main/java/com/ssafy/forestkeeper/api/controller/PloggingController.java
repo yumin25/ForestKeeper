@@ -1,13 +1,14 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import java.util.List;
 import java.util.Optional;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,9 @@ import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingService;
+import com.ssafy.forestkeeper.application.service.s3.S3Service;
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
+import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,13 +39,19 @@ import lombok.RequiredArgsConstructor;
 public class PloggingController {
 
     private final PloggingService ploggingService;
+    
+    private final S3Service s3Service;
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(
-        @RequestBody PloggingRegisterDTO ploggingRegisterDTO) {
+    public ResponseEntity<?> registerPlogging(@ModelAttribute PloggingRegisterDTO ploggingRegisterDTO) {
         try {
-            ploggingService.register(ploggingRegisterDTO);
+        	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
+        	if(ploggingRegisterDTO.getImage() != null) {
+        		String savedFileName = s3Service.uploadFileToS3("plogging", ploggingRegisterDTO.getImage());
+        		ploggingService.registerPloggingImg(ploggingRegisterDTO.getImage().getOriginalFilename(), savedFileName, plogging);
+        	}
+        	
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 등록에 실패했습니다.", 409));
         }
