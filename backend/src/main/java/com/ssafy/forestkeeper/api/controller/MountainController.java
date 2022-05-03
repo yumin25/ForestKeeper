@@ -96,4 +96,24 @@ public class MountainController {
             return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
         }
     }
+
+    @ApiOperation(value = "산 검색")
+    @GetMapping("/rank/{mountainCode}")
+    public ResponseEntity<?> getRank(@RequestParam("keyword") String keyword, @PathVariable("mountainCode") String mountainCode) {
+
+        try {
+
+            Optional<List<Mountain>> mountainList = mountainService.searchMountain(keyword, page);
+
+            if (!mountainList.isPresent() || mountainList.get().size() == 0) {
+                return ResponseEntity.status(404).body(BaseResponseDTO.of("데이터가 존재하지 않습니다.", 404));
+            }
+
+            return ResponseEntity.status(200).body(
+                MountainSearchResponseDTO.of("산 검색에 성공했습니다.", 200, mountainList.get()));
+        } catch (Exception e) {
+            System.err.println(e);
+            return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
+        }
+    }
 }
