@@ -8,9 +8,6 @@
   border-radius: 10;
   border: "none";
 }
-/* .input.placeholder: {
-  color: "#8E8E92";
-} */
 .input:focus {
   outline: none;
 }
