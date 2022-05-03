@@ -28,7 +28,6 @@ function Login({ saveUser, userSlice }) {
       .then((res) => {
         if (res.status === 200) {
           window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
-          console.log(localStorage.getItem("idToken"));
           axios
             .get(`https://k6a306.p.ssafy.io/api/user/userinfo`, {
               headers: {
