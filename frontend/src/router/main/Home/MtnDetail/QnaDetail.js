@@ -87,7 +87,11 @@ function QnaDetail() {
           >
             댓글
           </div>
-          <div id="comment" style={{ height: "30vh", overflow: "auto" }}>
+          <div
+            id="comment"
+            className="box"
+            style={{ height: "30vh", overflow: "auto" }}
+          >
             {comments &&
               comments.map((comment) => (
                 //   10.5vh
