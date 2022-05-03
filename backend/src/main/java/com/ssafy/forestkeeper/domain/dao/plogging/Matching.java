@@ -56,7 +56,7 @@ public class Matching extends BaseEntity {
     @OneToMany(mappedBy = "matching", fetch = FetchType.LAZY)
     private List<MatchingUser> matchingUsers = new ArrayList<>();
 
-//     글 수정
+    //     글 수정
     public void changeMatch(String title, String content) {
         this.title = title;
         this.content = content;
@@ -69,5 +69,14 @@ public class Matching extends BaseEntity {
 
     public void changeDelete() {
         this.delete = true;
+    }
+
+    public void changeMatching(String title, String content, LocalDate ploggingDate, int total,
+        Mountain mountain) {
+        this.title = title;
+        this.content = content;
+        this.ploggingDate = ploggingDate;
+        this.total = total;
+        this.mountain = mountain;
     }
 }

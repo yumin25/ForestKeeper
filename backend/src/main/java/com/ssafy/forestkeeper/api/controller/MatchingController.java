@@ -1,6 +1,7 @@
 package com.ssafy.forestkeeper.api.controller;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingJoinPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
@@ -62,6 +63,34 @@ public class MatchingController {
         }
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성에 성공했습니다.", 201));
+
+    }
+
+    @ApiOperation(value = "매칭 글 수정")
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "글 수정에 성공했습니다."),
+        @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
+        @ApiResponse(code = 404, message = "글 수정에 필요한 정보를 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "글 수정에 실패했습니다."),
+    })
+    @PatchMapping
+    public ResponseEntity<? extends BaseResponseDTO> modify(
+        @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyPatchDTO matchingModifyPatchDTO
+    ) {
+
+        if (matchingModifyPatchDTO.getTotal() < matchingUserService.getParticipant(matchingModifyPatchDTO.getMatchingId())) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원이 참여 인원보다 적습니다.", 409));
+        }
+
+        try {
+            matchingService.modifyMatching(matchingModifyPatchDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 수정에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.status(201).body(BaseResponseDTO.of("글 수정에 성공했습니다.", 201));
 
     }
 

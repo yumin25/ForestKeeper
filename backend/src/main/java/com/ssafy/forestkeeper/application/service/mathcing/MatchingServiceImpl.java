@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.service.mathcing;
 
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
@@ -55,6 +56,20 @@ public class MatchingServiceImpl implements MatchingService {
                     SecurityContextHolder.getContext().getAuthentication().getName(), false)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
             .matching(matching).build());
+    }
+
+    @Override
+    public void modifyMatching(MatchingModifyPatchDTO matchingModifyPatchDTO) {
+        Matching matching = matchingRepository.findByIdAndDelete(
+                matchingModifyPatchDTO.getMatchingId(), false)
+            .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        matching.changeMatching(matchingModifyPatchDTO.getTitle(),
+            matchingModifyPatchDTO.getContent(), LocalDate.parse(matchingModifyPatchDTO.getPloggingDate()),
+            matchingModifyPatchDTO.getTotal(),
+            mountainRepository.findByCode(matchingModifyPatchDTO.getMountainCode()).get());
+
+        matchingRepository.save(matching);
     }
 
     @Override
