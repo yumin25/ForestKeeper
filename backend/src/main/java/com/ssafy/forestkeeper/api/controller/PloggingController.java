@@ -1,25 +1,31 @@
 package com.ssafy.forestkeeper.api.controller;
 
-<<<<<<< backend/src/main/java/com/ssafy/forestkeeper/api/controller/PloggingController.java
-=======
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
-import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
-import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
->>>>>>> backend/src/main/java/com/ssafy/forestkeeper/api/controller/PloggingController.java
+
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingService;
 import com.ssafy.forestkeeper.application.service.s3.S3Service;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
@@ -29,7 +35,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Api(value = "Plogging API", tags = {"Plogging"})
 @CrossOrigin("*")
