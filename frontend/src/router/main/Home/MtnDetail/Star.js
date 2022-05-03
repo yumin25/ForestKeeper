@@ -3,6 +3,7 @@ import temp from "../../../../res/img/temp.png";
 import first from "../../../../res/img/medal.png";
 import second from "../../../../res/img/medal(1).png";
 import third from "../../../../res/img/medal(2).png";
+import axios from "axios";
 function UserItem({ user }) {
   return (
     <>
@@ -63,59 +64,24 @@ function UserItem({ user }) {
   );
 }
 
-function Star() {
-  const users = [
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
-      rank: 1,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 2,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 3,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨이이이이이이이이이",
-      rank: 4,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 5,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 6,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 7,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 8,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 9,
-    },
-    {
-      userId: "bc9f-x5ad-2hdz-p6dvt5sk",
-      nickname: "숨1",
-      rank: 10,
-    },
-  ];
+function Star({ url }) {
+  const [users, setUsers] = useState([]);
+  const [mountainId, setMountainId] = useState();
+  function getRank() {
+    axios
+      .get(url + `/api/mountain/rank`, {
+        params: {
+          mountainId: mountainId,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        setUsers(response.data.users);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   const LowRanker = users.slice(3, users.length);
   const [tab, setTab] = useState("count");

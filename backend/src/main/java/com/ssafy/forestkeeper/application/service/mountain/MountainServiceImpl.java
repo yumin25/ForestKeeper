@@ -20,9 +20,8 @@ public class MountainServiceImpl implements MountainService {
 
     @Override
     public Optional<Mountain> getMountainInfo(String mountainCode) {
-        Optional<Mountain> result = Optional.ofNullable(
-            mountainRepository.findByCode(mountainCode));
-        return result;
+        return  mountainRepository.findByCode(mountainCode);
+
     }
 
     @Override
