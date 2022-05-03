@@ -46,6 +46,9 @@ public class Matching extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "matching_is_deleted")
+    private boolean delete;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_code", referencedColumnName = "mountain_code")
     private Mountain mountain;
@@ -62,5 +65,9 @@ public class Matching extends BaseEntity {
     // 조회수 증가
     public void increaseViews() {
         this.views += 1;
+    }
+
+    public void changeDelete() {
+        this.delete = true;
     }
 }
