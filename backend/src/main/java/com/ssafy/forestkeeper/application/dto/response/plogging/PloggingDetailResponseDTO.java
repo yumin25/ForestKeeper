@@ -31,6 +31,9 @@ public class PloggingDetailResponseDTO extends BaseResponseDTO{
     @ApiModelProperty(name = "경험치")
     private long exp;
     
+    @ApiModelProperty(name = "이미지 경로")
+    private String imagePath;
+    
     public static PloggingDetailResponseDTO of(String message, Integer statusCode, PloggingDetailResponseDTO ploggingDetailResponseDTO) {
 
     	ploggingDetailResponseDTO.setMessage(message);
