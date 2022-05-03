@@ -8,4 +8,5 @@ public interface MountainService {
 
     Optional<Mountain> getMountainInfo(String mountainCode);
     Optional<List<Mountain>> searchMountain(String keyword, int page);
+    int totalSearch(String keyword);
 }
