@@ -57,7 +57,7 @@ function SearchList({ keyword, keywordHandler }) {
       })
       .then(function (response) {
         console.log(response.data);
-        setSearchList(response.data.searchlist);
+        //setSearchList(response.data.searchlist);
         setSearchList((list) => [...list, ...response.data.searchlist]);
         setLoading(true);
       })
