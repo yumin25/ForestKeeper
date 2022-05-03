@@ -15,6 +15,10 @@ public interface MatchingService {
 
     boolean isClose(String matchingId);
 
+    void deleteMatching(String matchingId);
+
+    boolean isDelete(String matchingId);
+
     // 매칭 글 조회
     MatchingResponseDTO getMatching(String matchingId);
 

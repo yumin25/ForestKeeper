@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MatchingUserRepository extends JpaRepository<MatchingUser, String> {
 
-    Optional<List<MatchingUser>> findByMatching(Matching matching);
+    Optional<List<MatchingUser>> findByMatchingAndDelete(Matching matching, boolean delete);
+    Optional<MatchingUser> findByMatchingAndUserId(Matching matching, String userId);
 }

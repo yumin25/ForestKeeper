@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,6 +84,10 @@ public class MatchingController {
 
         if (matchingService.isClose(matchingId)) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 마감된 매칭입니다.", 409));
+        }
+
+        if (matchingService.isDelete(matchingId)) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("삭제된 매칭입니다.", 409));
         }
 
         if (matchingUserService.isJoin(matchingId)) {
@@ -176,6 +181,53 @@ public class MatchingController {
 
         return ResponseEntity.ok(MatchingResponseDTO.of("매칭 글조회에 성공했습니다.", 200,
             matchingResponseDTO));
+
+    }
+
+
+    @ApiOperation(value = "매칭 글 삭제")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
+        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+    })
+    @DeleteMapping("/{matchingId}")
+    public ResponseEntity<? extends BaseResponseDTO> deleteMatching(
+        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+    ) {
+
+        try {
+            matchingService.deleteMatching(matchingId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 글 삭제에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("매칭 글 삭제에 성공했습니다.", 200));
+
+    }
+
+    @ApiOperation(value = "매칭 참여 취소")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "매칭 참여 취소에 성공했습니다."),
+        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+    })
+    @DeleteMapping("/cancel/{matchingId}")
+    public ResponseEntity<? extends BaseResponseDTO> cancelMatching(
+        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+    ) {
+
+        try {
+            matchingUserService.cancelMatching(matchingId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 취소에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(BaseResponseDTO.of("매칭 참여 취소에 성공했습니다.", 200));
 
     }
 }
