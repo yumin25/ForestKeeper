@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import { Route, Routes } from "react-router-dom";
-
+import axios from "axios";
 function NaverMapAPI({ lat, lng }) {
   const navermaps = window.naver.maps;
 
@@ -22,7 +22,31 @@ function NaverMapAPI({ lat, lng }) {
   );
 }
 
-function Home({ lat, lng }) {
+function Home({ mountainName, lat, lng }) {
+  const url = "https://k6a306.p.ssafy.io/api";
+  const [visiter, setVisiter] = useState();
+  const [distance, setDistance] = useState();
+
+  function getTotal() {
+    axios
+      .get(url + `/plogging`, {
+        params: {
+          mountainName: mountainName,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setVisiter(response.data.visiter);
+        setDistance(response.data.distance);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    getTotal();
+  }, []);
+
   return (
     <>
       {/* 15vh */}
@@ -45,8 +69,8 @@ function Home({ lat, lng }) {
           <div
             style={{ display: "flex", fontSize: "3.5vh", fontWeight: "bold" }}
           >
-            <div style={{ marginRight: "5vw" }}>명</div>
-            <div> km</div>
+            <div style={{ marginRight: "5vw" }}>{visiter}명</div>
+            <div> {distance}km</div>
           </div>
         </div>
       </div>
