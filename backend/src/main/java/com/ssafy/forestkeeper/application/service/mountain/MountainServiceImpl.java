@@ -20,7 +20,7 @@ public class MountainServiceImpl implements MountainService {
 
     @Override
     public Optional<Mountain> getMountainInfo(String mountainCode) {
-        return  mountainRepository.findByCode(mountainCode);
+        return mountainRepository.findByCode(mountainCode);
 
     }
 
@@ -30,5 +30,11 @@ public class MountainServiceImpl implements MountainService {
             mountainRepositorySupport.findByNameContains(keyword,
                 PageRequest.of(page * batch, batch)));
         return result;
+    }
+
+    @Override
+    public int totalSearch(String keyword) {
+
+        return mountainRepositorySupport.findByNameContains(keyword).size();
     }
 }
