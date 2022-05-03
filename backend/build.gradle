@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'mysql:mysql-connector-java'
@@ -27,7 +28,7 @@ dependencies {
     // Swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
-    implementation 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.projectlombok:lombok:1.18.24'
 
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
@@ -53,7 +54,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.6.2'
 
-
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
@@ -65,17 +65,26 @@ dependencies {
 
     // JSON
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // QueryDsl
-    implementation("com.querydsl:querydsl-jpa:5.0.0")
-    implementation("com.querydsl:querydsl-apt:5.0.0")
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation 'com.querydsl:querydsl-apt:5.0.0'
+
+    // Vision API
+    implementation platform('com.google.cloud:libraries-bom:25.1.0')
+    implementation 'com.google.cloud:google-cloud-vision'
+
+    // Mattermost
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 }
 
 test {
     useJUnitPlatform()
 }
 
-//querydsl 추가 시작
+// querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -95,4 +104,4 @@ configurations {
     }
     querydsl.extendsFrom compileClasspath
 }
-//querydsl 추가 끝
+// querydsl 추가 끝

@@ -1,6 +1,7 @@
 import logo from "../../res/img/logo.png";
 import "./Login.css";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { save } from "../../store/user";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,6 @@ function Login({ saveUser, userSlice }) {
   const onEmailHandler = (e) => {
     setEmail(e.target.value);
   };
-
   const [password, setPassword] = useState("");
   const onPasswordHandler = (e) => {
     setPassword(e.target.value);
@@ -24,22 +24,27 @@ function Login({ saveUser, userSlice }) {
       email: email,
       password: password,
     };
-
     Send.post(`/user/login`, JSON.stringify(data))
       .then((res) => {
-        if (res.status === 202) {
-          alert("이메일 및 비밀번호를 확인해주세요.");
-          return;
+        if (res.status === 200) {
+          window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
+          axios
+            .get(`https://k6a306.p.ssafy.io/api/user/userinfo`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + res.data.accessToken,
+              },
+            })
+            .then((response) => {
+              saveUser(response.data);
+            });
+          history("/");
         }
-        window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
-        Send.get(`/user/userinfo`).then((response) => {
-          saveUser(response.data);
-        });
-        history({
-          pathname: "/",
-        });
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        window.alert("이메일과 비밀번호를 확인해주십시오");
+      });
   };
   const handleEnter = (e) => {
     if (e.key === "Enter") {
@@ -47,6 +52,11 @@ function Login({ saveUser, userSlice }) {
     }
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("idToken")) {
+      history("/accounts/mypage");
+    }
+  });
   return (
     <div style={{ margin: "10vh" }}>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
