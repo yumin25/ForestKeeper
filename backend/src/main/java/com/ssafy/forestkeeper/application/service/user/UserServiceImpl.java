@@ -3,6 +3,7 @@ package com.ssafy.forestkeeper.application.service.user;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.config.AmazonS3Config;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.enums.UserCode;
@@ -28,6 +30,9 @@ public class UserServiceImpl implements UserService {
     private final ImageRepository imageRepository;
     
     private final JwtAuthenticationProvider jwtProvider;
+    
+    @Value("${cloud.aws.s3.hosting}")
+    public String hosting;
     
 
     // 회원가입
@@ -77,6 +82,7 @@ public class UserServiceImpl implements UserService {
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
+                .imagePath(hosting + imageRepository.findByUserId(user.getId()).get().getSavedFileName())
                 .build();
     }
 

@@ -40,7 +40,7 @@ public class S3Service {
 	            e.printStackTrace();
 	        }
 	        
-//	        return amazonS3Client.getUrl(bucket, fileName).toString();
+	        System.out.println(amazonS3Client.getUrl(bucket, fileName).toString());
 	        return fileName;
 	    }
 	    

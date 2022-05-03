@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,10 @@ public class PloggingServiceImpl implements PloggingService{
 	private final TrashCanRepository trashCanRepository;
 	
 	private final ImageRepository imageRepository;
+	
+    @Value("${cloud.aws.s3.hosting}")
+    public String hosting;
+    
 
 	@Override
 	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
@@ -73,6 +78,7 @@ public class PloggingServiceImpl implements PloggingService{
 				.distance(plogging.getDistance())
 				.time(plogging.getDurationTime())
 				.exp(plogging.getExp())
+				.imagePath(hosting + imageRepository.findByPloggingId(ploggingId).get().getSavedFileName())
 				.build();
 	}
 
