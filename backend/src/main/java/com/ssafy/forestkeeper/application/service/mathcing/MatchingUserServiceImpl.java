@@ -32,8 +32,8 @@ public class MatchingUserServiceImpl implements MatchingUserService {
 
     @Override
     public boolean isJoin(String matchingId) {
-        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatching(
-            matchingRepository.findById(matchingId).get()).get();
+        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatchingAndDelete(
+            matchingRepository.findById(matchingId).get(), false).get();
 
         for (MatchingUser matchingUser : matchingUserList) {
             if (matchingUser.getUser() == userRepository.findByEmailAndDelete(
@@ -47,7 +47,21 @@ public class MatchingUserServiceImpl implements MatchingUserService {
 
     @Override
     public int getParticipant(String matchingId) {
-        return matchingUserRepository.findByMatching(
-            matchingRepository.findById(matchingId).get()).get().size();
+        return matchingUserRepository.findByMatchingAndDelete(
+            matchingRepository.findById(matchingId).get(), false).get().size();
+    }
+
+    @Override
+    public void cancelMatching(String matchingId) {
+        MatchingUser matchingUser = matchingUserRepository.findByMatchingAndUserId(
+                matchingRepository.findById(matchingId).get()
+                ,
+                userRepository.findByEmailAndDelete(
+                        SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")).getId())
+            .get();
+
+        matchingUser.changeDelete();
+        matchingUserRepository.save(matchingUser);
     }
 }
