@@ -52,7 +52,7 @@ function SearchList({ keyword, keywordHandler }) {
       .get(url + `/mountain`, {
         params: {
           keyword: keyword,
-          pageNumber: pageNumber,
+          page: pageNumber,
         },
       })
       .then(function (response) {
