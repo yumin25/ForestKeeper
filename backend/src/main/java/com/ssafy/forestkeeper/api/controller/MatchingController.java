@@ -158,6 +158,32 @@ public class MatchingController {
 
     }
 
+    @ApiOperation(value = "내 매칭 목록 조회")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
+        @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
+        @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
+    })
+    @GetMapping("/my")
+    public ResponseEntity<? extends BaseResponseDTO> getMyMatchingList(
+        @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+    ) {
+
+        MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
+
+        try {
+            matchingGetListWrapperResponseDTO = matchingService.getMyMatching(page);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 목록 조회에 실패했습니다.", 409));
+        }
+
+        return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
+            matchingGetListWrapperResponseDTO));
+
+    }
+
     @ApiOperation(value = "매칭 글 조회")
     @ApiResponses({
         @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),

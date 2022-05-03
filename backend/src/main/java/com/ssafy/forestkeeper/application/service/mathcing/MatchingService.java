@@ -25,6 +25,8 @@ public interface MatchingService {
     // 글 목록 조회
     MatchingGetListWrapperResponseDTO getMatchingList(int page);
 
+    MatchingGetListWrapperResponseDTO getMyMatching(int page);
+
 //    // 글 검색
 //    CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page);
 //
