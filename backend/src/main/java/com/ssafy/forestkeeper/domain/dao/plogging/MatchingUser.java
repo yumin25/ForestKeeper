@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.domain.dao.plogging;
 
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.user.User;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -27,4 +28,11 @@ public class MatchingUser extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "matching_id")
     private Matching matching;
+
+    @Column(name = "matching_is_deleted")
+    private boolean delete;
+
+    public void changeDelete() {
+        this.delete = true;
+    }
 }
