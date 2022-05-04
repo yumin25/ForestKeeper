@@ -60,7 +60,7 @@ public class UserInfoController {
         try {
         	mountainList = userInfoService.getMountainList(page);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("산 목록 조회에 실패했습니다.", 409));
         }
