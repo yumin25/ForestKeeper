@@ -78,11 +78,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoDTO getUserDetail(String email) {
         User user = userRepository.findByEmailAndDelete(email, false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+        Image image = imageRepository.findByUserId(user.getId()).orElse(null);
+        String imagePath;
+        if(image == null) imagePath = "";
+        else imagePath = hosting + image.getSavedFileName();
         return UserInfoDTO.builder()
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
-                .imagePath(hosting + imageRepository.findByUserId(user.getId()).get().getSavedFileName())
+                .imagePath(imagePath)
                 .build();
     }
 
