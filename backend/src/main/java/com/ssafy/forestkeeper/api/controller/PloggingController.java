@@ -9,13 +9,13 @@ import javax.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,14 +52,15 @@ public class PloggingController {
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(@ModelAttribute PloggingRegisterDTO ploggingRegisterDTO) {
+    public ResponseEntity<?> registerPlogging(@RequestPart("dto") @ApiParam(value = "플로깅 기록 DTO", required = true) PloggingRegisterDTO ploggingRegisterDTO,
+    		@RequestPart("image") @ApiParam(value = "플로깅 이동경로 이미지", required = true) MultipartFile multipartFile) {
         try {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
-        	if(ploggingRegisterDTO.getImage() != null) {
-        		String savedFileName = s3Service.uploadFileToS3("plogging", ploggingRegisterDTO.getImage());
-        		ploggingService.registerPloggingImg(ploggingRegisterDTO.getImage().getOriginalFilename(), savedFileName, plogging);
-        	}
+        	String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
+        	ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
         	
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 등록에 실패했습니다.", 409));
         }
@@ -73,8 +74,10 @@ public class PloggingController {
         PloggingDetailResponseDTO ploggingDetailResponseDTO = null;
         try {
             ploggingDetailResponseDTO = ploggingService.get(ploggingId);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 조회에 실패했습니다.", 409));
         }
         return ResponseEntity.ok(
             PloggingDetailResponseDTO.of("플로깅 조회에 성공했습니다.", 200, ploggingDetailResponseDTO));
@@ -85,6 +88,8 @@ public class PloggingController {
     public ResponseEntity<?> registerExp(@RequestBody ExpRegisterDTO expRegisterDTO) {
         try {
             ploggingService.registerExp(expRegisterDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
@@ -97,8 +102,10 @@ public class PloggingController {
     	PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO;
         try {
         	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainName);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 누적치 조회에 실패했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 누적치 조회에 성공했습니다.", 409));
         }
         return ResponseEntity.status(200).body(PloggingCumulativeResponseDTO.of("산별 누적치 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
     }
