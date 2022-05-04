@@ -22,31 +22,7 @@ function NaverMapAPI({ lat, lng }) {
   );
 }
 
-function Home({ mountainName, lat, lng }) {
-  const url = "https://k6a306.p.ssafy.io/api";
-  const [visiter, setVisiter] = useState();
-  const [distance, setDistance] = useState();
-
-  function getTotal() {
-    axios
-      .get(url + `/plogging`, {
-        params: {
-          mountainName: mountainName,
-        },
-      })
-      .then(function (response) {
-        console.log(response.data);
-        setVisiter(response.data.visiter);
-        setDistance(response.data.distance);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-  useEffect(() => {
-    getTotal();
-  }, []);
-
+function Home({ visiter, distance, lat, lng }) {
   return (
     <>
       {/* 15vh */}
