@@ -42,26 +42,7 @@ function UserItem({ user, tab }) {
 }
 
 function Star({ mountainCode, url }) {
-  const [users, setUsers] = useState([
-    {
-      rank: 1,
-      nickname: "1위",
-      count: 1,
-      distance: 0.0,
-    },
-    {
-      rank: 2,
-      nickname: "2위",
-      count: 2,
-      distance: 0.0,
-    },
-    {
-      rank: 3,
-      nickname: "3위",
-      count: 3,
-      distance: 0.0,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
   const LowRanker = users.slice(3, users.length);
   const [tab, setTab] = useState("count");
 
@@ -133,7 +114,7 @@ function Star({ mountainCode, url }) {
           width: "73vw",
           marginTop: "2.5vh",
           marginBottom: "2.5vh",
-          marginLeft: "13.5vw",
+          marginLeft: "10vw",
           display: "flex",
         }}
       >
@@ -147,7 +128,7 @@ function Star({ mountainCode, url }) {
                 src={second}
                 style={{
                   top: "33.5vh",
-                  left: "24vw",
+                  left: "19.5vw",
                   position: "absolute",
                   width: "8.8vw",
                   height: "8.5vw",
@@ -156,7 +137,7 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNickname">
+          <div className="topNickname">
             {users.length >= 2 && users[1].nickname}
           </div>
           {tab == "count"
@@ -190,7 +171,7 @@ function Star({ mountainCode, url }) {
                 src={first}
                 style={{
                   top: "28vh",
-                  left: "52vw",
+                  left: "47.5vw",
                   position: "absolute",
                   width: "9.3vw",
                   height: "9vw",
@@ -199,7 +180,7 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNicknamw">
+          <div id="nickname" className="topNickname">
             {users.length >= 1 && users[0].nickname}
           </div>
 
@@ -226,7 +207,7 @@ function Star({ mountainCode, url }) {
                 src={third}
                 style={{
                   top: "33.5vh",
-                  left: "77vw",
+                  left: "72.5vw",
                   position: "absolute",
                   width: "8.3vw",
                   height: "8vw",
