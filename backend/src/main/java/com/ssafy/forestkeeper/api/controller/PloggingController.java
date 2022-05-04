@@ -1,27 +1,41 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
-import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
-import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
+
 import java.util.List;
 import java.util.Optional;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingService;
+import com.ssafy.forestkeeper.application.service.s3.S3Service;
+import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
+import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Api(value = "Plogging API", tags = {"Plogging"})
 @CrossOrigin("*")
@@ -31,14 +45,21 @@ import org.springframework.web.multipart.MultipartFile;
 public class PloggingController {
 
     private final PloggingService ploggingService;
+    
+    private final S3Service s3Service;
+
     private final PloggingAiService ploggingAiService;
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(
-        @RequestBody PloggingRegisterDTO ploggingRegisterDTO) {
+    public ResponseEntity<?> registerPlogging(@ModelAttribute PloggingRegisterDTO ploggingRegisterDTO) {
         try {
-            ploggingService.register(ploggingRegisterDTO);
+        	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
+        	if(ploggingRegisterDTO.getImage() != null) {
+        		String savedFileName = s3Service.uploadFileToS3("plogging", ploggingRegisterDTO.getImage());
+        		ploggingService.registerPloggingImg(ploggingRegisterDTO.getImage().getOriginalFilename(), savedFileName, plogging);
+        	}
+        	
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 등록에 실패했습니다.", 409));
         }
@@ -68,6 +89,18 @@ public class PloggingController {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
         return ResponseEntity.status(201).body(BaseResponseDTO.of("경험치 부여에 성공했습니다.", 201));
+    }
+    
+    @ApiOperation(value = "산 누적 방문자 및 거리 조회")
+    @GetMapping
+    public ResponseEntity<?> getCumulative(@RequestParam String mountainName) {
+    	PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO;
+        try {
+        	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainName);
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 누적치 조회에 실패했습니다.", 409));
+        }
+        return ResponseEntity.status(200).body(PloggingCumulativeResponseDTO.of("산별 누적치 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
     }
 
     @ApiOperation(value = "쓰레기통 전체 목록")

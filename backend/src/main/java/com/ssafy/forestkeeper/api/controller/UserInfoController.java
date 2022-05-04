@@ -31,8 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/userinfo")
 public class UserInfoController {
 	
-	private final PloggingService ploggingService;
-
 	private final UserInfoService userInfoService;
 
 	@ApiOperation(value = "플로깅 목록 조회")

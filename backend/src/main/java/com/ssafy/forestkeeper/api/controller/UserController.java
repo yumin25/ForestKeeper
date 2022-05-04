@@ -1,19 +1,35 @@
 package com.ssafy.forestkeeper.api.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
+import com.ssafy.forestkeeper.application.service.s3.S3Service;
 import com.ssafy.forestkeeper.application.service.user.UserService;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @Api(value = "User API", tags = {"User"})
 @CrossOrigin("*")
@@ -23,10 +39,12 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    
+    private final S3Service s3Service;
 
     @ApiOperation(value = "회원가입")
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody UserSignUpDTO userSignUpDTO) {
+    public ResponseEntity<?> register(@ModelAttribute UserSignUpDTO userSignUpDTO) {
         try {
             Integer result = userService.signUp(userSignUpDTO);
 
@@ -35,6 +53,11 @@ public class UserController {
             else if (result == 4093) return ResponseEntity.status(409).body(BaseResponseDTO.of("비밀번호 형식이 잘못되었습니다.", 409));
             else if (result == 4094) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 이메일로 가입된 계정이 이미 존재합니다.", 409));
             else if (result == 4095) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
+            
+            if(userSignUpDTO.getImage() != null) {
+            	String savedFileName = s3Service.uploadFileToS3("user", userSignUpDTO.getImage());
+            	userService.registerUserImgPath(userSignUpDTO.getImage().getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
+            }
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("회원가입에 실패했습니다.", 409));
         }
@@ -121,4 +144,12 @@ public class UserController {
         if(userService.withdraw(email)) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
         return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
     }
+    
+	@PutMapping("/modify/profile")
+	@ApiOperation(value = "회원 프로필 사진 수정")
+	public Object updateUserImage(@RequestBody @ApiParam(value = "회원 프로필 사진.", required = true) MultipartFile image) {
+		String savedFileName = s3Service.uploadFileToS3("user", image);
+		userService.updateUserImgPath(image.getOriginalFilename(), savedFileName);
+		return ResponseEntity.status(201).body(BaseResponseDTO.of("이미지 업로드에 성공했습니다.", 201));
+	}
 }
