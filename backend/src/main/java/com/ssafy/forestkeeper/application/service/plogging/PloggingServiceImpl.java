@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
@@ -126,5 +127,28 @@ public class PloggingServiceImpl implements PloggingService{
 				.savedFileName(savedFileName)
 				.plogging(plogging)
 				.build());
+	}
+
+	@Override
+	public PloggingCumulativeResponseDTO getCumulative(String mountainName) {
+		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountainRepository.findByName(mountainName).getId()).orElse(null);
+		long distance = 0L;
+		int visiter = 0;
+		
+		if(ploggingList == null) {
+			return PloggingCumulativeResponseDTO.builder()
+					.distance(distance)
+					.visiter(visiter)
+					.build();
+		}
+
+		for(Plogging plogging : ploggingList) {
+			visiter++;
+			distance += (int)plogging.getDistance();
+		}
+		return PloggingCumulativeResponseDTO.builder()
+											.distance(distance)
+											.visiter(visiter)
+											.build();
 	}
 }
