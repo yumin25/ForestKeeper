@@ -42,7 +42,7 @@ function Detail() {
     axios
       .get(url + `/plogging`, {
         params: {
-          mountainName: Info.mountainName,
+          mountainName: Info.name,
         },
       })
       .then(function (response) {
