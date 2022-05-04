@@ -205,7 +205,11 @@ function Detail() {
                 <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
 
-              <Home lat={Info.lat} lng={Info.lng}></Home>
+              <Home
+                mountainName={Info.name}
+                lat={Info.lat}
+                lng={Info.lng}
+              ></Home>
             </>
           )}
         </div>
