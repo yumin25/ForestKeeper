@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
+import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
@@ -42,7 +44,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                 .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
-
+		
     	ploggingList.forEach(plogging ->
     		ploggingListResponseDTOList.add(
                         PloggingListResponseDTO.builder()
@@ -81,8 +83,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 	
 	@Override
 	public PloggingListWrapperResponseDTO getPloggingInMountain(String mountainName) {
-        List<Plogging> ploggingList = ploggingRepository.findByUserIdAndMountainId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),mountainRepository.findByName(mountainName).getId())
-                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+		Mountain mountain = mountainRepository.findByName(mountainName)
+				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
+        List<Plogging> ploggingList = ploggingRepository.findByUserIdAndMountainId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),mountain.getId())
+                .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
 
