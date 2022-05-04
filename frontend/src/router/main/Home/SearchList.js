@@ -49,7 +49,7 @@ function SearchList({ keyword, keywordHandler }) {
   }, [pageNumber]);
 
   function getResult() {
-    if ((pageNumber - 1) * 8 < total && pageNumber * 8 <= total) {
+    if ((pageNumber - 1) * 8 < total) {
       axios
         .get(url + `/mountain`, {
           params: {
