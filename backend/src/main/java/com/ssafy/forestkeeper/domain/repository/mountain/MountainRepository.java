@@ -10,5 +10,5 @@ import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 public interface MountainRepository extends JpaRepository<Mountain, String>{
     Optional<Mountain> findByCode(String MountainCode);
     
-    Mountain findByName(String mountainName);
+    Optional<Mountain> findByName(String mountainName);
 }
