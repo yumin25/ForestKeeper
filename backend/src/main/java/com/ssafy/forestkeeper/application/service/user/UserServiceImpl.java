@@ -1,25 +1,39 @@
 package com.ssafy.forestkeeper.application.service.user;
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
-import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
-import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
-import com.ssafy.forestkeeper.domain.dao.user.User;
-import com.ssafy.forestkeeper.domain.enums.UserCode;
-import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
-import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
-import lombok.RequiredArgsConstructor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.config.AmazonS3Config;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
+import com.ssafy.forestkeeper.domain.dao.user.User;
+import com.ssafy.forestkeeper.domain.enums.UserCode;
+import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
+import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    
+    private final ImageRepository imageRepository;
+    
     private final JwtAuthenticationProvider jwtProvider;
+    
+    @Value("${cloud.aws.s3.hosting}")
+    public String hosting;
+    
 
     // 회원가입
     @Override
@@ -68,6 +82,7 @@ public class UserServiceImpl implements UserService {
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
+                .imagePath(hosting + imageRepository.findByUserId(user.getId()).get().getSavedFileName())
                 .build();
     }
 
@@ -134,5 +149,31 @@ public class UserServiceImpl implements UserService {
         if (nickname.length() < 2 || nickname.length() > 10) return false;  //2자 이상 10자 이하
         if (!Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname)) return false; //영어, 한글, 숫자만 입력 허용
         return true;
+    }
+    
+    @Override
+    public void updateUserImgPath(String originalFileName, String savedFileName) {
+    	Image image = imageRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId()).orElse(null);
+    	
+    	if(image != null) {
+    		image.setOriginalFileName(originalFileName);
+    		image.setSavedFileName(savedFileName);
+    		imageRepository.save(image);
+    	}else {
+    		imageRepository.save(Image.builder()
+    				.originalFileName(originalFileName)
+    				.savedFileName(savedFileName)
+    				.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get())
+    				.build());
+    	}
+    }
+    
+    @Override
+    public void registerUserImgPath(String originalFileName, String savedFileName, String email) {
+    	imageRepository.save(Image.builder()
+				.originalFileName(originalFileName)
+				.savedFileName(savedFileName)
+				.user(userRepository.findByEmailAndDelete(email,false).get())
+				.build());
     }
 }

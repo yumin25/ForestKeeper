@@ -1,4 +1,6 @@
 import { fontFamily } from "@mui/system";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import back from "../../../../res/img/back.png";
 import check from "../../../../res/img/check.png";
@@ -11,20 +13,25 @@ import Home from "./Home";
 function Detail() {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
-  const [Info, setInfo] = useState({
-    name: "북악산",
-    address: "서울특별시  종로구 청운동 ",
-    admin: "종로구청",
-    tel: "02-2148-1114",
-    description:
-      "북악산은 서울의 주산으로 경복궁 뒤쪽에... 전망도 빼어나다.\n\n.",
-    height: 342.5,
-    isFamous: 0,
-    famousDescription: "",
-    lat: 37.5930556,
-    lng: 126.9733333,
-  });
-  function getMountainInfo() {}
+  const [Info, setInfo] = useState([]);
+  let useParam = useParams();
+  const url = "https://k6a306.p.ssafy.io/api";
+  useEffect(() => {
+    getMtnInfo();
+  }, []);
+
+  function getMtnInfo() {
+    axios
+      .get(url + `/mountain/${useParam.mountainCode}`)
+      .then(function (response) {
+        console.log(response);
+        setInfo(response.data.mountainInfo);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <div style={{ height: "92.5vh" }}>
@@ -131,7 +138,7 @@ function Detail() {
                 </div>
                 <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
-              <Star></Star>
+              <Star url={url}></Star>
             </>
           ) : tab == "about" ? (
             <>
@@ -166,7 +173,7 @@ function Detail() {
                   About {Info.name}
                 </div>
               </div>
-              <About></About>
+              <About url={url}></About>
             </>
           ) : (
             <>
@@ -195,10 +202,14 @@ function Detail() {
                 >
                   명예의 전당
                 </div>
-                <div onClick={() => setTab("home")}>About {Info.name}</div>
+                <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
 
-              <Home lat={Info.lat} lng={Info.lng}></Home>
+              <Home
+                mountainName={Info.name}
+                lat={Info.lat}
+                lng={Info.lng}
+              ></Home>
             </>
           )}
         </div>

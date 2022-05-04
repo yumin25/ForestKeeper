@@ -18,4 +18,6 @@ public interface UserService {
     boolean isValidPassword(String password);
     boolean isValidName(String name);
     boolean isValidNickname(String nickname);
+    public void updateUserImgPath(String originalName, String savedName);
+    public void registerUserImgPath(String originalFileName, String savedFileName, String email);
 }

@@ -8,9 +8,13 @@
   border-radius: 10;
   border: "none";
 }
-/* .input.placeholder: {
-  color: "#8E8E92";
-} */
 .input:focus {
   outline: none;
+}
+
+.box {
+  -ms-overflow-style: none;
+}
+.box::-webkit-scrollbar {
+  display: none;
 }

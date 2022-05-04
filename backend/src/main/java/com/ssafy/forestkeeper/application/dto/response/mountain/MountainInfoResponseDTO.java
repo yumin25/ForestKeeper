@@ -4,16 +4,19 @@ import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @ApiModel("MountainInfoResponseDTO")
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 @ToString
-@RequiredArgsConstructor
 public class MountainInfoResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "산 정보")

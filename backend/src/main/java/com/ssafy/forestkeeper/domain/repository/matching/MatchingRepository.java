@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MatchingRepository extends JpaRepository<Matching, String>{
-    Optional<List<Matching>> findAllByOrderByCreateTimeDesc(Pageable pageable);
+
+    Optional<Matching> findByIdAndDelete(String matchingId, boolean delete);
+
+    Optional<List<Matching>> findByDeleteOrderByCreateTimeDesc(boolean delete, Pageable pageable);
 }

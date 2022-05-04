@@ -1,15 +1,26 @@
 package com.ssafy.forestkeeper.domain.dao.image;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.user.User;
-import lombok.*;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
