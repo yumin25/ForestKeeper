@@ -4,7 +4,8 @@ import first from "../../../../res/img/medal.png";
 import second from "../../../../res/img/medal(1).png";
 import third from "../../../../res/img/medal(2).png";
 import axios from "axios";
-function UserItem({ user }) {
+import "./Star.css";
+function UserItem({ user, tab }) {
   return (
     <>
       <div
@@ -14,18 +15,7 @@ function UserItem({ user }) {
           marginBottom: "1.5vh",
         }}
       >
-        <div
-          style={{
-            marginTop: "0.5vh",
-            fontWeight: 700,
-            width: "8vw",
-            marginRight: "3vw",
-            textAlign: "center",
-            fontSize: "2vh",
-          }}
-        >
-          {user.rank}
-        </div>
+        <div className="lowRank">{user.rank}</div>
         <div style={{ marginRight: "3vw" }}>
           <img
             src={temp}
@@ -36,29 +26,16 @@ function UserItem({ user }) {
             }}
           />
         </div>
-        <div
-          style={{
-            marginTop: "0.5vh",
-            fontSize: "1.8vh",
-            fontWeight: "400",
-            width: "40vw",
-          }}
-        >
-          {user.nickname}
-        </div>
-        <div
-          style={{
-            marginTop: "0.5vh",
-            marginLeft: "1vw",
-            fontSize: "1.8vh",
-            fontWeight: "400",
-            width: "16vw",
-            textAlign: "end",
-            color: "#ACACAC",
-          }}
-        >
-          20000회
-        </div>
+        <div className="lowNickname">{user.nickname}</div>
+        {tab == "count" ? (
+          <div id="result" className="topResult">
+            {user.count} 회
+          </div>
+        ) : (
+          <div id="result" className="topResult">
+            {user.distance} km
+          </div>
+        )}
       </div>
     </>
   );
@@ -66,25 +43,29 @@ function UserItem({ user }) {
 
 function Star({ url }) {
   const [users, setUsers] = useState([]);
-  const [mountainId, setMountainId] = useState();
+  const LowRanker = users.slice(3, users.length);
+  const [tab, setTab] = useState("count");
+
+  useEffect(() => {
+    getRank();
+  }, [tab]);
+
   function getRank() {
     axios
       .get(url + `/api/mountain/rank`, {
         params: {
-          mountainId: mountainId,
+          by: tab,
         },
       })
       .then(function (response) {
-        console.log(response);
-        setUsers(response.data.users);
+        console.log(response.data);
+        setUsers(response.data.mountainRankResponseDTOList);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
 
-  const LowRanker = users.slice(3, users.length);
-  const [tab, setTab] = useState("count");
   const ClickedStyle = {
     borderRadius: 3,
     width: "20vw",
@@ -103,6 +84,7 @@ function Star({ url }) {
     border: "none",
     marginRight: "1vw",
   };
+
   return (
     <>
       <div id="tab" style={{ marginLeft: "9vw", marginRight: "6vw" }}>
@@ -138,15 +120,7 @@ function Star({ url }) {
         <div id="second" style={{ width: "19vw", marginRight: "5.5vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img
-                src={temp}
-                style={{
-                  position: "relative",
-                  width: "17vw",
-                  height: "17vw",
-                  borderRadius: 100,
-                }}
-              />
+              <img src={temp} className="topImage" />
             </div>
             <div id="rankImg">
               <img
@@ -162,26 +136,18 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div
-            id="nickname"
-            style={{
-              fontSize: "1.8vh",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
+          <div id="nickname" className="topNickname">
             {users[1].nickname}
           </div>
-          <div
-            id="result"
-            style={{
-              fontSize: "1.8vh",
-              color: "#ACACAC",
-              textAlign: "center",
-            }}
-          >
-            200회
-          </div>
+          {tab == "count" ? (
+            <div id="result" className="topResult">
+              {users[1].count} 회
+            </div>
+          ) : (
+            <div id="result" className="topResult">
+              {users[1].distance} km
+            </div>
+          )}
         </div>
 
         <div id="first" style={{ width: "23vw", marginRight: "5.5vw" }}>
@@ -211,40 +177,25 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div
-            id="nickname"
-            style={{
-              fontSize: "1.8vh",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
+          <div id="nickname" className="topNicknamw">
             {users[0].nickname}
           </div>
-          <div
-            id="result"
-            style={{
-              fontSize: "1.8vh",
-              color: "#ACACAC",
-              textAlign: "center",
-            }}
-          >
-            200회
-          </div>
+
+          {tab == "count" ? (
+            <div id="result" className="topResult">
+              {users[0].count} 회
+            </div>
+          ) : (
+            <div id="result" className="topResult">
+              {users[0].distance} km
+            </div>
+          )}
         </div>
 
         <div id="third" style={{ width: "19vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img
-                src={temp}
-                style={{
-                  position: "relative",
-                  width: "17vw",
-                  height: "17vw",
-                  borderRadius: 100,
-                }}
-              />
+              <img src={temp} className="topImage" />
             </div>
             <div id="rankImg">
               <img
@@ -260,22 +211,16 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div
-            id="nickname"
-            style={{
-              fontSize: "1.8vh",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            {users[2].nickname}
-          </div>
-          <div
-            id="result"
-            style={{ fontSize: "1.8vh", color: "#ACACAC", textAlign: "center" }}
-          >
-            300회
-          </div>
+          <div className="topNickname">{users[2].nickname}</div>
+          {tab == "count" ? (
+            <div id="result" className="topResult">
+              {users[2].count} 회
+            </div>
+          ) : (
+            <div id="result" className="topResult">
+              {users[2].distance} km
+            </div>
+          )}
         </div>
       </div>
 
@@ -289,7 +234,7 @@ function Star({ url }) {
         }}
       >
         {LowRanker &&
-          LowRanker.map((user) => <UserItem user={user}></UserItem>)}
+          LowRanker.map((user) => <UserItem tab={tab} user={user}></UserItem>)}
       </div>
     </>
   );
