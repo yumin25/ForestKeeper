@@ -49,25 +49,23 @@ function SearchList({ keyword, keywordHandler }) {
   }, [pageNumber]);
 
   function getResult() {
-    if ((pageNumber - 1) * 8 < total && pageNumber * 8 <= total) {
-      axios
-        .get(url + `/mountain`, {
-          params: {
-            keyword: keyword,
-            page: pageNumber,
-          },
-        })
-        .then(function (response) {
-          console.log(response.data);
-          //setSearchList(response.data.searchlist);
-          setSearchList((list) => [...list, ...response.data.searchlist]);
-          setTotal(response.data.total);
-          setLoading(true);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    axios
+      .get(url + `/mountain`, {
+        params: {
+          keyword: keyword,
+          page: pageNumber,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        //setSearchList(response.data.searchlist);
+        setSearchList((list) => [...list, ...response.data.searchlist]);
+        setTotal(response.data.total);
+        setLoading(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   const loadMore = () => {
