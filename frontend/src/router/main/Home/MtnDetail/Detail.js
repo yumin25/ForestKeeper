@@ -138,7 +138,7 @@ function Detail() {
                 </div>
                 <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
-              <Star url={url}></Star>
+              <Star mountainCode={useParam.mountainCode} url={url}></Star>
             </>
           ) : tab == "about" ? (
             <>
