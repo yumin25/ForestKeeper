@@ -38,6 +38,7 @@ function SearchList({ keyword, keywordHandler }) {
   const [searchList, setSearchList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
   const getItems = async (pageNumber) => {
     getResult();
@@ -48,22 +49,25 @@ function SearchList({ keyword, keywordHandler }) {
   }, [pageNumber]);
 
   function getResult() {
-    axios
-      .get(url + `/mountain`, {
-        params: {
-          keyword: keyword,
-          page: pageNumber,
-        },
-      })
-      .then(function (response) {
-        console.log(response.data);
-        //setSearchList(response.data.searchlist);
-        setSearchList((list) => [...list, ...response.data.searchlist]);
-        setLoading(true);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    if ((pageNumber - 1) * 8 < total && pageNumber * 8 <= total) {
+      axios
+        .get(url + `/mountain`, {
+          params: {
+            keyword: keyword,
+            page: pageNumber,
+          },
+        })
+        .then(function (response) {
+          console.log(response.data);
+          //setSearchList(response.data.searchlist);
+          setSearchList((list) => [...list, ...response.data.searchlist]);
+          setTotal(response.data.total);
+          setLoading(true);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }
 
   const loadMore = () => {
@@ -141,10 +145,7 @@ function SearchList({ keyword, keywordHandler }) {
             </div>
           ))}
 
-        <div style={{ height: "2vh", background: "red" }} ref={pageEnd}></div>
-        {/* <button onClick={loadMore} ref={pageEnd}>
-          더보기
-        </button> */}
+        <div style={{ height: "2vh" }} ref={pageEnd}></div>
       </div>
 
       {/* <Bar></Bar> */}
