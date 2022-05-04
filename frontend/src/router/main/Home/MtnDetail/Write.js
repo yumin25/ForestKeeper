@@ -19,7 +19,7 @@ function Write() {
     borderRadius: 15,
     fontSize: "1.7vh",
     height: "4vh",
-    width: "16vw",
+    width: "18vw",
   };
   const UnClickedStyle = {
     border: "0.1px solid #8E8E92",
@@ -142,7 +142,7 @@ function Write() {
         </div>
 
         <textarea
-          className="input"
+          class="textarea"
           placeholder="제목을 입력해주세요."
           onChange={onTitleHandler}
           style={{
