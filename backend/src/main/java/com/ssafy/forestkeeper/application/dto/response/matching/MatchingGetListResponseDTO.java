@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.dto.response.matching;
 
+import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class MatchingGetListResponseDTO {
+public class MatchingGetListResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "매칭 글 ID")
     private String id;
