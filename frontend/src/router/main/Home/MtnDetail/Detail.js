@@ -22,9 +22,9 @@ function Detail() {
     getMtnInfo();
   }, []);
 
-  useEffect(() => {
-    getTotal();
-  }, [Info]);
+  // useEffect(() => {
+  //   getTotal();
+  // }, [Info]);
 
   function getMtnInfo() {
     axios
@@ -32,6 +32,7 @@ function Detail() {
       .then(function (response) {
         console.log(response);
         setInfo(response.data.mountainInfo);
+        getTotal();
       })
       .catch(function (error) {
         console.log(error);
