@@ -41,7 +41,7 @@ function UserItem({ user, tab }) {
   );
 }
 
-function Star({ url }) {
+function Star({ mountainCode,url }) {
   const [users, setUsers] = useState([
     {
       rank: 1,
@@ -71,7 +71,7 @@ function Star({ url }) {
 
   function getRank() {
     axios
-      .get(url + `/mountain/rank`, {
+      .get(url + `/mountain/rank/${}`, {
         params: {
           by: tab,
         },
