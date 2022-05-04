@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
+import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
@@ -28,7 +30,12 @@ public class UserInfoServiceImpl implements UserInfoService{
     private final UserRepository userRepository;
 
 	private final MountainRepository mountainRepository;
-
+	
+	private final ImageRepository imageRepository;
+	
+    @Value("${cloud.aws.s3.hosting}")
+    public String hosting;
+    
 	@Override
 	public PloggingListWrapperResponseDTO getPloggingList(int page) {
         List<Plogging> ploggingList = ploggingRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),PageRequest.of(page - 1, 10))
@@ -45,6 +52,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
+                        		.imagePath(hosting + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
                                 .build()
                 )
         );
@@ -87,6 +95,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
+                        		.imagePath(hosting + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
                                 .build()
                 )
         );

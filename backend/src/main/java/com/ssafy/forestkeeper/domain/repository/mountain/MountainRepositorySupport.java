@@ -29,4 +29,12 @@ public class MountainRepositorySupport {
             .limit(pageable.getPageSize())
             .fetch();
     }
+
+    public List<Mountain> findByNameContains(String keyword) {
+
+        return this.jpaQueryFactory
+            .selectFrom(qMountain)
+            .where(qMountain.name.contains(keyword))
+            .fetch();
+    }
 }

@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 @ApiModel("UserSignUpDTO")
 @Getter
@@ -31,4 +33,8 @@ public class UserSignUpDTO {
     @ApiModelProperty(name = "닉네임")
     @NotBlank
     private String nickname;
+    
+    @ApiModelProperty(name = "프로필 사진")
+    @Nullable
+    private MultipartFile image;
 }
