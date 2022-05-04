@@ -42,7 +42,26 @@ function UserItem({ user, tab }) {
 }
 
 function Star({ url }) {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([
+    {
+      rank: 1,
+      nickname: "1위",
+      count: 1,
+      distance: 0.0,
+    },
+    {
+      rank: 2,
+      nickname: "2위",
+      count: 2,
+      distance: 0.0,
+    },
+    {
+      rank: 3,
+      nickname: "3위",
+      count: 3,
+      distance: 0.0,
+    },
+  ]);
   const LowRanker = users.slice(3, users.length);
   const [tab, setTab] = useState("count");
 
@@ -137,17 +156,19 @@ function Star({ url }) {
             </div>
           </div>
           <div id="nickname" className="topNickname">
-            {users[1].nickname}
+            {users.length >= 2 && users[1].nickname}
           </div>
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[1].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[1].distance} km
-            </div>
-          )}
+          {tab == "count"
+            ? users.length >= 2 && (
+                <div id="result" className="topResult">
+                  {users[1].count} 회
+                </div>
+              )
+            : users.length >= 2 && (
+                <div id="result" className="topResult">
+                  {users[1].distance} km
+                </div>
+              )}
         </div>
 
         <div id="first" style={{ width: "23vw", marginRight: "5.5vw" }}>
@@ -178,18 +199,20 @@ function Star({ url }) {
             </div>
           </div>
           <div id="nickname" className="topNicknamw">
-            {users[0].nickname}
+            {users.length >= 1 && users[0].nickname}
           </div>
 
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[0].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[0].distance} km
-            </div>
-          )}
+          {tab == "count"
+            ? users.length >= 1 && (
+                <div id="result" className="topResult">
+                  {users[0].count} 회
+                </div>
+              )
+            : users.length >= 1 && (
+                <div id="result" className="topResult">
+                  {users[0].distance} km
+                </div>
+              )}
         </div>
 
         <div id="third" style={{ width: "19vw" }}>
@@ -211,16 +234,20 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div className="topNickname">{users[2].nickname}</div>
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[2].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[2].distance} km
-            </div>
-          )}
+          <div className="topNickname">
+            {users.length >= 3 && users[2].nickname}
+          </div>
+          {tab == "count"
+            ? users.length >= 3 && (
+                <div id="result" className="topResult">
+                  {users[2].count} 회
+                </div>
+              )
+            : users.length >= 3 && (
+                <div id="result" className="topResult">
+                  {users[2].distance} km
+                </div>
+              )}
         </div>
       </div>
 
