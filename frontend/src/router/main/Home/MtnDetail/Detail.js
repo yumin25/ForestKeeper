@@ -22,13 +22,16 @@ function Detail() {
     getMtnInfo();
   }, []);
 
+  useEffect(() => {
+    getTotal();
+  }, [Info]);
+
   function getMtnInfo() {
     axios
       .get(url + `/mountain/${useParam.mountainCode}`)
       .then(function (response) {
         console.log(response);
         setInfo(response.data.mountainInfo);
-        getTotal();
       })
       .catch(function (error) {
         console.log(error);
