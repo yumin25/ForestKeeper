@@ -71,7 +71,7 @@ function Star({ url }) {
 
   function getRank() {
     axios
-      .get(url + `/api/mountain/rank`, {
+      .get(url + `/mountain/rank`, {
         params: {
           by: tab,
         },
