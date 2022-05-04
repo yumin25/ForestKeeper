@@ -9,7 +9,7 @@ import Index from "./router/main/Home/Index";
 import SearchList from "./router/main/Home/SearchList";
 import Detail from "./router/main/Home/MtnDetail/Detail";
 import QnaDetail from "./router/main/Home/MtnDetail/QnaDetail";
-import QnaWrite from "./router/main/Home/MtnDetail/QnaWrite";
+import Write from "./router/main/Home/MtnDetail/Write";
 function App() {
   return (
     <>
@@ -24,7 +24,7 @@ function App() {
           <Route path="/accounts/mypage/settings" element={<Settings />} />
           <Route path="/detail/:mountainCode" element={<Detail />} />
           <Route path="/articleDetail/:articleId" element={<QnaDetail />} />
-          <Route path="/articleWrite" element={<QnaWrite />} />
+          <Route path="/articleWrite/:mountainCode" element={<Write />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
             <Route path="plogging" element={<Plogging />} />
