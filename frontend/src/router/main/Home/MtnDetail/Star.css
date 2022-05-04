@@ -1,0 +1,44 @@
+.topImage {
+  position: "relative";
+  width: "17vw";
+  height: "17vw";
+  border-radius: 100;
+}
+
+.topNickname {
+  font-size: "1.8vh";
+  font-weight: "bold";
+  text-align: "center";
+}
+
+.topResult {
+  font: "1.8vh";
+  color: "#ACACAC";
+  text-align: "center";
+}
+
+.lowRank {
+  margin-top: "0.5vh";
+  font-weight: 700;
+  width: "8vw";
+  margin-right: "3vw";
+  text-align: "center";
+  font-size: "2vh";
+}
+
+.lowNickname {
+  margin-top: "0.5vh";
+  font-size: "1.8vh";
+  font-weight: "400";
+  width: "40vw";
+}
+
+.lowResult {
+  margin-top: "0.5vh";
+  margin-left: "1vw";
+  font-size: "1.8vh";
+  font-weight: "400";
+  width: "16vw";
+  text-align: "end";
+  color: "#ACACAC";
+}
