@@ -3,12 +3,12 @@ package com.ssafy.forestkeeper.application.dto.response.plogging;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.ToString;
 
 @ApiModel("PloggingListResponseDTO")
 @Builder
-@Data
+@Getter
 @ToString
 public class PloggingListResponseDTO {
     @ApiModelProperty(name = "플로깅 id")
@@ -28,4 +28,7 @@ public class PloggingListResponseDTO {
     
     @ApiModelProperty(name = "경험치")
     private long exp;
+    
+    @ApiModelProperty(name = "이동 경로 이미지")
+    private String imagePath;
 }

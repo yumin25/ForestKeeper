@@ -41,6 +41,7 @@ public class MountainServiceImpl implements MountainService {
     }
 
     @Override
+
     public MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode) {
 
         List<Tuple> ploggingList = ploggingRepositorySupport.rankByDistance(
@@ -82,5 +83,11 @@ public class MountainServiceImpl implements MountainService {
         return MountainRankWrapperResponseDTO.builder()
             .mountainRankResponseDTOList(mountainRankResponseDTOList)
             .build();
+
+    }
+
+    public int totalSearch(String keyword) {
+
+        return mountainRepositorySupport.findByNameContains(keyword).size();
     }
 }

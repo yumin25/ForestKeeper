@@ -10,6 +10,10 @@ public interface MountainService {
     Optional<Mountain> getMountainInfo(String mountainCode);
     Optional<List<Mountain>> searchMountain(String keyword, int page);
 
+
     MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode);
     MountainRankWrapperResponseDTO getMountainRankByCount(String mountainCode);
+
+    int totalSearch(String keyword);
+
 }
