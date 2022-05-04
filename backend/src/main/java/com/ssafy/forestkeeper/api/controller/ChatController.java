@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RequiredArgsConstructor
 public class ChatController {
 
-//    private final SimpMessagingTemplate template;
-//
-//    private final ChatMessageService chatMessageService;
-//
-//    @MessageMapping("/chat/enter")
-//    public void enter(ChatMessageRequestDTO chatMessageRequestDTO) {
-//
-//        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.enterRoom(chatMessageRequestDTO));
-//
-//    }
-//
-//    @MessageMapping("/chat/room")
-//    public void send(ChatMessageRequestDTO chatMessageRequestDTO) {
-//
-//        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.sendMessage(chatMessageRequestDTO));
-//
-//    }
+    private final SimpMessagingTemplate template;
+
+    private final ChatMessageService chatMessageService;
+
+    @MessageMapping("/chat/enter")
+    public void enter(ChatMessageRequestDTO chatMessageRequestDTO) {
+
+        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.enterChatRoom(chatMessageRequestDTO));
+
+    }
+
+    @MessageMapping("/chat/room")
+    public void send(ChatMessageRequestDTO chatMessageRequestDTO) {
+
+        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.sendChatMessage(chatMessageRequestDTO));
+
+    }
 
 }
 
