@@ -2,6 +2,7 @@ package com.ssafy.forestkeeper.api.controller;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainInfoResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearch;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
@@ -97,20 +98,25 @@ public class MountainController {
         }
     }
 
-    @ApiOperation(value = "산 검색")
+    @ApiOperation(value = "산 랭킹 검색")
     @GetMapping("/rank/{mountainCode}")
-    public ResponseEntity<?> getRank(@RequestParam("keyword") String keyword, @PathVariable("mountainCode") String mountainCode) {
+    public ResponseEntity<?> getRank(@PathVariable("mountainCode") String mountainCode,
+        @RequestParam("by") String by) {
 
         try {
+            MountainRankWrapperResponseDTO mountainRankWrapperResponseDTO = null;
 
-            Optional<List<Mountain>> mountainList = mountainService.searchMountain(keyword, page);
-
-            if (!mountainList.isPresent() || mountainList.get().size() == 0) {
-                return ResponseEntity.status(404).body(BaseResponseDTO.of("데이터가 존재하지 않습니다.", 404));
+            if("distance".equals(by)){
+                mountainRankWrapperResponseDTO = mountainService.getMountainRankByDistance(
+                    mountainCode);
+            }else if("count".equals(by)){
+                mountainRankWrapperResponseDTO = mountainService.getMountainRankByCount(
+                    mountainCode);
             }
 
             return ResponseEntity.status(200).body(
-                MountainSearchResponseDTO.of("산 검색에 성공했습니다.", 200, mountainList.get()));
+                MountainRankWrapperResponseDTO.of("산 랭킹 조회에 성공했습니다.", 200,
+                    mountainRankWrapperResponseDTO));
         } catch (Exception e) {
             System.err.println(e);
             return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
