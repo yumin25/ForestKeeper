@@ -98,10 +98,10 @@ public class PloggingController {
     
     @ApiOperation(value = "산 누적 방문자 및 거리 조회")
     @GetMapping
-    public ResponseEntity<?> getCumulative(@RequestParam String mountainName) {
+    public ResponseEntity<?> getCumulative(@RequestParam String mountainCode) {
     	PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO;
         try {
-        	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainName);
+        	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
