@@ -59,7 +59,6 @@ function Write() {
 
   function register() {
     const mountainId = window.localStorage.getItem("mountainId");
-    console.log(moun);
     const data = {
       mountainId: mountainId,
       communityCode: communityCode,
