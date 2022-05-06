@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import Bar from "../Bar";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Send from "../../../../config/Send";
 import "../Home.css";
 function Write() {
-  const jwtToken = JSON.parse(window.localStorage.getItem("idToken")).token;
-
   const url = "https://k6a306.p.ssafy.io/api";
   const [reviewTab, setReviewTab] = useState(false);
   const [qnaTab, setQnaTab] = useState(false);
@@ -60,30 +59,22 @@ function Write() {
   };
 
   function register() {
-    axios
-      .post(
-        url + `/community`,
-        {
-          mountainId: useParam.mountainCode,
-          communityCode: communityCode,
-          title: title,
-          description: content,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ` + jwtToken,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        if (response.code === 201) {
+    const data = {
+      mountainId: useParam.mountainCode,
+      communityCode: communityCode,
+      title: title,
+      description: content,
+    };
+
+    Send.post(`/community`, JSON.stringify(data))
+      .then((res) => {
+        console.log(res);
+        if (res.code === 201) {
           alert("글이 등록되었습니다.");
-          document.location.href = "/accounts/login";
         }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
       });
   }
 
