@@ -43,7 +43,15 @@ function SearchList({ keyword, keywordHandler }) {
   };
 
   useEffect(() => {
-    getItems(pageNumber);
+    console.log(pageNumber);
+    console.log(total);
+    if (pageNumber != 1 && total != 0) {
+      if (total >= pageNumber * 8) {
+        getItems(pageNumber);
+      }
+    } else {
+      getItems(pageNumber);
+    }
   }, [pageNumber]);
 
   function getResult() {
@@ -62,14 +70,12 @@ function SearchList({ keyword, keywordHandler }) {
         setLoading(true);
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.code);
       });
   }
 
   const loadMore = () => {
-    if (total > pageNumber * 8) {
-      setPageNumber((prevPageNumber) => prevPageNumber + 1);
-    }
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
 
   const pageEnd = useRef();
