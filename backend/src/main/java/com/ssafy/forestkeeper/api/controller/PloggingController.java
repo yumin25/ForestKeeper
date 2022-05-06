@@ -52,12 +52,14 @@ public class PloggingController {
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(@RequestPart("dto") @ApiParam(value = "플로깅 기록 DTO", required = true) PloggingRegisterDTO ploggingRegisterDTO,
-    		@RequestPart("image") @ApiParam(value = "플로깅 이동경로 이미지", required = false) MultipartFile multipartFile) {
+    public ResponseEntity<?> registerPlogging(@RequestPart(value = "dto", required = true) PloggingRegisterDTO ploggingRegisterDTO,
+    		@RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         try {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
-        	String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
-        	ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
+        	if(multipartFile !=null) {
+        		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
+        		ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
+        	}
         	
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
