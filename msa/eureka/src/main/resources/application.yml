@@ -1,0 +1,13 @@
+spring:
+  security:
+    user:
+      name: admin
+      password: forestkeeper306
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+server:
+  port: 8761
