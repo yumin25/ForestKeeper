@@ -143,7 +143,9 @@ function About({ url }) {
   }
 
   const loadMore = () => {
-    setPage((prevPageNumber) => prevPageNumber + 1);
+    if (list.length > page * 8) {
+      setPage((prevPageNumber) => prevPageNumber + 1);
+    }
   };
 
   const pageEnd = useRef();
@@ -183,7 +185,7 @@ function About({ url }) {
           )}
         </div>
 
-        <div id="List" style={{ height: "62vh" }}>
+        <div id="List" style={{ height: "62vh", overflow: "auto" }}>
           {tab == "review" ? (
             <>
               <div

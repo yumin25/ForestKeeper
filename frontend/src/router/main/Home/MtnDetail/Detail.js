@@ -10,34 +10,33 @@ import Star from "./Star";
 import About from "./About";
 import Home from "./Home";
 import { connect } from "react-redux";
+import Send from "../../../../config/Send";
 function Detail({ userSlice }) {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
   const [Info, setInfo] = useState([]);
   const [visiter, setVisiter] = useState(0);
   const [distance, setDistance] = useState(0);
+  const [count, setCount] = useState(0);
   let useParam = useParams();
   const url = "https://k6a306.p.ssafy.io/api";
 
-  console.log(userSlice);
   useEffect(() => {
     getMtnInfo();
+    getTotal();
   }, []);
 
   function getMtnInfo() {
-    axios
-      .get(url + `/mountain/${useParam.mountainCode}`)
-      .then(function (response) {
-        console.log(response);
-        setInfo(response.data.mountainInfo);
-        getTotal();
-        window.localStorage.setItem(
-          "mountainId",
-          response.data.mountainInfo.id
-        );
+    Send.get(url + `/mountain/${useParam.mountainCode}`)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res);
+          setInfo(res.data.mountainInfo);
+          window.localStorage.setItem("mountainId", res.data.mountainInfo.id);
+        }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
       });
   }
 
@@ -52,12 +51,12 @@ function Detail({ userSlice }) {
         console.log(response.data);
         setVisiter(response.data.visiter);
         setDistance(response.data.distance);
+        setCount(response.data.count);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
-
   return (
     <>
       <div style={{ height: "92.5vh" }}>
@@ -97,7 +96,7 @@ function Detail({ userSlice }) {
           </div>
 
           <div>
-            {isVisited == false ? (
+            {count == 0 ? (
               <img
                 style={{
                   marginLeft: "2vw",
@@ -108,15 +107,19 @@ function Detail({ userSlice }) {
                 src={check}
               />
             ) : (
-              <img
-                style={{
-                  marginLeft: "2vw",
-                  marginTop: "1.5vh",
-                  width: "6vw",
-                  height: "6vw",
-                }}
-                src={checked}
-              />
+              <div style={{ color: "#69696C" }}>
+                <img
+                  style={{
+                    marginLeft: "2vw",
+                    marginTop: "1.5vh",
+                    width: "6vw",
+                    height: "6vw",
+                    marginRight: "1vw",
+                  }}
+                  src={checked}
+                />
+                <div>{count}회 방문</div>
+              </div>
             )}
           </div>
         </div>

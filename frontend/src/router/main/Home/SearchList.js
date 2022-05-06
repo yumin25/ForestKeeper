@@ -67,7 +67,9 @@ function SearchList({ keyword, keywordHandler }) {
   }
 
   const loadMore = () => {
-    setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    if (total > pageNumber * 8) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
   };
 
   const pageEnd = useRef();
