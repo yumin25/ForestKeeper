@@ -9,7 +9,6 @@ function ReviewItem({ result }) {
       style={{
         marginTop: "1.5vh",
         paddingBottom: "1.5vh",
-        // background: "red",
         borderBottom: "1px solid #E5E5E5",
         fontSize: "1.5vh",
       }}
@@ -116,7 +115,10 @@ function About({ url }) {
     getItems(page);
   }, [tab]);
 
-  function goDetail() {}
+  function goDetail(communityId) {
+    window.localStorage.setItem("communityId", communityId);
+    document.location.href = "/articleDetail";
+  }
 
   function getList() {
     axios
@@ -194,7 +196,7 @@ function About({ url }) {
 
               {list &&
                 list.map((result) => (
-                  <div onClick={() => goDetail(result)}>
+                  <div onClick={() => goDetail(result.communityId)}>
                     <ReviewItem result={result} />
                   </div>
                 ))}
@@ -213,7 +215,7 @@ function About({ url }) {
 
               {list &&
                 list.map((result) => (
-                  <div onClick={() => goDetail(result)}>
+                  <div onClick={() => goDetail(result.communityId)}>
                     <QnaItem result={result} />
                   </div>
                 ))}
