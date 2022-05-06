@@ -33,6 +33,7 @@ function Detail() {
         console.log(response);
         setInfo(response.data.mountainInfo);
         getTotal();
+        window.localStorage.setItem("mountainId", Info.id);
       })
       .catch(function (error) {
         console.log(error);
@@ -43,7 +44,7 @@ function Detail() {
     axios
       .get(url + `/plogging`, {
         params: {
-          mountainName: Info.name,
+          mountainCode: useParam.mountainCode,
         },
       })
       .then(function (response) {
