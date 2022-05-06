@@ -12,7 +12,6 @@ function Write() {
   const [content, setContent] = useState();
   const [communityCode, setCommunityCode] = useState();
   let useParam = useParams();
-
   const ClickedStyle = {
     border: "0.1px solid #8ABC9A",
     background: "#8ABC9A",
@@ -59,8 +58,9 @@ function Write() {
   };
 
   function register() {
+    const mountainId = window.localStorage.getItem("mountainId");
     const data = {
-      mountainId: useParam.mountainCode,
+      mountainId: mountainId,
       communityCode: communityCode,
       title: title,
       description: content,

@@ -174,6 +174,7 @@ function About({ url }) {
             </>
           )}
         </div>
+
         <div id="List" style={{ height: "62vh" }}>
           {tab == "review" ? (
             <>
