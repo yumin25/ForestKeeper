@@ -131,10 +131,15 @@ function About({ url }) {
       .then(function (response) {
         console.log(response.data);
         //setSearchList(response.data.searchlist);
-        setList((list) => [
-          ...list,
-          ...response.data.communityGetListResponseDTOList,
-        ]);
+        if (page >= 2) {
+          setList((list) => [
+            ...list,
+            ...response.data.communityGetListResponseDTOList,
+          ]);
+        } else {
+          setList(response.data.communityGetListResponseDTOList);
+        }
+
         setLoading(true);
       })
       .catch(function (error) {
