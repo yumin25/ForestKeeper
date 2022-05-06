@@ -10,7 +10,7 @@ public interface ChatMessageService {
 
     ChatMessageResponseDTO enterChatRoom(ChatMessageRequestDTO message);
 
-    ChatMessageResponseDTO sendChatMessage(ChatMessageRequestDTO message);
+    ChatMessageResponseDTO sendChatMessage(ChatMessageRequestDTO message, String accessToken);
 
     List<ChatMessageResponseDTO> getChatMessageList(ChatRoom chatRoom);
 
