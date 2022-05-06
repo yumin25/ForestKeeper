@@ -174,7 +174,7 @@ function ArticleDetail({ userSlice }) {
                     <div style={{ fontWeight: "bold", marginTop: "1.5vh" }}>
                       {comment.nickname}
                     </div>
-                    {userSlice.userNickname != comment.nickname ? (
+                    {userSlice.userNickname == comment.nickname ? (
                       <>
                         <div
                           style={{
