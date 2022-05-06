@@ -33,7 +33,10 @@ function Detail() {
         console.log(response);
         setInfo(response.data.mountainInfo);
         getTotal();
-        window.localStorage.setItem("mountainId", Info.id);
+        window.localStorage.setItem(
+          "mountainId",
+          response.data.mountainInfo.id
+        );
       })
       .catch(function (error) {
         console.log(error);
