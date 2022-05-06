@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import temp from "../../../../res/img/temp.png";
 import axios from "axios";
 import edit from "../../../../res/img/edit.png";
@@ -7,9 +8,9 @@ function ReviewItem({ nickname, content }) {
     <div
       style={{
         marginTop: "1.5vh",
+        paddingBottom: "1.5vh",
         // background: "red",
-        height: "8vh",
-        borderBottom: "1px solid #CDCDCD",
+        borderBottom: "1px solid #E5E5E5",
         fontSize: "1.5vh",
       }}
     >
@@ -76,11 +77,12 @@ function WriteItem() {
   );
 }
 
-function About() {
-  const nickname = "익명숲지기";
-  const title = "여기 꼭 아이젠 필요할까요??";
-  const content = "제가 어쩌고 저쩌고요 이러쿵 저러쿵 배고프다";
-  const [tab, setTab] = useState("review");
+function About({ url }) {
+  const [tab, setTab] = useState("REVIEW");
+  const [list, setList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  let useParam = useParams();
   const ClickedStyle = {
     borderRadius: 3,
     width: "20vw",
@@ -99,20 +101,73 @@ function About() {
     border: "none",
     marginRight: "1vw",
   };
+
+  const getItems = async (page) => {
+    getList();
+  };
+
+  useEffect(() => {
+    getItems(page);
+  }, [page]);
+
+  function goDetail() {}
+
+  function getList() {
+    axios
+      .get(url + `/community`, {
+        params: {
+          communityCode: tab,
+          page: page,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        //setSearchList(response.data.searchlist);
+        setList((list) => [
+          ...list,
+          ...response.data.communityGetListResponseDTOList,
+        ]);
+        setLoading(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const loadMore = () => {
+    setPage((prevPageNumber) => prevPageNumber + 1);
+  };
+
+  const pageEnd = useRef();
+
+  useEffect(() => {
+    if (loading) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(pageEnd.current);
+    }
+  }, [loading]);
+
   return (
     <>
       <div style={{ marginLeft: "9vw", marginRight: "9vw" }}>
         <div id="tab" style={{ marginBottom: "1vh" }}>
-          {tab == "review" ? (
+          {tab == "REVIEW" ? (
             <>
               <button style={ClickedStyle}>등산후기</button>
-              <button onClick={() => setTab("qna")} style={UnClickedStyle}>
+              <button onClick={() => setTab("QNA")} style={UnClickedStyle}>
                 Q&A
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => setTab("review")} style={UnClickedStyle}>
+              <button onClick={() => setTab("REVIEW")} style={UnClickedStyle}>
                 등산후기
               </button>
               <button style={ClickedStyle}>Q&A</button>
@@ -122,17 +177,41 @@ function About() {
         <div id="List" style={{ height: "62vh" }}>
           {tab == "review" ? (
             <>
-              <WriteItem />
-              <ReviewItem nickname={nickname} content={content} />
+              <div
+                onClick={() =>
+                  (document.location.href = `/articleWrite/${useParam.mountainCode}`)
+                }
+              >
+                <WriteItem />
+              </div>
+
+              {list &&
+                list.map((result) => (
+                  <div onClick={() => goDetail(result)}>
+                    <ReviewItem result={result} />
+                  </div>
+                ))}
+
+              <div style={{ height: "2vh" }} ref={pageEnd}></div>
             </>
           ) : (
             <>
-              <WriteItem />
-              <QnaItem
-                nickname={nickname}
-                content={content}
-                title={title}
-              ></QnaItem>
+              <div
+                onClick={() =>
+                  (document.location.href = `/articleWrite/${useParam.mountainCode}`)
+                }
+              >
+                <WriteItem />
+              </div>
+
+              {list &&
+                list.map((result) => (
+                  <div onClick={() => goDetail(result)}>
+                    <QnaItem result={result} />
+                  </div>
+                ))}
+
+              <div style={{ height: "2vh" }} ref={pageEnd}></div>
             </>
           )}
         </div>

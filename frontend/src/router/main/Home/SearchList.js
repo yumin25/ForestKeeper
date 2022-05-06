@@ -1,7 +1,5 @@
-import { useOutlet, useParams } from "react-router-dom";
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import search from "../../../res/img/search.png";
-import Bar from "./Bar";
+import React, { useEffect, useState, useRef } from "react";
+
 import SearchInput from "./SearchInput";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
