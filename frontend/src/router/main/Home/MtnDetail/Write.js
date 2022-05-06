@@ -59,6 +59,7 @@ function Write() {
 
   function register() {
     const mountainId = window.localStorage.getItem("mountainId");
+    console.log(moun);
     const data = {
       mountainId: mountainId,
       communityCode: communityCode,
@@ -69,8 +70,9 @@ function Write() {
     Send.post(`/community`, JSON.stringify(data))
       .then((res) => {
         console.log(res);
-        if (res.code === 201) {
+        if (res.status === 201) {
           alert("글이 등록되었습니다.");
+          document.location.href = `/detail/${useParam.mountainCode}`;
         }
       })
       .catch((e) => {

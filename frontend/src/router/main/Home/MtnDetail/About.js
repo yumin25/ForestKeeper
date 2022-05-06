@@ -112,6 +112,10 @@ function About({ url }) {
     getItems(page);
   }, [page]);
 
+  useEffect(() => {
+    getItems(page);
+  }, [tab]);
+
   function goDetail() {}
 
   function getList() {
