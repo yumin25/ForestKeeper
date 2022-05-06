@@ -83,6 +83,7 @@ function About({ url }) {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
   let useParam = useParams();
   const ClickedStyle = {
     borderRadius: 3,
@@ -107,8 +108,18 @@ function About({ url }) {
     getList();
   };
 
+  // useEffect(() => {
+  //   getItems(page);
+  // }, [page]);
+
   useEffect(() => {
-    getItems(page);
+    if (page != 1 && total != 0) {
+      if (total >= page * 8) {
+        getItems(page);
+      }
+    } else {
+      getItems(page);
+    }
   }, [page]);
 
   useEffect(() => {
@@ -130,6 +141,7 @@ function About({ url }) {
       })
       .then(function (response) {
         console.log(response.data);
+        setTotal(response.data.communityGetListResponseDTOList.length);
         //setSearchList(response.data.searchlist);
         if (page >= 2) {
           setList((list) => [
