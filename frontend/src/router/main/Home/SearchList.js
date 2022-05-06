@@ -43,8 +43,6 @@ function SearchList({ keyword, keywordHandler }) {
   };
 
   useEffect(() => {
-    console.log(pageNumber);
-    console.log(total);
     if (pageNumber != 1 && total != 0) {
       if (total >= pageNumber * 8) {
         getItems(pageNumber);
