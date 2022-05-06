@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
+import ReactTimerStopwatch from "react-stopwatch-timer";
 import location from "../../../res/img/location.png";
 import play from "../../../res/img/play.png";
 import stop from "../../../res/img/stop.png";
+import File from "../../../config/File";
 import "./PloggingMap.css";
 
 function MapAPI({ myLocation }) {
@@ -42,6 +45,8 @@ function MapAPI({ myLocation }) {
 }
 
 function PloggingMap({ getLocation, myLocation }) {
+  const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
+  const [isOn, setIsOn] = useState(false);
   const startRecording = () => {
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "stretch 1s both";
@@ -50,6 +55,58 @@ function PloggingMap({ getLocation, myLocation }) {
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "reverse-stretch 1s both";
   };
+  const timeRecord = () => {
+    const timeValue = document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText;
+    console.log(timeValue);
+  };
+
+  const makeZeroNum = (num, n) => {
+    var numStr = "" + num;
+    while (true) {
+      if (numStr.length >= n) {
+        break;
+      }
+      numStr = "0" + numStr;
+    }
+    return numStr;
+  };
+
+  const watch = () => {
+    var date = new Date();
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var h = date.getHours();
+    var min = date.getMinutes();
+    var s = date.getSeconds();
+
+    var result =
+      y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2) + ":" + makeZeroNum(s, 2);
+    console.log(result);
+  };
+
+  // 요청보내기
+  const recordPlogging = () => {
+    let formData = new FormData();
+    formData.append("image", play);
+
+    const data = {
+      mountainName: "아차산",
+      startTime: "2022-05-04 11:04:44",
+      endTime: "2022-05-04 11:14:44",
+      distance: "1.1",
+    };
+    formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+
+    File.post("/plogging", formData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <button
@@ -79,14 +136,30 @@ function PloggingMap({ getLocation, myLocation }) {
           src={play}
           alt=""
           style={{ zIndex: 3, height: "3.5vh", width: "3.5vh", marginTop: "0.5vh", marginLeft: "1.4vw" }}
-          onClick={startRecording}
+          onClick={() => {
+            startRecording();
+            setIsOn(true);
+            watch();
+          }}
         />
       </button>
       <button id="stop" className="btn-recording">
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: "0.5vh", marginBottom: 0 }}>1:15:11</p>
-          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: "0.5vh", marginBottom: 0 }}>11.5km</p>
-          <img src={stop} alt="" style={{ zIndex: 3, height: "3.5vh", width: "3.5vh" }} onClick={endRecording} />
+        <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+          <div>
+            <ReactTimerStopwatch id="timer" isOn={isOn} className="react-stopwatch-timer__table" watchType="stopwatch" fromTime={fromTime} />
+          </div>
+          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>11.5km</p>
+          <img
+            src={stop}
+            alt=""
+            style={{ zIndex: 3, height: "3.5vh", width: "3.5vh" }}
+            onClick={() => {
+              endRecording();
+              setIsOn(false);
+              timeRecord();
+              recordPlogging();
+            }}
+          />
         </div>
       </button>
       <RenderAfterNavermapsLoaded

@@ -137,8 +137,8 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public PloggingCumulativeResponseDTO getCumulative(String mountainName) {
-		Mountain mountain = mountainRepository.findByName(mountainName)
+	public PloggingCumulativeResponseDTO getCumulative(String mountainCode) {
+		Mountain mountain = mountainRepository.findByCode(mountainCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
 		long distance = 0L;
