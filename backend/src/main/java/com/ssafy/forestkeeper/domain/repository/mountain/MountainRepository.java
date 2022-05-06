@@ -11,4 +11,5 @@ public interface MountainRepository extends JpaRepository<Mountain, String>{
     Optional<Mountain> findByCode(String MountainCode);
     
     Optional<Mountain> findByName(String mountainName);
+    
 }
