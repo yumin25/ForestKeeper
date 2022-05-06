@@ -108,19 +108,19 @@ function About({ url }) {
     getList();
   };
 
-  // useEffect(() => {
-  //   getItems(page);
-  // }, [page]);
-
   useEffect(() => {
-    if (page != 1 && total != 0) {
-      if (total >= page * 8) {
-        getItems(page);
-      }
-    } else {
-      getItems(page);
-    }
+    getItems(page);
   }, [page]);
+
+  // useEffect(() => {
+  //   if (page != 1 && total != 0) {
+  //     if (total >= page * 8) {
+  //       getItems(page);
+  //     }
+  //   } else {
+  //     getItems(page);
+  //   }
+  // }, [page]);
 
   useEffect(() => {
     getItems(page);
