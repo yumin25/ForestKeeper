@@ -58,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
                 .forEach(comment ->
                         commentGetListResponseDTOList.add(
                                 CommentGetListResponseDTO.builder()
+                                        .commentId(comment.getId())
                                         .nickname(comment.getUser().getNickname())
                                         .description(comment.getDescription())
                                         .createTime(comment.getCreateTime())
