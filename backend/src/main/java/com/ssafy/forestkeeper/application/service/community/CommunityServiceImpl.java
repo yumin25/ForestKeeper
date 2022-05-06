@@ -167,6 +167,7 @@ public class CommunityServiceImpl implements CommunityService {
         communityList.forEach(community ->
                 communityGetListResponseDTOList.add(
                         CommunityGetListResponseDTO.builder()
+                                .communityId(community.getId())
                                 .nickname(community.getUser().getNickname())
                                 .title(community.getTitle())
                                 .createTime(community.getCreateTime())
