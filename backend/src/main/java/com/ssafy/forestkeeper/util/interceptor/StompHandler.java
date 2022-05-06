@@ -24,19 +24,24 @@ public class StompHandler implements ChannelInterceptor {
 
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         System.out.println(accessor);
+        System.out.println(accessor.getNativeHeader("Authorization"));
 
         // WebSocket 연결 시 헤더의 JWT 검증
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             System.out.println("!!!@@@" + accessor.getFirstNativeHeader("Authorization"));
-            jwtAuthenticationProvider.validateToken(
+            if (jwtAuthenticationProvider.validateToken(
                     Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).split(" ")[1]
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(
-                    jwtAuthenticationProvider.getAuthentication(
-                            Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).split(" ")[1]
-                    )
-            );
+            )) {
+                System.out.println("123" + jwtAuthenticationProvider.getAuthentication(
+                        Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).split(" ")[1]
+                ));
+                SecurityContextHolder.getContext().setAuthentication(
+                        jwtAuthenticationProvider.getAuthentication(
+                                Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).split(" ")[1]
+                        )
+                );
+                System.out.println("312" + SecurityContextHolder.getContext().getAuthentication().getName());
+            }
 
 //			if (user != null) {
 //				List<GrantedAuthority> authorities = new ArrayList<>();
