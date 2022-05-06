@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
@@ -96,18 +96,18 @@ public class PloggingController {
         return ResponseEntity.status(201).body(BaseResponseDTO.of("경험치 부여에 성공했습니다.", 201));
     }
     
-    @ApiOperation(value = "산 누적 방문자 및 거리 조회")
+    @ApiOperation(value = "산별 플로깅관련 정보 조회")
     @GetMapping
-    public ResponseEntity<?> getCumulative(@RequestParam String mountainCode) {
-    	PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO;
+    public ResponseEntity<?> getMountainPlogging(@RequestParam String mountainCode) {
+    	MountainPloggingInfoResponseDTO ploggingCumulativeResponseDTO;
         try {
-        	ploggingCumulativeResponseDTO = ploggingService.getCumulative(mountainCode);
+        	ploggingCumulativeResponseDTO = ploggingService.getMountainPlogging(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 누적치 조회에 성공했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 플로깅관련 정보 조회에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(200).body(PloggingCumulativeResponseDTO.of("산별 누적치 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
+        return ResponseEntity.status(200).body(MountainPloggingInfoResponseDTO.of("산별 플로깅관련 정보 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
     }
 
     @ApiOperation(value = "쓰레기통 전체 목록")
