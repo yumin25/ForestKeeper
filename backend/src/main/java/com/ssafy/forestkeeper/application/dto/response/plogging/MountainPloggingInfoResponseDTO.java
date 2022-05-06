@@ -9,12 +9,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@ApiModel("PloggingCumulativeResponseDTO")
+@ApiModel("MountainPloggingInfoResponseDTO")
 @Builder
 @Getter
 @ToString
 @AllArgsConstructor
-public class PloggingCumulativeResponseDTO extends BaseResponseDTO{
+public class MountainPloggingInfoResponseDTO extends BaseResponseDTO{
 
     @ApiModelProperty(name = "누적 방문자 수")
     private int visiter;
@@ -22,12 +22,15 @@ public class PloggingCumulativeResponseDTO extends BaseResponseDTO{
     @ApiModelProperty(name = "누적 거리")
     private long distance;
     
-    public static PloggingCumulativeResponseDTO of(String message, Integer statusCode, PloggingCumulativeResponseDTO ploggingCumulativeResponseDTO) {
+    @ApiModelProperty(name = "누적 거리")
+    private int count;
+    
+    public static MountainPloggingInfoResponseDTO of(String message, Integer statusCode, MountainPloggingInfoResponseDTO mountainPloggingInfoResponseDTO) {
 
-    	ploggingCumulativeResponseDTO.setMessage(message);
-    	ploggingCumulativeResponseDTO.setStatusCode(statusCode);
+    	mountainPloggingInfoResponseDTO.setMessage(message);
+    	mountainPloggingInfoResponseDTO.setStatusCode(statusCode);
 
-        return ploggingCumulativeResponseDTO;
+        return mountainPloggingInfoResponseDTO;
 
     }
 }
