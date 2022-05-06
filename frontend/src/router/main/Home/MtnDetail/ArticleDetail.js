@@ -2,20 +2,23 @@ import React, { useCallback, useEffect, useState } from "react";
 import Bar from "../Bar";
 import "../Home.css";
 import Send from "../../../../config/Send";
-function ArticleDetail() {
+import axios from "axios";
+import { connect } from "react-redux";
+import x from "../../../../res/img/x.png";
+function ArticleDetail({ userSlice }) {
   const [nickname, setNickname] = useState();
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [createTime, setCreateTime] = useState("2022-05-06T13:20:33.548201");
   const [comments, setComments] = useState([]);
-
   const [commentContent, setCommentContent] = useState();
+  const [commentId, setCommentId] = useState();
+  const communityId = window.localStorage.getItem("communityId");
   useEffect(() => {
     getArticle();
   }, []);
 
   function getArticle() {
-    const communityId = window.localStorage.getItem("communityId");
     Send.get(`/community/${communityId}`)
       .then((res) => {
         console.log(res);
@@ -24,6 +27,20 @@ function ArticleDetail() {
         setDescription(res.data.description);
         setCreateTime(res.data.createTime);
         setComments(res.data.comments);
+        axios
+          .get(
+            `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + res.data.accessToken,
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response);
+            setComments(response.data.commentGetListResponseDTOList);
+          });
       })
       .catch((e) => {
         console.log(e);
@@ -31,7 +48,6 @@ function ArticleDetail() {
   }
 
   function createComment() {
-    const communityId = window.localStorage.getItem("communityId");
     const data = {
       communityId: communityId,
       description: commentContent,
@@ -47,9 +63,24 @@ function ArticleDetail() {
         console.log(e);
       });
   }
+
+  function deleteComment(commentId) {
+    Send.delete(`/comment/community/${commentId}`)
+      .then((res) => {
+        console.log(res);
+        if (res.code === 201) {
+          getArticle();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   const onCommentHandler = (event) => {
     setCommentContent(event.currentTarget.value);
   };
+
   return (
     <>
       {/* 92.5vh */}
@@ -74,7 +105,7 @@ function ArticleDetail() {
           <div style={{ fontWeight: "bolder" }}>{nickname}</div>
           <div style={{ color: "#ACACAC", display: "flex" }}>
             <div>
-              {createTime.substr(0, 10) + " " + createTime.substr(11, 8)}{" "}
+              {createTime.substr(0, 10) + " " + createTime.substr(11, 8)}
             </div>
           </div>
         </div>
@@ -139,12 +170,45 @@ function ArticleDetail() {
                     borderBottom: "1px solid #8E8E92",
                   }}
                 >
-                  <div style={{ fontWeight: "bold", marginTop: "1.5vh" }}>
-                    익명숲지기
+                  <div style={{ display: "flex" }}>
+                    <div style={{ fontWeight: "bold", marginTop: "1.5vh" }}>
+                      {comment.nickname}
+                    </div>
+                    {userSlice.userNickname != comment.nickname ? (
+                      <>
+                        <div
+                          style={{
+                            color: "#FF7760",
+                            fontWeight: "bold",
+                            marginTop: "1.5vh",
+                            marginLeft: "1vw",
+                          }}
+                        >
+                          me
+                        </div>
+                        <img
+                          onClick={() => deleteComment(comment.commentId)}
+                          style={{
+                            position: "absolute",
+                            right: "8.3vw",
+                            marginTop: "2vh",
+                            width: "1.5vh",
+                            height: "1.5vh",
+                            marginLeft: "2vw",
+                            float: "right",
+                          }}
+                          src={x}
+                        />
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
+
                   <div style={{ fontSize: "1.7vh" }}>{comment.description}</div>
                   <div style={{ color: "#ACACAC", marginBottom: "1.5vh" }}>
-                    {comment.createTime}
+                    {comment.createTime.substr(0, 10) +
+                      comment.createTime.substr(11, 8)}
                   </div>
                 </div>
               ))}
@@ -191,4 +255,8 @@ function ArticleDetail() {
     </>
   );
 }
-export default ArticleDetail;
+function mapStateToProps(state) {
+  return { userSlice: state.user };
+}
+
+export default connect(mapStateToProps)(ArticleDetail);
