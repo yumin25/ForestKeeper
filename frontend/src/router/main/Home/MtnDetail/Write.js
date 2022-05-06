@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../Home.css";
 function Write() {
+  const jwtToken = JSON.parse(window.localStorage.getItem("idToken")).token;
+
   const url = "https://k6a306.p.ssafy.io/api";
   const [reviewTab, setReviewTab] = useState(false);
   const [qnaTab, setQnaTab] = useState(false);
@@ -35,6 +37,7 @@ function Write() {
     if (reviewTab == false) {
       setReviewTab(true);
       setQnaTab(false);
+      setCommunityCode("REVIEW");
     } else {
       setReviewTab(false);
     }
@@ -43,6 +46,7 @@ function Write() {
     if (qnaTab == false) {
       setQnaTab(true);
       setReviewTab(false);
+      setCommunityCode("QNA");
     } else {
       setQnaTab(false);
     }
@@ -56,18 +60,21 @@ function Write() {
   };
 
   function register() {
-    if (reviewTab == true) {
-      setCommunityCode("REVIEW");
-    } else {
-      setCommunityCode("QNA");
-    }
     axios
-      .post(url + `/community`, {
-        mountainId: useParam.mountainCode,
-        communityCode: communityCode,
-        title: title,
-        description: content,
-      })
+      .post(
+        url + `/community`,
+        {
+          mountainId: useParam.mountainCode,
+          communityCode: communityCode,
+          title: title,
+          description: content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ` + jwtToken,
+          },
+        }
+      )
       .then(function (response) {
         console.log(response);
         if (response.code === 201) {
@@ -172,4 +179,5 @@ function Write() {
     </>
   );
 }
+
 export default Write;
