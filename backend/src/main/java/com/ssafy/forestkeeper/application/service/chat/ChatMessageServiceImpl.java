@@ -44,7 +44,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
-    public ChatMessageResponseDTO sendChatMessage(ChatMessageRequestDTO message) {
+    public ChatMessageResponseDTO sendChatMessage(ChatMessageRequestDTO message, String accessToken) {
+
+        System.out.println("123123"+SecurityContextHolder.getContext().getAuthentication());
 
         User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                 .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));

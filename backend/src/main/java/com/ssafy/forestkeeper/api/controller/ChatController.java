@@ -27,7 +27,12 @@ public class ChatController {
     @MessageMapping("/chat/room")
     public void send(ChatMessageRequestDTO chatMessageRequestDTO) {
 
-        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.sendChatMessage(chatMessageRequestDTO));
+//        System.out.println("AT : " + accessToken);
+        System.out.println(chatMessageRequestDTO);
+
+//        chatMessageService.sendChatMessage(chatMessageRequestDTO, accessToken);
+
+        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageRequestDTO);
 
     }
 
