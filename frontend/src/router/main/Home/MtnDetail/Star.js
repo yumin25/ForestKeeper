@@ -41,7 +41,7 @@ function UserItem({ user, tab }) {
   );
 }
 
-function Star({ url }) {
+function Star({ mountainCode, url }) {
   const [users, setUsers] = useState([]);
   const LowRanker = users.slice(3, users.length);
   const [tab, setTab] = useState("count");
@@ -51,8 +51,9 @@ function Star({ url }) {
   }, [tab]);
 
   function getRank() {
+    console.log(mountainCode);
     axios
-      .get(url + `/api/mountain/rank`, {
+      .get(url + `/mountain/rank/${mountainCode}`, {
         params: {
           by: tab,
         },
@@ -113,7 +114,7 @@ function Star({ url }) {
           width: "73vw",
           marginTop: "2.5vh",
           marginBottom: "2.5vh",
-          marginLeft: "13.5vw",
+          marginLeft: "10vw",
           display: "flex",
         }}
       >
@@ -127,7 +128,7 @@ function Star({ url }) {
                 src={second}
                 style={{
                   top: "33.5vh",
-                  left: "24vw",
+                  left: "19.5vw",
                   position: "absolute",
                   width: "8.8vw",
                   height: "8.5vw",
@@ -136,18 +137,20 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNickname">
-            {users[1].nickname}
+          <div className="topNickname">
+            {users.length >= 2 && users[1].nickname}
           </div>
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[1].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[1].distance} km
-            </div>
-          )}
+          {tab == "count"
+            ? users.length >= 2 && (
+                <div id="result" className="topResult">
+                  {users[1].count} 회
+                </div>
+              )
+            : users.length >= 2 && (
+                <div id="result" className="topResult">
+                  {users[1].distance} km
+                </div>
+              )}
         </div>
 
         <div id="first" style={{ width: "23vw", marginRight: "5.5vw" }}>
@@ -168,7 +171,7 @@ function Star({ url }) {
                 src={first}
                 style={{
                   top: "28vh",
-                  left: "52vw",
+                  left: "47.5vw",
                   position: "absolute",
                   width: "9.3vw",
                   height: "9vw",
@@ -177,19 +180,21 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNicknamw">
-            {users[0].nickname}
+          <div id="nickname" className="topNickname">
+            {users.length >= 1 && users[0].nickname}
           </div>
 
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[0].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[0].distance} km
-            </div>
-          )}
+          {tab == "count"
+            ? users.length >= 1 && (
+                <div id="result" className="topResult">
+                  {users[0].count} 회
+                </div>
+              )
+            : users.length >= 1 && (
+                <div id="result" className="topResult">
+                  {users[0].distance} km
+                </div>
+              )}
         </div>
 
         <div id="third" style={{ width: "19vw" }}>
@@ -202,7 +207,7 @@ function Star({ url }) {
                 src={third}
                 style={{
                   top: "33.5vh",
-                  left: "77vw",
+                  left: "72.5vw",
                   position: "absolute",
                   width: "8.3vw",
                   height: "8vw",
@@ -211,16 +216,20 @@ function Star({ url }) {
               />
             </div>
           </div>
-          <div className="topNickname">{users[2].nickname}</div>
-          {tab == "count" ? (
-            <div id="result" className="topResult">
-              {users[2].count} 회
-            </div>
-          ) : (
-            <div id="result" className="topResult">
-              {users[2].distance} km
-            </div>
-          )}
+          <div className="topNickname">
+            {users.length >= 3 && users[2].nickname}
+          </div>
+          {tab == "count"
+            ? users.length >= 3 && (
+                <div id="result" className="topResult">
+                  {users[2].count} 회
+                </div>
+              )
+            : users.length >= 3 && (
+                <div id="result" className="topResult">
+                  {users[2].distance} km
+                </div>
+              )}
         </div>
       </div>
 

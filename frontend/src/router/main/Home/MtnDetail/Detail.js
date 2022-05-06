@@ -14,11 +14,17 @@ function Detail() {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
   const [Info, setInfo] = useState([]);
+  const [visiter, setVisiter] = useState(0);
+  const [distance, setDistance] = useState(0);
   let useParam = useParams();
   const url = "https://k6a306.p.ssafy.io/api";
   useEffect(() => {
     getMtnInfo();
   }, []);
+
+  // useEffect(() => {
+  //   getTotal();
+  // }, [Info]);
 
   function getMtnInfo() {
     axios
@@ -26,6 +32,24 @@ function Detail() {
       .then(function (response) {
         console.log(response);
         setInfo(response.data.mountainInfo);
+        getTotal();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function getTotal() {
+    axios
+      .get(url + `/plogging`, {
+        params: {
+          mountainName: Info.name,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setVisiter(response.data.visiter);
+        setDistance(response.data.distance);
       })
       .catch(function (error) {
         console.log(error);
@@ -138,7 +162,7 @@ function Detail() {
                 </div>
                 <div onClick={() => setTab("about")}>About {Info.name}</div>
               </div>
-              <Star url={url}></Star>
+              <Star mountainCode={useParam.mountainCode} url={url}></Star>
             </>
           ) : tab == "about" ? (
             <>
@@ -206,7 +230,8 @@ function Detail() {
               </div>
 
               <Home
-                mountainName={Info.name}
+                visiter={visiter}
+                distance={distance}
                 lat={Info.lat}
                 lng={Info.lng}
               ></Home>

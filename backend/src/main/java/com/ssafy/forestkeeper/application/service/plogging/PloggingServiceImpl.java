@@ -15,6 +15,7 @@ import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterD
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
+import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
@@ -45,6 +46,8 @@ public class PloggingServiceImpl implements PloggingService{
 
 	@Override
 	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
+		Mountain mountain = mountainRepository.findByName(ploggingRegisterDTO.getMountainName())
+				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
 		StringBuilder sb = new StringBuilder();
@@ -64,7 +67,7 @@ public class PloggingServiceImpl implements PloggingService{
 								.exp(0L)
 								.durationTime(sb.toString())
 								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
-								.mountain(mountainRepository.findByName(ploggingRegisterDTO.getMountainName()))
+								.mountain(mountain)
 								.build();
 		return ploggingRepository.save(plogging);
 	}
@@ -73,13 +76,17 @@ public class PloggingServiceImpl implements PloggingService{
 	public PloggingDetailResponseDTO get(String ploggingId) {
 		Plogging plogging = ploggingRepository.findById(ploggingId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
+		Image image = imageRepository.findByPloggingId(ploggingId).orElse(null);
+		String imagePath;
+		if(image == null) imagePath = "";
+		else imagePath = hosting + image.getSavedFileName();
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
 				.distance(plogging.getDistance())
 				.time(plogging.getDurationTime())
 				.exp(plogging.getExp())
-				.imagePath(hosting + imageRepository.findByPloggingId(ploggingId).get().getSavedFileName())
+				.imagePath(imagePath)
 				.build();
 	}
 
@@ -130,8 +137,8 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public PloggingCumulativeResponseDTO getCumulative(String mountainName) {
-		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountainRepository.findByName(mountainName).getId()).orElse(null);
+	public PloggingCumulativeResponseDTO getCumulative(String mountainId) {
+		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountainId).orElse(null);
 		long distance = 0L;
 		int visiter = 0;
 		
