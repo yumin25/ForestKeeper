@@ -3,6 +3,7 @@ package com.ssafy.forestkeeper.application.service.plogging;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingCumulativeResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
+import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
@@ -137,17 +139,21 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 
 	@Override
-	public PloggingCumulativeResponseDTO getCumulative(String mountainCode) {
+	public MountainPloggingInfoResponseDTO getMountainPlogging(String mountainCode) {
 		Mountain mountain = mountainRepository.findByCode(mountainCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
+		User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get();
+		
 		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
 		long distance = 0L;
 		int visiter = 0;
+		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainId(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
 		
 		if(ploggingList == null) {
-			return PloggingCumulativeResponseDTO.builder()
+			return MountainPloggingInfoResponseDTO.builder()
 					.distance(distance)
 					.visiter(visiter)
+					.count(visitList.size())
 					.build();
 		}
 
@@ -155,9 +161,10 @@ public class PloggingServiceImpl implements PloggingService{
 			visiter++;
 			distance += (int)plogging.getDistance();
 		}
-		return PloggingCumulativeResponseDTO.builder()
+		return MountainPloggingInfoResponseDTO.builder()
 											.distance(distance)
 											.visiter(visiter)
+											.count(visitList.size())
 											.build();
 	}
 }
