@@ -160,9 +160,7 @@ function About({ url }) {
   }
 
   const loadMore = () => {
-    if (list.length > page * 8) {
-      setPage((prevPageNumber) => prevPageNumber + 1);
-    }
+    setPage((prevPageNumber) => prevPageNumber + 1);
   };
 
   const pageEnd = useRef();
