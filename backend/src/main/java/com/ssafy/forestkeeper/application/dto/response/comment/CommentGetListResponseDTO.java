@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @ToString
 public class CommentGetListResponseDTO {
 
+    @ApiModelProperty(name = "댓글 ID")
+    private String commentId;
+
     @ApiModelProperty(name = "작성자 닉네임")
     private String nickname;
 
