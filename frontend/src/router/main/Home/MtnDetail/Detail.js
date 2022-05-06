@@ -9,8 +9,8 @@ import Bar from "../Bar";
 import Star from "./Star";
 import About from "./About";
 import Home from "./Home";
-
-function Detail() {
+import { connect } from "react-redux";
+function Detail({ userSlice }) {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
   const [Info, setInfo] = useState([]);
@@ -18,13 +18,11 @@ function Detail() {
   const [distance, setDistance] = useState(0);
   let useParam = useParams();
   const url = "https://k6a306.p.ssafy.io/api";
+
+  console.log(userSlice);
   useEffect(() => {
     getMtnInfo();
   }, []);
-
-  // useEffect(() => {
-  //   getTotal();
-  // }, [Info]);
 
   function getMtnInfo() {
     axios
@@ -247,4 +245,7 @@ function Detail() {
     </>
   );
 }
-export default Detail;
+function mapStateToProps(state) {
+  return { userSlice: state.user };
+}
+export default connect(mapStateToProps)(Detail);
