@@ -27,6 +27,14 @@
   /* animation: stretch 1s forwards; */
 }
 
+.react-stopwatch-timer__table {
+  width: 16.5vw;
+  height: 12vw;
+  color: white;
+  font-size: 5vw;
+  font-weight: 700;
+}
+
 @keyframes stretch {
   from {
     width: 12vw;
