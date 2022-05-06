@@ -1,34 +1,55 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Bar from "../Bar";
 import "../Home.css";
-function QnaDetail() {
-  function createComment() {}
-  function getArticle() {}
+import Send from "../../../../config/Send";
+function ArticleDetail() {
+  const [nickname, setNickname] = useState();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [createTime, setCreateTime] = useState("2022-05-06T13:20:33.548201");
+  const [comments, setComments] = useState([]);
+
+  const [commentContent, setCommentContent] = useState();
   useEffect(() => {
     getArticle();
   }, []);
-  const [comments, setComments] = useState([
-    {
-      nickname: "didii",
-      description: "최고 !",
-      createTime: "2022-04-18 15:37:33",
-    },
-    {
-      nickname: "didii",
-      description: "최고 !",
-      createTime: "2022-04-18 15:37:33",
-    },
-    {
-      nickname: "didii",
-      description: "최고 !",
-      createTime: "2022-04-18 15:37:33",
-    },
-    {
-      nickname: "didii",
-      description: "최고 !",
-      createTime: "2022-04-18 15:37:33",
-    },
-  ]);
+
+  function getArticle() {
+    const communityId = window.localStorage.getItem("communityId");
+    Send.get(`/community/${communityId}`)
+      .then((res) => {
+        console.log(res);
+        setNickname(res.data.nickname);
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+        setCreateTime(res.data.createTime);
+        setComments(res.data.comments);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function createComment() {
+    const communityId = window.localStorage.getItem("communityId");
+    const data = {
+      communityId: communityId,
+      description: commentContent,
+    };
+    Send.post(`/comment`, JSON.stringify(data))
+      .then((res) => {
+        console.log(res);
+        if (res.code === 201) {
+          getArticle();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  const onCommentHandler = (event) => {
+    setCommentContent(event.currentTarget.value);
+  };
   return (
     <>
       {/* 92.5vh */}
@@ -50,8 +71,12 @@ function QnaDetail() {
             marginBottom: "3.5vh",
           }}
         >
-          <div style={{ fontWeight: "bolder" }}>익명숲지기</div>
-          <div style={{ color: "#ACACAC" }}>04/18 16:30</div>
+          <div style={{ fontWeight: "bolder" }}>{nickname}</div>
+          <div style={{ color: "#ACACAC", display: "flex" }}>
+            <div>
+              {createTime.substr(0, 10) + " " + createTime.substr(11, 8)}{" "}
+            </div>
+          </div>
         </div>
         <div
           id="contents"
@@ -69,24 +94,37 @@ function QnaDetail() {
               marginBottom: "1.5vh",
             }}
           >
-            여기 꼭 아이젠 필요할까요??
+            {title}
           </div>
           <div id="content" style={{ fontSize: "1.8vh" }}>
-            관악산은 처음 등반해보는데 아이젠이 필요할지 ~~~~~~~~~~~~~~~~~~~~~~
-            저쩌고~~~~~~배고파~~~신전 빨리 왕~~~~ 룰루랄라
+            {description}
           </div>
         </div>
         <div id="comments">
-          <div
-            style={{
-              position: "relative",
-              fontWeight: "regular",
-              fontSize: "2vh",
-              marginBottom: "1.5vh",
-            }}
-          >
-            댓글
-          </div>
+          {comments == undefined ? (
+            <div
+              style={{
+                position: "relative",
+                fontWeight: "regular",
+                fontSize: "2vh",
+                marginBottom: "1.5vh",
+              }}
+            >
+              댓글 0개
+            </div>
+          ) : (
+            <div
+              style={{
+                position: "relative",
+                fontWeight: "regular",
+                fontSize: "2vh",
+                marginBottom: "1.5vh",
+              }}
+            >
+              댓글 {comments.length}개
+            </div>
+          )}
+
           <div
             id="comment"
             className="box"
@@ -116,6 +154,7 @@ function QnaDetail() {
           <div>
             <input
               className="input"
+              onChange={onCommentHandler}
               style={{
                 position: "relative",
                 background: "#EFEFEF",
@@ -132,7 +171,7 @@ function QnaDetail() {
           </div>
           <div>
             <button
-              onClick={createComment}
+              onClick={() => createComment()}
               style={{
                 position: "absolute",
                 top: "85vh",
@@ -152,4 +191,4 @@ function QnaDetail() {
     </>
   );
 }
-export default QnaDetail;
+export default ArticleDetail;
