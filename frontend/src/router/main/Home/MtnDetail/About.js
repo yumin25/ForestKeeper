@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import temp from "../../../../res/img/temp.png";
 import axios from "axios";
 import edit from "../../../../res/img/edit.png";
-function ReviewItem({ nickname, content }) {
+function ReviewItem({ result }) {
   return (
     <div
       style={{
@@ -15,13 +15,13 @@ function ReviewItem({ nickname, content }) {
       }}
     >
       <div style={{ fontWeight: "bold", marginBottom: "0.5vh" }}>
-        {nickname}
+        {result.nickname}
       </div>
-      <div style={{ color: "#69696C" }}>{content}</div>
+      <div style={{ color: "#69696C" }}>{result.content}</div>
     </div>
   );
 }
-function QnaItem({ nickname, content, title }) {
+function QnaItem({ result }) {
   return (
     <>
       <div
@@ -38,10 +38,12 @@ function QnaItem({ nickname, content, title }) {
             marginBottom: "0.5vh",
           }}
         >
-          {nickname}
+          {result.nickname}
         </div>
-        <div style={{ marginBottom: "0.5vh" }}>{title}</div>
-        <div style={{ color: "#8E8E92", marginBottom: "1.5vh" }}>{content}</div>
+        <div style={{ marginBottom: "0.5vh" }}>{result.title}</div>
+        <div style={{ color: "#8E8E92", marginBottom: "1.5vh" }}>
+          {result.content}
+        </div>
       </div>
     </>
   );
