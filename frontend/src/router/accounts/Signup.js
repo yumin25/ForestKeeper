@@ -91,18 +91,10 @@ function Signup() {
       console.log(email, password, name, nickname);
       let formData = new FormData();
       formData.append("image", image);
-      let signupData = {
-        email: email,
-        name: name,
-        nickname: nickname,
-        password: password,
-      };
-      formData.append(
-        "signupData",
-        new Blob([JSON.stringify(signupData)], {
-          type: "application/json",
-        })
-      );
+      formData.append("email", email);
+      formData.append("name", name);
+      formData.append("nickname", nickname);
+      formData.append("password", password);
 
       axios
         .post(url + `/api/user`, formData)
