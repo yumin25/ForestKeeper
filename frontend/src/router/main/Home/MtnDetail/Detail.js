@@ -23,7 +23,7 @@ function Detail({ userSlice }) {
 
   useEffect(() => {
     getMtnInfo();
-    getTotal();
+    // getTotal();
   }, []);
 
   function getMtnInfo() {
@@ -33,6 +33,7 @@ function Detail({ userSlice }) {
           console.log(res);
           setInfo(res.data.mountainInfo);
           window.localStorage.setItem("mountainId", res.data.mountainInfo.id);
+          getTotal();
         }
       })
       .catch((e) => {
