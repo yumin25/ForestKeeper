@@ -97,7 +97,11 @@ function Signup() {
       formData.append("password", password);
 
       axios
-        .post(url + `/api/user`, formData)
+        .post(url + `/api/user`, formData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
         .then(function (response) {
           console.log(response);
           if (response.data.statusCode === 201) {
