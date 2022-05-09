@@ -27,20 +27,18 @@ function ArticleDetail({ userSlice }) {
         setDescription(res.data.description);
         setCreateTime(res.data.createTime);
         setComments(res.data.comments);
-        axios
-          .get(
-            `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + res.data.accessToken,
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-            setComments(response.data.commentGetListResponseDTOList);
-          });
+        Send.get(
+          `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + res.data.accessToken,
+            },
+          }
+        ).then((response) => {
+          console.log(response);
+          setComments(response.data.commentGetListResponseDTOList);
+        });
       })
       .catch((e) => {
         console.log(e);
