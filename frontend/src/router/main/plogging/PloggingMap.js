@@ -7,8 +7,15 @@ import stop from "../../../res/img/stop.png";
 import File from "../../../config/File";
 import "./PloggingMap.css";
 
-function MapAPI({ myLocation }) {
+function MapAPI({ myLocation, trackingPath }) {
   const navermaps = window.naver.maps;
+  // const [pathArray, ] = [
+  //   new navermaps.LatLng(37.550620929135716, 127.0636195755005),
+  //   new navermaps.LatLng(trackingPath[0][0], trackingPath[0][1]),
+  //   new navermaps.LatLng(37.560620929135716, 127.10353302001953),
+  //   new navermaps.LatLng(trackingPath[1][0], trackingPath[1][1]),
+  //   // new navermaps.LatLng(trackingPath[1].latitude, trackingPath[1].longitude),
+  // ];
 
   return (
     <NaverMap
@@ -25,7 +32,7 @@ function MapAPI({ myLocation }) {
       {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
         <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
       )}
-      {/* <Polyline
+      <Polyline
         path={[
           new navermaps.LatLng(37.560620929135716, 127.0936195755005),
           new navermaps.LatLng(37.560620929135716, 127.10353302001953),
@@ -39,12 +46,19 @@ function MapAPI({ myLocation }) {
         strokeStyle={"solid"}
         strokeOpacity={0.8}
         strokeWeight={3}
-      /> */}
+      />
+      <Polyline
+        path={trackingPath}
+        // clickable // 사용자 인터랙션을 받기 위해 clickable을 true로 설정합니다.
+        strokeColor={"blue"}
+        strokeStyle={"solid"}
+        strokeOpacity={0.8}
+        strokeWeight={3}
+      />
     </NaverMap>
   );
 }
-
-function PloggingMap({ getLocation, myLocation }) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath }) {
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
   const startRecording = () => {
@@ -78,22 +92,24 @@ function PloggingMap({ getLocation, myLocation }) {
     var d = date.getDate();
     var h = date.getHours();
     var min = date.getMinutes();
-    var s = date.getSeconds();
+    // var s = date.getSeconds();
 
-    var result =
-      y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2) + ":" + makeZeroNum(s, 2);
+    var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
+    // + ":" + makeZeroNum(s, 2);
     console.log(result);
   };
-
   // 요청보내기
+  const imgFile =
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDExMDVfMTg2%2FMDAxNjA0NTczODQzMDUy.6Rfm1wBLiJqX0j_jacirUtOQPuo6kIz89XZ3-JRg0qcg.9Yjpdz3fQJH7F2HIiXQ4u8uncSKvAKjX0-iKRZFWgi4g.JPEG.violet110113%2Fy8hfb1bf61czzvoru310.jpg&type=sc960_832";
   const recordPlogging = () => {
     let formData = new FormData();
-    formData.append("image", play);
+    formData.append("image", imgFile);
+    // console.log(imgFile.src);
 
     const data = {
       mountainName: "아차산",
-      startTime: "2022-05-04 11:04:44",
-      endTime: "2022-05-04 11:14:44",
+      startTime: "2022-05-04 11:04",
+      endTime: "2022-05-04 11:14",
       distance: "1.1",
     };
     formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
@@ -133,6 +149,7 @@ function PloggingMap({ getLocation, myLocation }) {
       </button>
       <button id="start" className="btn-start">
         <img
+          id="play"
           src={play}
           alt=""
           style={{ zIndex: 3, height: "3.5vh", width: "3.5vh", marginTop: "0.5vh", marginLeft: "1.4vw" }}
@@ -140,6 +157,7 @@ function PloggingMap({ getLocation, myLocation }) {
             startRecording();
             setIsOn(true);
             watch();
+            tracking();
           }}
         />
       </button>
@@ -157,7 +175,8 @@ function PloggingMap({ getLocation, myLocation }) {
               endRecording();
               setIsOn(false);
               timeRecord();
-              recordPlogging();
+              stopTracking();
+              // recordPlogging();
             }}
           />
         </div>
@@ -167,7 +186,7 @@ function PloggingMap({ getLocation, myLocation }) {
         error={<p>Maps Load Error</p>}
         loading={<p>Maps Loading...</p>}
       >
-        <MapAPI myLocation={myLocation} />
+        <MapAPI myLocation={myLocation} trackingPath={trackingPath} />
       </RenderAfterNavermapsLoaded>
     </>
   );
