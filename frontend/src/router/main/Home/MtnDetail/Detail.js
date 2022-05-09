@@ -26,6 +26,9 @@ function Detail({ userSlice }) {
     // getTotal();
   }, []);
 
+  useEffect(() => {
+    getTotal();
+  }, [Info]);
   function getMtnInfo() {
     Send.get(url + `/mountain/${useParam.mountainCode}`)
       .then((res) => {
@@ -33,7 +36,6 @@ function Detail({ userSlice }) {
           console.log(res);
           setInfo(res.data.mountainInfo);
           window.localStorage.setItem("mountainId", res.data.mountainInfo.id);
-          getTotal();
         }
       })
       .catch((e) => {
