@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import SearchInput from "./SearchInput";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
+import Send from "../../../config/Send";
 function ResultItem({ result }) {
   return (
     <>
@@ -53,13 +54,12 @@ function SearchList({ keyword, keywordHandler }) {
   }, [pageNumber]);
 
   function getResult() {
-    axios
-      .get(url + `/mountain`, {
-        params: {
-          keyword: keyword,
-          page: pageNumber,
-        },
-      })
+    Send.get(url + `/mountain`, {
+      params: {
+        keyword: keyword,
+        page: pageNumber,
+      },
+    })
       .then(function (response) {
         console.log(response.data);
         //setSearchList(response.data.searchlist);

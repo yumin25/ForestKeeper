@@ -97,7 +97,7 @@ function Detail({ userSlice }) {
           </div>
 
           <div>
-            {count != 0 ? (
+            {count == 0 ? (
               <img
                 style={{
                   marginLeft: "2vw",
@@ -150,6 +150,7 @@ function Detail({ userSlice }) {
                   marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
+                  marginBottom: "2vh",
                 }}
               >
                 <div
