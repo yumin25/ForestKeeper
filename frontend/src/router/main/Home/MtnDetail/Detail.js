@@ -23,12 +23,8 @@ function Detail({ userSlice }) {
 
   useEffect(() => {
     getMtnInfo();
-    // getTotal();
   }, []);
 
-  useEffect(() => {
-    getTotal();
-  }, [Info]);
   function getMtnInfo() {
     Send.get(url + `/mountain/${useParam.mountainCode}`)
       .then((res) => {
@@ -36,6 +32,7 @@ function Detail({ userSlice }) {
           console.log(res);
           setInfo(res.data.mountainInfo);
           window.localStorage.setItem("mountainId", res.data.mountainInfo.id);
+          getTotal();
         }
       })
       .catch((e) => {
@@ -44,12 +41,11 @@ function Detail({ userSlice }) {
   }
 
   function getTotal() {
-    axios
-      .get(url + `/plogging`, {
-        params: {
-          mountainCode: useParam.mountainCode,
-        },
-      })
+    Send.get(url + `/plogging`, {
+      params: {
+        mountainCode: useParam.mountainCode,
+      },
+    })
       .then(function (response) {
         console.log(response.data);
         setVisiter(response.data.visiter);
