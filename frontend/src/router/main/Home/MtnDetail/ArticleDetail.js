@@ -55,8 +55,9 @@ function ArticleDetail({ userSlice }) {
     Send.post(`/comment`, JSON.stringify(data))
       .then((res) => {
         console.log(res);
-        if (res.code === 201) {
+        if (res.status === 201) {
           getArticle();
+          setCommentContent("");
         }
       })
       .catch((e) => {
