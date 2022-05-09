@@ -219,6 +219,7 @@ function ArticleDetail({ userSlice }) {
           <div>
             <input
               className="input"
+              value={commentContent}
               onChange={onCommentHandler}
               style={{
                 position: "relative",
