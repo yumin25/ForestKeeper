@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
@@ -44,7 +46,8 @@ public class UserController {
 
     @ApiOperation(value = "회원가입")
     @PostMapping
-    public ResponseEntity<?> register(@ModelAttribute UserSignUpDTO userSignUpDTO) {
+    public ResponseEntity<?> register(@RequestPart(value = "dto", required = true) UserSignUpDTO userSignUpDTO,
+    		@RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         try {
             Integer result = userService.signUp(userSignUpDTO);
 
@@ -54,9 +57,9 @@ public class UserController {
             else if (result == 4094) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 이메일로 가입된 계정이 이미 존재합니다.", 409));
             else if (result == 4095) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
             
-            if(userSignUpDTO.getImage() != null) {
-            	String savedFileName = s3Service.uploadFileToS3("user", userSignUpDTO.getImage());
-            	userService.registerUserImgPath(userSignUpDTO.getImage().getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
+            if(multipartFile != null) {
+            	String savedFileName = s3Service.uploadFileToS3("user", multipartFile);
+            	userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
             }
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("회원가입에 실패했습니다.", 409));
