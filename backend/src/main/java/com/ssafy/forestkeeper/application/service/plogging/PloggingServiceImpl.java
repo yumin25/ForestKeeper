@@ -1,17 +1,26 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
+import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
+import com.ssafy.forestkeeper.domain.dao.user.User;
+import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
@@ -30,10 +39,19 @@ public class PloggingServiceImpl implements PloggingService{
 	private final MountainRepository mountainRepository;
 	
 	private final TrashCanRepository trashCanRepository;
+	
+	private final ImageRepository imageRepository;
+	
+    @Value("${cloud.aws.s3.hosting}")
+    public String hosting;
+    
 
 	@Override
-	public void register(PloggingRegisterDTO ploggingRegisterDTO) {
-		Duration duration = Duration.between(ploggingRegisterDTO.getStartTime(), ploggingRegisterDTO.getEndTime());
+	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
+		Mountain mountain = mountainRepository.findByName(ploggingRegisterDTO.getMountainName())
+				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
 		StringBuilder sb = new StringBuilder();
 		String HM = duration.toString().split("T")[1];
 		if(duration.toString().contains("H")) {
@@ -46,26 +64,31 @@ public class PloggingServiceImpl implements PloggingService{
 		}
 		Plogging plogging = Plogging.builder()
 								.distance(ploggingRegisterDTO.getDistance())
-								.startTime(ploggingRegisterDTO.getStartTime())
-								.endTime(ploggingRegisterDTO.getEndTime())
+								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))
+								.endTime(LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter))
 								.exp(0L)
 								.durationTime(sb.toString())
 								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
-								.mountain(mountainRepository.findByName(ploggingRegisterDTO.getMountainName()))
+								.mountain(mountain)
 								.build();
-		ploggingRepository.save(plogging);
+		return ploggingRepository.save(plogging);
 	}
 
 	@Override
 	public PloggingDetailResponseDTO get(String ploggingId) {
 		Plogging plogging = ploggingRepository.findById(ploggingId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
+		Image image = imageRepository.findByPloggingId(ploggingId).orElse(null);
+		String imagePath;
+		if(image == null) imagePath = "";
+		else imagePath = hosting + image.getSavedFileName();
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
 				.distance(plogging.getDistance())
 				.time(plogging.getDurationTime())
 				.exp(plogging.getExp())
+				.imagePath(imagePath)
 				.build();
 	}
 
@@ -106,4 +129,42 @@ public class PloggingServiceImpl implements PloggingService{
 //				.build();
 //	}
 
+	@Override
+	public void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging) {
+    	imageRepository.save(Image.builder()
+				.originalFileName(originalFileName)
+				.savedFileName(savedFileName)
+				.plogging(plogging)
+				.build());
+	}
+
+	@Override
+	public MountainPloggingInfoResponseDTO getMountainPlogging(String mountainCode) {
+		Mountain mountain = mountainRepository.findByCode(mountainCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
+		User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get();
+		
+		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
+		long distance = 0L;
+		int visiter = 0;
+		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainId(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
+		
+		if(ploggingList == null) {
+			return MountainPloggingInfoResponseDTO.builder()
+					.distance(distance)
+					.visiter(visiter)
+					.count(visitList.size())
+					.build();
+		}
+
+		for(Plogging plogging : ploggingList) {
+			visiter++;
+			distance += (int)plogging.getDistance();
+		}
+		return MountainPloggingInfoResponseDTO.builder()
+											.distance(distance)
+											.visiter(visiter)
+											.count(visitList.size())
+											.build();
+	}
 }

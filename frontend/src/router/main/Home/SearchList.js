@@ -1,9 +1,8 @@
-import { useOutlet, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import search from "../../../res/img/search.png";
-import Bar from "./Bar";
+import React, { useEffect, useState, useRef } from "react";
+
 import SearchInput from "./SearchInput";
 import axios from "axios";
+import { useInView } from "react-intersection-observer";
 function ResultItem({ result }) {
   return (
     <>
@@ -32,79 +31,71 @@ function ResultItem({ result }) {
   );
 }
 
-function SearchList({
-  keyword,
-  keywordHandler,
-  pageStateHandler,
-  mountainCodeHandler,
-}) {
-  let useParam = useParams(); //여기 안에 keyword, category 존재함
+function SearchList({ keyword, keywordHandler }) {
   const url = "https://k6a306.p.ssafy.io/api";
-  const [searchList, setSearchList] = useState();
-  // const [searchList, setSearchList] = useState([
-  //   {
-  //     mountainCode: "1",
-  //     name: "관악산1",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "2",
-  //     name: "관악산2",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "3",
-  //     name: "관악산3",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "4",
-  //     name: "관악산4",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "4",
-  //     name: "관악산4",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "4",
-  //     name: "관악산4",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "4",
-  //     name: "관악산4",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  //   {
-  //     mountainCode: "4",
-  //     name: "관악산4",
-  //     address: "서울특별시 상도로 47갈 89 아사달빌딩",
-  //   },
-  // ]);
-  useEffect(() => {
+  const [searchList, setSearchList] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+
+  const getItems = async (pageNumber) => {
     getResult();
-  }, []);
+  };
+
+  useEffect(() => {
+    if (pageNumber != 1 && total != 0) {
+      if (total >= pageNumber * 8) {
+        getItems(pageNumber);
+      }
+    } else {
+      getItems(pageNumber);
+    }
+  }, [pageNumber]);
 
   function getResult() {
     axios
       .get(url + `/mountain`, {
         params: {
           keyword: keyword,
+          page: pageNumber,
         },
       })
       .then(function (response) {
-        console.log(response);
-        setSearchList(response.data.searchlist);
+        console.log(response.data);
+        //setSearchList(response.data.searchlist);
+        setSearchList((list) => [...list, ...response.data.searchlist]);
+        setTotal(response.data.total);
+        setLoading(true);
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.code);
       });
   }
 
+  const loadMore = () => {
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
+  };
+
+  const pageEnd = useRef();
+
+  useEffect(() => {
+    if (loading) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(pageEnd.current);
+    }
+  }, [loading]);
+
   function goSearch() {
     if (keyword !== "" && keyword != undefined) {
+      setPageNumber(1);
+      setSearchList([]);
       getResult();
     } else {
       alert("검색어를 입력해주세요.");
@@ -115,6 +106,8 @@ function SearchList({
     if (event.key === "Enter") {
       console.log(keyword);
       if (keyword !== "" && keyword !== undefined) {
+        setPageNumber(1);
+        setSearchList([]);
         getResult();
       } else {
         alert("검색어를 입력해주세요.");
@@ -122,8 +115,8 @@ function SearchList({
     }
   };
 
-  function goDetail(mountainCode) {
-    document.location.href = `/detail/${mountainCode}`;
+  function goDetail(result) {
+    document.location.href = `/detail/${result.mountainCode}`;
   }
 
   return (
@@ -136,23 +129,27 @@ function SearchList({
       ></SearchInput>
 
       <div
+        className="box"
+        // ref={pageEnd}
         id="List"
         style={{
-          // background: "yellow",
           height: "81.9vh",
           borderTop: "1px solid #EFEFEF",
-          // borderBottom: "1px solid #EFEFEF",
           marginLeft: "5vw",
           width: "90vw",
+          overflow: "auto",
         }}
       >
         {searchList &&
           searchList.map((result) => (
-            <div onClick={() => goDetail(result.mountainCode)}>
+            <div onClick={() => goDetail(result)}>
               <ResultItem result={result}></ResultItem>
             </div>
           ))}
+
+        <div style={{ height: "2vh" }} ref={pageEnd}></div>
       </div>
+
       {/* <Bar></Bar> */}
     </>
   );

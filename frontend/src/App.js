@@ -7,7 +7,9 @@ import RecordDetail from "./router/accounts/mypage/RecordDetail";
 import Settings from "./router/accounts/mypage/Settings";
 import Index from "./router/main/Home/Index";
 import SearchList from "./router/main/Home/SearchList";
-import Detail from "./router/main/Home/Detail";
+import Detail from "./router/main/Home/MtnDetail/Detail";
+import ArticleDetail from "./router/main/Home/MtnDetail/ArticleDetail";
+import Write from "./router/main/Home/MtnDetail/Write";
 function App() {
   return (
     <>
@@ -21,6 +23,8 @@ function App() {
           />
           <Route path="/accounts/mypage/settings" element={<Settings />} />
           <Route path="/detail/:mountainCode" element={<Detail />} />
+          <Route path="/articleDetail" element={<ArticleDetail />} />
+          <Route path="/articleWrite/:mountainCode" element={<Write />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
             <Route path="plogging" element={<Plogging />} />

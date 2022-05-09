@@ -12,6 +12,9 @@ import com.ssafy.forestkeeper.domain.repository.comment.CommentRepository;
 import com.ssafy.forestkeeper.domain.repository.community.CommunityRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import com.ssafy.forestkeeper.exception.CommunityNotFoundException;
+import com.ssafy.forestkeeper.exception.MountainNotFoundException;
+import com.ssafy.forestkeeper.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,9 +45,9 @@ public class CommunityServiceImpl implements CommunityService {
                 .description(communityRegisterPostDTO.getDescription())
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")))
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다.")))
+                        .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")))
                 .build();
 
         communityRepository.save(community);
@@ -55,7 +58,7 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
 
         List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 6))
-                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         return convertCommunityListToDTO(communityList);
 
@@ -71,31 +74,31 @@ public class CommunityServiceImpl implements CommunityService {
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
                                 communityCode, false, keyword, keyword, PageRequest.of(page - 1, 6)
                         )
-                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "t":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
                                 communityCode, false, keyword, PageRequest.of(page - 1, 6)
                         )
-                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "d":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
                                 communityCode, false, keyword, PageRequest.of(page - 1, 6)
                         )
-                        .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "n":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
                                 communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
-                                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")),
+                                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")),
                                 PageRequest.of(page - 1, 6)
                         )
-                        .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 작성한 글을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
         }
@@ -108,7 +111,7 @@ public class CommunityServiceImpl implements CommunityService {
     public CommunityResponseDTO getCommunity(String communityId) {
 
         Community community = communityRepository.findByIdAndDelete(communityId, false)
-                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         community.increaseViews();
 
@@ -128,7 +131,7 @@ public class CommunityServiceImpl implements CommunityService {
     public void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO) {
 
         Community community = communityRepository.findByIdAndDelete(communityModifyPatchDTO.getCommunityId(), false)
-                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         community.changeCommunity(communityModifyPatchDTO.getTitle(), communityModifyPatchDTO.getDescription());
 
@@ -140,7 +143,7 @@ public class CommunityServiceImpl implements CommunityService {
     public void deleteCommunity(String communityId) {
 
         Community community = communityRepository.findById(communityId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         community.changeDelete();
 
@@ -164,6 +167,7 @@ public class CommunityServiceImpl implements CommunityService {
         communityList.forEach(community ->
                 communityGetListResponseDTOList.add(
                         CommunityGetListResponseDTO.builder()
+                                .communityId(community.getId())
                                 .nickname(community.getUser().getNickname())
                                 .title(community.getTitle())
                                 .createTime(community.getCreateTime())
