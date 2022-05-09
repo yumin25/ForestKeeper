@@ -2,7 +2,11 @@ import axios from "axios";
 const url = "";
 function checkId(email, url) {
   axios
-    .get(url + `/api/user/email/${email}`)
+    .get(url + `/api/user/check/email`, {
+      params: {
+        email: email,
+      },
+    })
     .then(function (response) {
       console.log(response.data.valid);
       if (response.data.valid === true) {
@@ -19,7 +23,8 @@ function checkId(email, url) {
 }
 
 function checkEmail(email) {
-  const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  const regExp =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
   if (regExp.test(email) === false) {
     alert("이메일 형식으로 작성하셔야 합니다.");
   }
@@ -42,7 +47,11 @@ function checkNickname(nickname, url) {
     alert("닉네임은 2자 이상 10자 이하여야 합니다.");
   } else {
     axios
-      .get(url + `/api/user/nickname/${nickname}`)
+      .get(url + `/api/user/check/nickname`, {
+        params: {
+          nickname: nickname,
+        },
+      })
       .then(function (response) {
         console.log(response);
         if (response.data.valid === false) {
