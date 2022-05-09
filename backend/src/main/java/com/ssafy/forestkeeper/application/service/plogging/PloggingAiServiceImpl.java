@@ -116,10 +116,10 @@ public class PloggingAiServiceImpl implements PloggingAiService {
         if(exp<1000) exp = 1000;
         System.out.format("Score : %d%n", exp);
 
-        Plogging plogging = ploggingRepository.findById(ploggingId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-        plogging.setExp(exp);
-        ploggingRepository.save(plogging);
+//        Plogging plogging = ploggingRepository.findById(ploggingId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
+//        plogging.setExp(exp);
+//        ploggingRepository.save(plogging);
         return PloggingExperienceResponseDTO.builder().exp(exp).build();
     }
 }
