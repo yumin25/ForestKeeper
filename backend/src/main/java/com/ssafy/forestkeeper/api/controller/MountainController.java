@@ -6,6 +6,7 @@ import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrap
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearch;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.service.mountain.MountainService;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import io.swagger.annotations.Api;
@@ -118,6 +119,29 @@ public class MountainController {
             return ResponseEntity.status(200).body(
                 MountainRankWrapperResponseDTO.of("산 랭킹 조회에 성공했습니다.", 200,
                     mountainRankWrapperResponseDTO));
+        } catch (Exception e) {
+            System.err.println(e);
+            return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
+        }
+    }
+
+    @ApiOperation(value = "산 랭킹 검색")
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getRank(@RequestParam("by") String by,@RequestParam("lat") double lat,@RequestParam("lng") double lng) {
+
+        try {
+            RecommendWrapperResponseDTO recommendWrapperResponseDTO = null;
+
+            if("distance".equals(by)){
+                recommendWrapperResponseDTO = mountainService.getRecommendByDistance(lat, lng);
+            }else if("height".equals(by)){
+//                recommendWrapperResponseDTO = mountainService.getMountainRankByCount(
+//                    mountainCode);
+            }
+
+            return ResponseEntity.status(200).body(
+                RecommendWrapperResponseDTO.of("산 랭킹 조회에 성공했습니다.", 200,
+                    recommendWrapperResponseDTO));
         } catch (Exception e) {
             System.err.println(e);
             return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
