@@ -20,7 +20,9 @@ function Signup() {
     borderTop: "0",
     borderBottom: "1",
   };
-  const [image, setImage] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+  const [image, setImage] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
   const fileInput = useRef(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +55,9 @@ function Signup() {
       setImage(e.target.files[0]);
     } else {
       //업로드 취소할 시
-      setImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+      setImage(
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+      );
       return;
     }
     //화면에 프로필 사진 표시
@@ -67,10 +71,18 @@ function Signup() {
   };
 
   const onCreate = () => {
-    if (email === "" || password === "" || passwordConfirm === "" || name === "" || nickname === "") {
+    if (
+      email === "" ||
+      password === "" ||
+      passwordConfirm === "" ||
+      name === "" ||
+      nickname === ""
+    ) {
       alert("입력하지 않은 정보가 있습니다. 확인해주세요.");
     } else if (!/^[a-zA-Z0-9!@#$%\^&*()]{8,}$/.test(password)) {
-      alert("비밀번호는 영문자, 숫자, 특수문자 !@#$%^&*() 포함 8자 이상이어야 합니다.");
+      alert(
+        "비밀번호는 영문자, 숫자, 특수문자 !@#$%^&*() 포함 8자 이상이어야 합니다."
+      );
       return;
     } else if (password != passwordConfirm) {
       alert("비밀번호가 일치하지 않습니다.");
@@ -173,7 +185,10 @@ function Signup() {
                 style={{ width: "55vw", height: "3vh" }}
                 onBlur={() => checkEmail(email)}
               />
-              <button className="duplicateBtn" onClick={() => checkId(email, url)}>
+              <button
+                className="duplicateBtn"
+                onClick={() => checkId(email, url)}
+              >
                 중복확인
               </button>
             </div>
@@ -191,7 +206,10 @@ function Signup() {
                 onChange={onNicknameHandler}
                 style={{ width: "55vw", height: "3vh" }}
               />
-              <button className="duplicateBtn" onClick={() => checkNickname(nickname, url)}>
+              <button
+                className="duplicateBtn"
+                onClick={() => checkNickname(nickname, url)}
+              >
                 중복확인
               </button>
             </div>
