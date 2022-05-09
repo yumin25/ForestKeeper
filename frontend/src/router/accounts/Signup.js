@@ -108,7 +108,7 @@ function Signup() {
         .post(url + `/api/user`, formData)
         .then(function (response) {
           console.log(response);
-          if (response.status === 201) {
+          if (response.data.statusCode === 201) {
             setEmail("");
             setPassword("");
             setPasswordConfirm("");
