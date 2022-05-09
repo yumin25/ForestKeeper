@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import temp from "../../../../res/img/temp.png";
-import axios from "axios";
 import edit from "../../../../res/img/edit.png";
+import Send from "../../../../config/Send";
 function ReviewItem({ result }) {
   return (
     <div
@@ -54,7 +54,6 @@ function WriteItem() {
       <div style={{ display: "flex" }}>
         <div
           style={{
-            marginTop: "0.5vh",
             textAlign: "right",
             fontSize: "1.5vh",
             color: "#8E8E92",
@@ -132,15 +131,14 @@ function About({ url }) {
   }
 
   function getList() {
-    axios
-      .get(url + `/community`, {
-        params: {
-          communityCode: tab,
-          page: page,
-        },
-      })
+    Send.get(url + `/community`, {
+      params: {
+        communityCode: tab,
+        page: page,
+      },
+    })
       .then(function (response) {
-        console.log(response.data);
+        console.log(response);
         setTotal(response.data.communityGetListResponseDTOList.length);
         //setSearchList(response.data.searchlist);
         if (page >= 2) {
@@ -151,7 +149,7 @@ function About({ url }) {
         } else {
           setList(response.data.communityGetListResponseDTOList);
         }
-
+        console.log(list);
         setLoading(true);
       })
       .catch(function (error) {
@@ -200,46 +198,39 @@ function About({ url }) {
           )}
         </div>
 
-        <div id="List" style={{ height: "62vh", overflow: "auto" }}>
-          {tab == "review" ? (
-            <>
-              <div
-                onClick={() =>
-                  (document.location.href = `/articleWrite/${useParam.mountainCode}`)
-                }
-              >
-                <WriteItem />
-              </div>
+        <div>
+          <div
+            onClick={() =>
+              (document.location.href = `/articleWrite/${useParam.mountainCode}`)
+            }
+          >
+            <WriteItem />
+          </div>
+          <div id="List" style={{ height: "60vh", overflow: "auto" }}>
+            {tab == "review" ? (
+              <>
+                {list &&
+                  list.map((result) => (
+                    <div onClick={() => goDetail(result.communityId)}>
+                      <ReviewItem result={result} />
+                    </div>
+                  ))}
 
-              {list &&
-                list.map((result) => (
-                  <div onClick={() => goDetail(result.communityId)}>
-                    <ReviewItem result={result} />
-                  </div>
-                ))}
+                <div style={{ height: "2vh" }} ref={pageEnd}></div>
+              </>
+            ) : (
+              <>
+                {list &&
+                  list.map((result) => (
+                    <div onClick={() => goDetail(result.communityId)}>
+                      <QnaItem result={result} />
+                    </div>
+                  ))}
 
-              <div style={{ height: "2vh" }} ref={pageEnd}></div>
-            </>
-          ) : (
-            <>
-              <div
-                onClick={() =>
-                  (document.location.href = `/articleWrite/${useParam.mountainCode}`)
-                }
-              >
-                <WriteItem />
-              </div>
-
-              {list &&
-                list.map((result) => (
-                  <div onClick={() => goDetail(result.communityId)}>
-                    <QnaItem result={result} />
-                  </div>
-                ))}
-
-              <div style={{ height: "2vh" }} ref={pageEnd}></div>
-            </>
-          )}
+                <div style={{ height: "2vh" }} ref={pageEnd}></div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

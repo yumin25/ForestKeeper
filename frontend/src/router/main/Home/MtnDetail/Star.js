@@ -4,8 +4,10 @@ import first from "../../../../res/img/medal.png";
 import second from "../../../../res/img/medal(1).png";
 import third from "../../../../res/img/medal(2).png";
 import axios from "axios";
+import Send from "../../../../config/Send";
 import "./Star.css";
-function UserItem({ user, tab }) {
+function UserItem({ rank, user, tab }) {
+  rank += 1;
   return (
     <>
       <div
@@ -15,7 +17,8 @@ function UserItem({ user, tab }) {
           marginBottom: "1.5vh",
         }}
       >
-        <div className="lowRank">{user.rank}</div>
+        {/* <div className="lowRank">{user.rank}</div> */}
+        <div className="lowRank">{rank}위</div>
         <div style={{ marginRight: "3vw" }}>
           <img
             src={temp}
@@ -26,13 +29,31 @@ function UserItem({ user, tab }) {
             }}
           />
         </div>
-        <div className="lowNickname">{user.nickname}</div>
+        <div
+          className="lowNickname"
+          style={{ marginTop: "1vh", fontSize: "1.6vh" }}
+        >
+          {user.nickname}
+        </div>
         {tab == "count" ? (
-          <div id="result" className="topResult">
+          <div
+            id="result"
+            className="topResult"
+            style={{
+              position: "absolute",
+              right: "10vw",
+              marginTop: "0.8vh",
+              fontSize: "1.8vh",
+            }}
+          >
             {user.count} 회
           </div>
         ) : (
-          <div id="result" className="topResult">
+          <div
+            id="result"
+            className="topResult"
+            style={{ marginTop: "0.8vh", fontSize: "1.8vh" }}
+          >
             {user.distance} km
           </div>
         )}
@@ -43,7 +64,10 @@ function UserItem({ user, tab }) {
 
 function Star({ mountainCode, url }) {
   const [users, setUsers] = useState([]);
-  const LowRanker = users.slice(3, users.length);
+  // const LowRanker = users.slice(3, users.length);
+  const [LowRanker, setLowRanker] = useState(users.slice(3, users.length));
+  console.log(LowRanker);
+  const [rank, setRank] = useState(2);
   const [tab, setTab] = useState("count");
 
   useEffect(() => {
@@ -52,12 +76,12 @@ function Star({ mountainCode, url }) {
 
   function getRank() {
     console.log(mountainCode);
-    axios
-      .get(url + `/mountain/rank/${mountainCode}`, {
-        params: {
-          by: tab,
-        },
-      })
+    setRank(2);
+    Send.get(url + `/mountain/rank/${mountainCode}`, {
+      params: {
+        by: tab,
+      },
+    })
       .then(function (response) {
         console.log(response.data);
         setUsers(response.data.mountainRankResponseDTOList);
@@ -111,14 +135,14 @@ function Star({ mountainCode, url }) {
         id="topRanker"
         style={{
           height: "20vh",
-          width: "73vw",
+          width: "80vw",
           marginTop: "2.5vh",
-          marginBottom: "2.5vh",
+          marginBottom: "1vh",
           marginLeft: "10vw",
           display: "flex",
         }}
       >
-        <div id="second" style={{ width: "19vw", marginRight: "5.5vw" }}>
+        <div id="second" style={{ width: "19vw", marginRight: "10vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
               <img src={temp} className="topImage" />
@@ -127,7 +151,7 @@ function Star({ mountainCode, url }) {
               <img
                 src={second}
                 style={{
-                  top: "33.5vh",
+                  top: "36vh",
                   left: "19.5vw",
                   position: "absolute",
                   width: "8.8vw",
@@ -137,23 +161,33 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div className="topNickname">
-            {users.length >= 2 && users[1].nickname}
+          <div>
+            <div className="topNickname" style={{ fontSize: "1.6vh" }}>
+              {users.length >= 2 && users[1].nickname}
+            </div>
+            {tab == "count"
+              ? users.length >= 2 && (
+                  <div
+                    id="result"
+                    className="topResult"
+                    style={{ fontSize: "1.8vh" }}
+                  >
+                    {users[1].count} 회
+                  </div>
+                )
+              : users.length >= 2 && (
+                  <div
+                    id="result"
+                    className="topResult"
+                    style={{ fontSize: "1.8vh" }}
+                  >
+                    {users[1].distance} km
+                  </div>
+                )}
           </div>
-          {tab == "count"
-            ? users.length >= 2 && (
-                <div id="result" className="topResult">
-                  {users[1].count} 회
-                </div>
-              )
-            : users.length >= 2 && (
-                <div id="result" className="topResult">
-                  {users[1].distance} km
-                </div>
-              )}
         </div>
 
-        <div id="first" style={{ width: "23vw", marginRight: "5.5vw" }}>
+        <div id="first" style={{ width: "23vw", marginRight: "10vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center" }}>
               <img
@@ -170,8 +204,8 @@ function Star({ mountainCode, url }) {
               <img
                 src={first}
                 style={{
-                  top: "28vh",
-                  left: "47.5vw",
+                  top: "30vh",
+                  left: "50.5vw",
                   position: "absolute",
                   width: "9.3vw",
                   height: "9vw",
@@ -180,18 +214,30 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNickname">
+          <div
+            id="nickname"
+            className="topNickname"
+            style={{ fontSize: "1.6vh" }}
+          >
             {users.length >= 1 && users[0].nickname}
           </div>
 
           {tab == "count"
             ? users.length >= 1 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[0].count} 회
                 </div>
               )
             : users.length >= 1 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[0].distance} km
                 </div>
               )}
@@ -206,8 +252,8 @@ function Star({ mountainCode, url }) {
               <img
                 src={third}
                 style={{
-                  top: "33.5vh",
-                  left: "72.5vw",
+                  top: "36vh",
+                  left: "80.5vw",
                   position: "absolute",
                   width: "8.3vw",
                   height: "8vw",
@@ -216,17 +262,25 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div className="topNickname">
+          <div className="topNickname" style={{ fontSize: "1.6vh" }}>
             {users.length >= 3 && users[2].nickname}
           </div>
           {tab == "count"
             ? users.length >= 3 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[2].count} 회
                 </div>
               )
             : users.length >= 3 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[2].distance} km
                 </div>
               )}
@@ -243,7 +297,9 @@ function Star({ mountainCode, url }) {
         }}
       >
         {LowRanker &&
-          LowRanker.map((user) => <UserItem tab={tab} user={user}></UserItem>)}
+          LowRanker.map((user) => (
+            <UserItem rank={rank} tab={tab} user={user}></UserItem>
+          ))}
       </div>
     </>
   );

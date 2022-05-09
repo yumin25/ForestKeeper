@@ -150,6 +150,7 @@ function Detail({ userSlice }) {
                   marginRight: "6vw",
                   fontSize: "2vh",
                   display: "flex",
+                  marginBottom: "2vh",
                 }}
               >
                 <div
