@@ -8,11 +8,11 @@ function checkId(email, url) {
       },
     })
     .then(function (response) {
-      console.log(response.data.valid);
-      if (response.data.valid === true) {
+      console.log(response.data);
+      if (response.data.statusCode === 200) {
         alert("사용 가능한 이메일입니다.");
         return true;
-      } else if (response.data.valid === false) {
+      } else if (response.data.statusCode === 409) {
         alert("이미 존재하는 이메일입니다.");
         return false;
       }
@@ -54,10 +54,10 @@ function checkNickname(nickname, url) {
       })
       .then(function (response) {
         console.log(response);
-        if (response.data.valid === false) {
+        if (response.data.statusCode === 409) {
           alert("이미 존재하는 닉네임입니다.");
           return false;
-        } else if (response.data.valid === true) {
+        } else if (response.data.statusCode === 200) {
           alert("사용 가능한 닉네임입니다.");
           return true;
         }
