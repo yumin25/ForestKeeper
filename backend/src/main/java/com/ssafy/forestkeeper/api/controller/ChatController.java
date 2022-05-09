@@ -3,6 +3,7 @@ package com.ssafy.forestkeeper.api.controller;
 import com.ssafy.forestkeeper.application.dto.request.chat.ChatMessageRequestDTO;
 import com.ssafy.forestkeeper.application.service.chat.ChatMessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/room")
+//    public void send(ChatMessageRequestDTO chatMessageRequestDTO, @Header("Authorization") String accessToken) {
     public void send(ChatMessageRequestDTO chatMessageRequestDTO) {
 
 //        System.out.println("AT : " + accessToken);
