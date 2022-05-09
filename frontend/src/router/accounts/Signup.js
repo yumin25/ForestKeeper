@@ -91,14 +91,25 @@ function Signup() {
       console.log(email, password, name, nickname);
       let formData = new FormData();
       formData.append("image", image);
-      formData.append("email", email);
-      formData.append("name", name);
-      formData.append("nickname", nickname);
-      formData.append("password", password);
+
+      let dto = {
+        email: email,
+        password: password,
+        nickname: nickname,
+        name: name,
+      };
+
+      formData.append(
+        "dto",
+        new Blob([JSON.stringify(dto)], {
+          type: "application/json",
+        })
+      );
 
       axios
         .post(url + `/api/user`, formData, {
           headers: {
+            Accept: "application/json",
             "Content-Type": `multipart/form-data`,
           },
         })
