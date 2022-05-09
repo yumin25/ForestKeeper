@@ -106,7 +106,7 @@ function Detail({ userSlice }) {
                 src={check}
               />
             ) : (
-              <div style={{ color: "#69696C" }}>
+              <div style={{ color: "#69696C", display: "flex" }}>
                 <img
                   style={{
                     marginLeft: "2vw",
