@@ -97,7 +97,11 @@ function Signup() {
       formData.append("password", password);
 
       axios
-        .post(url + `/api/user`, formData)
+        .post(url + `/api/user`, formData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
         .then(function (response) {
           console.log(response);
           if (response.data.statusCode === 201) {
@@ -132,17 +136,19 @@ function Signup() {
               fileInput.current.click();
             }}
           />
-
-          <input
-            ref={fileInput}
-            type="file"
-            style={{ display: "none" }}
-            className="imgInput"
-            id="profile_img"
-            accept="image/*"
-            name="file"
-            onChange={onImageHandler}
-          />
+          <form enctype="multipart/form-data">
+            <input
+              ref={fileInput}
+              type="file"
+              style={{ display: "none" }}
+              className="imgInput"
+              id="profile_img"
+              accept="image/*"
+              name="file"
+              onChange={onImageHandler}
+              multiple
+            />
+          </form>
           <div
             style={{
               textAlign: "center",
