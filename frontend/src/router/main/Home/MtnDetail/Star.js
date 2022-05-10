@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import temp from "../../../../res/img/temp.png";
+import logo_temp from "../../../../res/img/logo_temp.png";
 import first from "../../../../res/img/medal.png";
 import second from "../../../../res/img/medal(1).png";
 import third from "../../../../res/img/medal(2).png";
 import axios from "axios";
 import Send from "../../../../config/Send";
 import "./Star.css";
-function UserItem({ rank, user, tab }) {
-  rank += 1;
+function UserItem({ user, tab }) {
   return (
     <>
       <div
@@ -17,14 +16,12 @@ function UserItem({ rank, user, tab }) {
           marginBottom: "1.5vh",
         }}
       >
-        {/* <div className="lowRank">{user.rank}</div> */}
-        <div className="lowRank">{rank}위</div>
         <div style={{ marginRight: "3vw" }}>
           <img
-            src={temp}
+            src={logo_temp}
             style={{
-              width: "8vw",
-              height: "8vw",
+              width: "4.5vh",
+              height: "4.5vh",
               borderRadius: 100,
             }}
           />
@@ -65,9 +62,51 @@ function UserItem({ rank, user, tab }) {
 function Star({ mountainCode, url }) {
   const [users, setUsers] = useState([]);
   // const LowRanker = users.slice(3, users.length);
-  const [LowRanker, setLowRanker] = useState(users.slice(3, users.length));
+  //const [LowRanker, setLowRanker] = useState(users.slice(3, users.length));
+  const [LowRanker, setLowRanker] = useState([
+    {
+      // 기타 유저 정보 필요하시면 추가 가능
+      nickname: "형덕",
+      count: 12,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      nickname: "김z",
+      count: 2,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      // 기타 유저 정보 필요하시면 추가 가능
+      nickname: "형덕",
+      count: 12,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      nickname: "김z",
+      count: 2,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      // 기타 유저 정보 필요하시면 추가 가능
+      nickname: "형덕",
+      count: 12,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      nickname: "김z",
+      count: 2,
+      distance: 0.0,
+      imagePath: "",
+    },
+  ]);
   console.log(LowRanker);
   const [rank, setRank] = useState(2);
+  const [rankNum, setRankNum] = useState([4, 5, 6, 7, 8, 9, 10]);
   const [tab, setTab] = useState("count");
 
   useEffect(() => {
@@ -145,7 +184,7 @@ function Star({ mountainCode, url }) {
         <div id="second" style={{ width: "19vw", marginRight: "10vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img src={temp} className="topImage" />
+              <img src={logo_temp} className="topImage" />
             </div>
             <div id="rankImg">
               <img
@@ -191,7 +230,7 @@ function Star({ mountainCode, url }) {
           <div id="images">
             <div id="profile" style={{ textAlign: "center" }}>
               <img
-                src={temp}
+                src={logo_temp}
                 style={{
                   position: "relative",
                   width: "21vw",
@@ -246,7 +285,7 @@ function Star({ mountainCode, url }) {
         <div id="third" style={{ width: "19vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img src={temp} className="topImage" />
+              <img src={logo_temp} className="topImage" />
             </div>
             <div id="rankImg">
               <img
@@ -296,10 +335,29 @@ function Star({ mountainCode, url }) {
           marginLeft: "10vw",
         }}
       >
-        {LowRanker &&
-          LowRanker.map((user) => (
-            <UserItem rank={rank} tab={tab} user={user}></UserItem>
-          ))}
+        <div style={{ display: "flex" }}>
+          <div>
+            {rankNum &&
+              rankNum.map((num) => (
+                <div
+                  style={{
+                    height: "3.5vh",
+                    marginBottom: "1.5vh",
+                    fontSize: "1.6vh",
+                    paddingTop: "1vh",
+                  }}
+                >
+                  {num}위
+                </div>
+              ))}
+          </div>
+          <div>
+            {LowRanker &&
+              LowRanker.map((user) => (
+                <UserItem rank={rank} tab={tab} user={user}></UserItem>
+              ))}
+          </div>
+        </div>
       </div>
     </>
   );
