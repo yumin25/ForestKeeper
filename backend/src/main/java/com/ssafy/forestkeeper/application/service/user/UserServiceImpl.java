@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserDetail(String email) {
-        User user = userRepository.findByEmailAndDelete(email, false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+    public UserInfoDTO getUserDetail() {
+        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
         Image image = imageRepository.findByUserId(user.getId()).orElse(null);
         String imagePath;
         if(image == null) imagePath = "";
@@ -91,18 +91,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer modifyNickname(String nickname, String email) {
+    public Integer modifyNickname(String nickname) {
         if (checkNickname(nickname)) return 4091;
         if (!isValidNickname(nickname)) return 4092;
-        User user = userRepository.findUserByEmailAndDelete(email, false);
+        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
         user.setNickname(nickname);
         userRepository.save(user);
         return 201;
     }
 
     @Override
-    public Integer modifyPassword(String past_password, String new_password, String email) {
-        User user = userRepository.findUserByEmailAndDelete(email, false);
+    public Integer modifyPassword(String past_password, String new_password) {
+        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (!encoder.matches(past_password, user.getPassword())) return 4091;
         if (!isValidPassword(new_password)) return 4092;
@@ -112,8 +112,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean withdraw(String email) {
-        User user = userRepository.findUserByEmailAndDelete(email, false);
+    public boolean withdraw() {
+        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
         user.setDelete(true);
         userRepository.save(user);
         return true;

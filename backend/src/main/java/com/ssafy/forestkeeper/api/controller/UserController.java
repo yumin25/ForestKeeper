@@ -82,11 +82,10 @@ public class UserController {
 
     @ApiOperation(value = "유저 정보 조회")
     @GetMapping("/userinfo")
-    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("Authorization"));
+    public ResponseEntity<?> getUserInfo() {
         UserInfoDTO userInfoDTO;
         try{
-            userInfoDTO = userService.getUserDetail(email);
+            userInfoDTO = userService.getUserDetail();
         } catch (IllegalStateException e){
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e){
@@ -115,9 +114,8 @@ public class UserController {
 
     @ApiOperation(value = "닉네임 변경")
     @GetMapping("/modify/nickname")
-    public ResponseEntity<?> modifyNickname(@RequestParam("nickname") String nickname, HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("Authorization"));
-        Integer result = userService.modifyNickname(nickname, email);
+    public ResponseEntity<?> modifyNickname(@RequestParam("nickname") String nickname) {
+        Integer result = userService.modifyNickname(nickname);
 
         if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
         else if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
@@ -128,11 +126,10 @@ public class UserController {
 
     @ApiOperation(value = "비밀번호 변경")
     @PatchMapping("/modify/password")
-    public ResponseEntity<?> modifyPassword(@RequestBody Map<String,String> param, HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("Authorization"));
+    public ResponseEntity<?> modifyPassword(@RequestBody Map<String,String> param) {
         String past_password = param.get("past_password");
         String new_password = param.get("new_password");
-        Integer result = userService.modifyPassword(past_password, new_password, email);
+        Integer result = userService.modifyPassword(past_password, new_password);
 
         if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("비밀번호를 변경하였습니다.", 201));
         if(result == 4091) return ResponseEntity.status(201).body(BaseResponseDTO.of("입력한 비밀번호가 일치하지 않습니다.", 409));
@@ -142,9 +139,8 @@ public class UserController {
 
     @ApiOperation(value = "탈퇴")
     @GetMapping("/modify/withdraw")
-    public ResponseEntity<?> withdraw(HttpServletRequest request) {
-        String email = userService.getUserEmail(request.getHeader("Authorization"));
-        if(userService.withdraw(email)) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
+    public ResponseEntity<?> withdraw() {
+        if(userService.withdraw()) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
         return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
     }
     
