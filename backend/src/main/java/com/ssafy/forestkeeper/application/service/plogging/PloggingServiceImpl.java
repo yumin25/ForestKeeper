@@ -44,11 +44,11 @@ public class PloggingServiceImpl implements PloggingService{
 	
     @Value("${cloud.aws.s3.hosting}")
     public String hosting;
-    
+
 
 	@Override
 	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
-		Mountain mountain = mountainRepository.findByName(ploggingRegisterDTO.getMountainName())
+		Mountain mountain = mountainRepository.findByCode(ploggingRegisterDTO.getMountainCode())
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
