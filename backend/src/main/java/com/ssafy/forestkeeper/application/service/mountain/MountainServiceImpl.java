@@ -1,5 +1,8 @@
 package com.ssafy.forestkeeper.application.service.mountain;
 
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.mountain.QMountain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +36,10 @@ public class MountainServiceImpl implements MountainService {
     private final MountainRepositorySupport mountainRepositorySupport;
     private final PloggingRepositorySupport ploggingRepositorySupport;
     private QPlogging qPlogging = QPlogging.plogging;
+    private QMountain qMountain = QMountain.mountain;
 
     private int batch = 8;
-    
+
     @Value("${cloud.aws.s3.hosting}")
     public String hosting;
 
@@ -61,11 +65,16 @@ public class MountainServiceImpl implements MountainService {
             mountainRepository.findByCode(mountainCode).get());
 
         List<MountainRankResponseDTO> mountainRankResponseDTOList = new ArrayList<>();
-		Image image = imageRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get().getId()).orElse(null);
-		String imagePath;
-		if(image == null) imagePath = "";
-		else imagePath = hosting + image.getSavedFileName();
-		
+        Image image = imageRepository.findByUserId(userRepository.findByEmailAndDelete(
+                SecurityContextHolder.getContext().getAuthentication().getName(), false).get().getId())
+            .orElse(null);
+        String imagePath;
+        if (image == null) {
+            imagePath = "";
+        } else {
+            imagePath = hosting + image.getSavedFileName();
+        }
+
         ploggingList.forEach(plogging ->
             mountainRankResponseDTOList.add(
                 MountainRankResponseDTO.builder()
@@ -107,5 +116,49 @@ public class MountainServiceImpl implements MountainService {
     public int totalSearch(String keyword) {
 
         return mountainRepositorySupport.findByNameContains(keyword).size();
+    }
+
+    @Override
+    public RecommendWrapperResponseDTO getRecommendByDistance(double lat, double lng) {
+
+        List<Tuple> recommendList = mountainRepositorySupport.findByDistance(lat, lng);
+
+        List<RecommendResponseDTO> nearRecommendResponseDTOList = new ArrayList<>();
+
+        recommendList.forEach(near ->
+            nearRecommendResponseDTOList
+                .add(RecommendResponseDTO.builder()
+                    .mountainCode(near.get(qMountain).getCode())
+                    .address(near.get(qMountain).getAddress())
+                    .name(near.get(qMountain).getName())
+                    .value(Double.parseDouble(near.toArray()[0].toString()))
+                    .build()));
+
+        return RecommendWrapperResponseDTO.builder()
+            .recommendResponseDTOList(nearRecommendResponseDTOList).build();
+    }
+
+    @Override
+    public RecommendWrapperResponseDTO getRecommendByHeight() {
+
+        double avg = ploggingRepositorySupport.getAvg(userRepository.findByEmailAndDelete(
+            SecurityContextHolder.getContext().getAuthentication().getName(), false).get());
+
+        List<Tuple> recommendList = mountainRepositorySupport.findByHeight(avg);
+
+        List<RecommendResponseDTO> nearRecommendResponseDTOList = new ArrayList<>();
+
+        recommendList.forEach(near ->
+            nearRecommendResponseDTOList
+                .add(RecommendResponseDTO.builder()
+                    .mountainCode(near.get(qMountain).getCode())
+                    .address(near.get(qMountain).getAddress())
+                    .name(near.get(qMountain).getName())
+                    .value(Double.parseDouble(near.toArray()[0].toString()))
+                    .build())
+        );
+
+        return RecommendWrapperResponseDTO.builder()
+            .recommendResponseDTOList(nearRecommendResponseDTOList).build();
     }
 }
