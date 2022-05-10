@@ -116,10 +116,64 @@ public class PloggingAiServiceImpl implements PloggingAiService {
         if(exp<1000) exp = 1000;
         System.out.format("Score : %d%n", exp);
 
-//        Plogging plogging = ploggingRepository.findById(ploggingId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-//        plogging.setExp(exp);
-//        ploggingRepository.save(plogging);
+        Plogging plogging = ploggingRepository.findById(ploggingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
+        plogging.setExp(exp);
+        ploggingRepository.save(plogging);
+        return PloggingExperienceResponseDTO.builder().exp(exp).build();
+    }
+
+    @Override
+    public PloggingExperienceResponseDTO detectLabelsTest(MultipartFile multipartFile) throws IOException {
+        int exp = 0;
+        HashMap<String, Integer> experience = new HashMap<>();
+        experience.put("Plastic Bag", 600);
+        experience.put("Litter", 600);
+        experience.put("Plastic", 600);
+        experience.put("Packing Materials", 600);
+        experience.put("Waste Container", 500);
+        experience.put("Bottle", 500);
+        experience.put("Tin Can", 500);
+        experience.put("Box", 500);
+        experience.put("Plastic bottle", 400);
+        experience.put("Water bottle", 400);
+        experience.put("Plastic Wrap", 400);
+
+        List<AnnotateImageRequest> requests = new ArrayList<>();
+        byte []byteArr = multipartFile.getBytes();
+        InputStream inputStream = new ByteArrayInputStream(byteArr);
+        ByteString imgBytes = ByteString.readFrom(inputStream);
+        Image img = Image.newBuilder().setContent(imgBytes).build();
+
+        Feature feat = Feature.newBuilder().setType(Feature.Type.LABEL_DETECTION).build();
+        AnnotateImageRequest request =
+                AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
+        requests.add(request);
+
+        try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
+            BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
+            List<AnnotateImageResponse> responses = response.getResponsesList();
+
+            for (AnnotateImageResponse res : responses) {
+                if (res.hasError()) {
+                    System.out.format("Error: %s%n", res.getError().getMessage());
+                    return PloggingExperienceResponseDTO.builder().exp(0).build();
+                }
+
+                for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
+                    if(!experience.containsKey(annotation.getDescription())) continue;
+                    int tmpScore = experience.get(annotation.getDescription());
+                    tmpScore *= annotation.getScore();
+                    System.out.println(tmpScore);
+                    exp += tmpScore;
+                    System.out.format("%s : %f%n", annotation.getDescription(), annotation.getScore());
+                }
+            }
+        }
+
+        if(exp<1000) exp = 1000;
+        System.out.format("Score : %d%n", exp);
+
         return PloggingExperienceResponseDTO.builder().exp(exp).build();
     }
 }
