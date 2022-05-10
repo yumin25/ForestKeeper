@@ -26,7 +26,7 @@ function Trash() {
   axios.defaults.withCredentials = true;
   function getTrash() {
     Send.get(
-      `/trash`,
+      `/plogging/trash`,
       {},
       {
         withCredentials: true,
