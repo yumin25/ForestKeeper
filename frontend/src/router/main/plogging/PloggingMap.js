@@ -9,13 +9,6 @@ import "./PloggingMap.css";
 
 function MapAPI({ myLocation, trackingPath }) {
   const navermaps = window.naver.maps;
-  // const [pathArray, ] = [
-  //   new navermaps.LatLng(37.550620929135716, 127.0636195755005),
-  //   new navermaps.LatLng(trackingPath[0][0], trackingPath[0][1]),
-  //   new navermaps.LatLng(37.560620929135716, 127.10353302001953),
-  //   new navermaps.LatLng(trackingPath[1][0], trackingPath[1][1]),
-  //   // new navermaps.LatLng(trackingPath[1].latitude, trackingPath[1].longitude),
-  // ];
 
   return (
     <NaverMap
@@ -32,33 +25,12 @@ function MapAPI({ myLocation, trackingPath }) {
       {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
         <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
       )}
-      <Polyline
-        path={[
-          new navermaps.LatLng(37.560620929135716, 127.0936195755005),
-          new navermaps.LatLng(37.560620929135716, 127.10353302001953),
-          new navermaps.LatLng(37.5556921307849, 127.09452079772949),
-          new navermaps.LatLng(37.56321310838941, 127.09814714431763),
-          new navermaps.LatLng(37.555760351656545, 127.10299657821654),
-          new navermaps.LatLng(37.560620929135716, 127.0936195755005),
-        ]}
-        // clickable // 사용자 인터랙션을 받기 위해 clickable을 true로 설정합니다.
-        strokeColor={"red"}
-        strokeStyle={"solid"}
-        strokeOpacity={0.8}
-        strokeWeight={3}
-      />
-      <Polyline
-        path={trackingPath}
-        // clickable // 사용자 인터랙션을 받기 위해 clickable을 true로 설정합니다.
-        strokeColor={"blue"}
-        strokeStyle={"solid"}
-        strokeOpacity={0.8}
-        strokeWeight={3}
-      />
+      <Polyline path={trackingPath} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
     </NaverMap>
   );
 }
-function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath }) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance }) {
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
   const startRecording = () => {
@@ -166,7 +138,13 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
           <div>
             <ReactTimerStopwatch id="timer" isOn={isOn} className="react-stopwatch-timer__table" watchType="stopwatch" fromTime={fromTime} />
           </div>
-          <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>11.5km</p>
+          {allDistance.length === 0 ? (
+            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>0.00 km</p>
+          ) : (
+            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>
+              {allDistance.reduce(reducer).toFixed(2)} km
+            </p>
+          )}
           <img
             src={stop}
             alt=""
