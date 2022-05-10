@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PloggingMap from "./PloggingMap";
 let tracker;
+let distanceTracker;
 function Plogging() {
   const [myLocation, setMyLocation] = useState({
     latitude: 37.554722,
@@ -32,7 +33,7 @@ function Plogging() {
     let endLon = degreesToRadians(endLonCord);
     const Radius = 6371;
     let distance = Math.acos(Math.sin(startLat) * Math.sin(endLat) + Math.cos(startLat) * Math.cos(endLat) * Math.cos(startLon - endLon)) * Radius;
-    return distance;
+    return Math.floor(distance) + (Math.round(distance * 100) - Math.floor(distance) * 100) / 100;
   };
   const [allDistance, setAllDistance] = useState([]);
 
@@ -42,17 +43,21 @@ function Plogging() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         setTrackingPath((currentArray) => [...currentArray, new window.naver.maps.LatLng(position.coords.latitude, position.coords.longitude)]);
-        // let startLatCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
-        // let startLonCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
+      });
+    }
+  };
+  const handleAllDistance = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
         var endLatCord = position.coords.latitude;
         var endLonCord = position.coords.longitude;
-        var startLatCord = endLatCord ? endLatCord : 37.537231872889365;
-        var startLonCord = endLonCord ? endLonCord : 127.06151176707532;
-        console.log(startLatCord, startLonCord, endLatCord, endLonCord);
-        console.log(trackingPath[trackingPath.length - 1], trackingPath[trackingPath.length - 1]);
+        var startLatCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
+        var startLonCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
-        console.log(dist);
         setAllDistance((currentArray) => [...currentArray, dist]);
+        console.log(startLatCord, startLonCord, endLatCord, endLonCord);
+        console.log(trackingPath[trackingPath.length - 1]);
+        console.log(dist);
       });
     }
   };
@@ -60,17 +65,22 @@ function Plogging() {
     tracker = setInterval(function () {
       getLocation();
       handleTrackingPath();
-    }, 3000);
+    }, 2000);
+  };
+  const distTracking = () => {
+    handleAllDistance();
   };
   const stopTracking = () => {
     clearInterval(tracker);
-    console.log(allDistance);
-    console.log(trackingPath);
+    clearInterval(distanceTracker);
+    // console.log(allDistance);
+    // console.log(trackingPath);
+    // console.log(trackingPath[trackingPath.length - 1].y, trackingPath[trackingPath.length - 1].x);
   };
 
-  // useEffect(() => {
-  //   getLocation();
-  // }, [myLocation]);
+  useEffect(() => {
+    distTracking();
+  }, [trackingPath]);
 
   return (
     <>
@@ -79,6 +89,7 @@ function Plogging() {
         myLocation={myLocation}
         trackingPath={trackingPath}
         tracking={tracking}
+        distTracking={distTracking}
         stopTracking={stopTracking}
         allDistance={allDistance}
       ></PloggingMap>
