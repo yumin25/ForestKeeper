@@ -51,13 +51,14 @@ function Plogging() {
       navigator.geolocation.getCurrentPosition((position) => {
         var endLatCord = position.coords.latitude;
         var endLonCord = position.coords.longitude;
-        var startLatCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
-        var startLonCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
+        var startLatCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].y : 1;
+        var startLonCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].x : 2;
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
         setAllDistance((currentArray) => [...currentArray, dist]);
         console.log(startLatCord, startLonCord, endLatCord, endLonCord);
         console.log(trackingPath[trackingPath.length - 1]);
         console.log(dist);
+        console.log(allDistance);
       });
     }
   };
@@ -73,9 +74,9 @@ function Plogging() {
   const stopTracking = () => {
     clearInterval(tracker);
     clearInterval(distanceTracker);
-    // console.log(allDistance);
-    // console.log(trackingPath);
-    // console.log(trackingPath[trackingPath.length - 1].y, trackingPath[trackingPath.length - 1].x);
+    console.log(allDistance);
+    console.log(trackingPath);
+    console.log(trackingPath[trackingPath.length - 1].y, trackingPath[trackingPath.length - 1].x);
   };
 
   useEffect(() => {
