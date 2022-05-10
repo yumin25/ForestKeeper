@@ -3,7 +3,6 @@ package com.ssafy.forestkeeper.api.controller;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearch;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
@@ -108,10 +107,10 @@ public class MountainController {
         try {
             MountainRankWrapperResponseDTO mountainRankWrapperResponseDTO = null;
 
-            if("distance".equals(by)){
+            if ("distance".equals(by)) {
                 mountainRankWrapperResponseDTO = mountainService.getMountainRankByDistance(
                     mountainCode);
-            }else if("count".equals(by)){
+            } else if ("count".equals(by)) {
                 mountainRankWrapperResponseDTO = mountainService.getMountainRankByCount(
                     mountainCode);
             }
@@ -127,16 +126,17 @@ public class MountainController {
 
     @ApiOperation(value = "산 랭킹 검색")
     @GetMapping("/recommend")
-    public ResponseEntity<?> getRank(@RequestParam("by") String by,@RequestParam("lat") double lat,@RequestParam("lng") double lng) {
+    public ResponseEntity<?> getRank(@RequestParam("by") String by,
+        @RequestParam(name = "lat", required = false) Double lat,
+        @RequestParam(name = "lng", required = false) Double lng) {
 
         try {
             RecommendWrapperResponseDTO recommendWrapperResponseDTO = null;
 
-            if("distance".equals(by)){
+            if ("distance".equals(by)) {
                 recommendWrapperResponseDTO = mountainService.getRecommendByDistance(lat, lng);
-            }else if("height".equals(by)){
-//                recommendWrapperResponseDTO = mountainService.getMountainRankByCount(
-//                    mountainCode);
+            } else if ("height".equals(by)) {
+                recommendWrapperResponseDTO = mountainService.getRecommendByHeight();
             }
 
             return ResponseEntity.status(200).body(

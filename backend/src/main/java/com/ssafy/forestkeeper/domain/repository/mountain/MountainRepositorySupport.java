@@ -60,5 +60,10 @@ public class MountainRepositorySupport {
         return tuples;
     }
 
+    public List<Tuple> findByHeight(double avg) {
 
+        NumberExpression<Double> dif = qMountain.height.subtract(avg).abs();
+
+        return jpaQueryFactory.select(dif, qMountain).from(qMountain).orderBy(dif.asc()).limit(5).fetch();
+    }
 }
