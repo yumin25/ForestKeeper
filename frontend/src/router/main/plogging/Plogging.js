@@ -42,11 +42,14 @@ function Plogging() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         setTrackingPath((currentArray) => [...currentArray, new window.naver.maps.LatLng(position.coords.latitude, position.coords.longitude)]);
-        let endLatCord = position.coords.latitude;
-        let endLonCord = position.coords.longitude;
-        let startLatCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
-        let startLonCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
+        // let startLatCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
+        // let startLonCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
+        var endLatCord = position.coords.latitude;
+        var endLonCord = position.coords.longitude;
+        var startLatCord = endLatCord ? endLatCord : 37.537231872889365;
+        var startLonCord = endLonCord ? endLonCord : 127.06151176707532;
         console.log(startLatCord, startLonCord, endLatCord, endLonCord);
+        console.log(trackingPath[trackingPath.length - 1], trackingPath[trackingPath.length - 1]);
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
         console.log(dist);
         setAllDistance((currentArray) => [...currentArray, dist]);
@@ -57,7 +60,7 @@ function Plogging() {
     tracker = setInterval(function () {
       getLocation();
       handleTrackingPath();
-    }, 1000);
+    }, 3000);
   };
   const stopTracking = () => {
     clearInterval(tracker);
