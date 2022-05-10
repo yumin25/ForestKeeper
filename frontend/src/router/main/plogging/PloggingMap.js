@@ -29,7 +29,7 @@ function MapAPI({ myLocation, trackingPath }) {
     </NaverMap>
   );
 }
-function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance }) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking }) {
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
@@ -130,6 +130,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             setIsOn(true);
             watch();
             tracking();
+            distTracking();
           }}
         />
       </button>
@@ -141,7 +142,9 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
           {allDistance.length === 0 ? (
             <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>0 km</p>
           ) : (
-            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>{allDistance.reduce(reducer)} km</p>
+            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>
+              {allDistance.reduce(reducer).toFixed(2)} km
+            </p>
           )}
           <img
             src={stop}
