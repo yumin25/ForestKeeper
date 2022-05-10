@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Bar from "../Bar";
 import "../Home.css";
 import Send from "../../../../config/Send";
-import axios from "axios";
 import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
 function ArticleDetail({ userSlice }) {
