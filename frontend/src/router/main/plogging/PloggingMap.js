@@ -139,11 +139,9 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             <ReactTimerStopwatch id="timer" isOn={isOn} className="react-stopwatch-timer__table" watchType="stopwatch" fromTime={fromTime} />
           </div>
           {allDistance.length === 0 ? (
-            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>0.00 km</p>
+            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>0 km</p>
           ) : (
-            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>
-              {allDistance.reduce(reducer).toFixed(2)} km
-            </p>
+            <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>{allDistance.reduce(reducer)} km</p>
           )}
           <img
             src={stop}
