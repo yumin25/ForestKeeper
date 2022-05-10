@@ -140,6 +140,25 @@ public class MountainServiceImpl implements MountainService {
 
     @Override
     public RecommendWrapperResponseDTO getRecommendByHeight() {
-        return null;
+
+        double avg = ploggingRepositorySupport.getAvg(userRepository.findByEmailAndDelete(
+            SecurityContextHolder.getContext().getAuthentication().getName(), false).get());
+
+        List<Tuple> recommendList = mountainRepositorySupport.findByHeight(avg);
+
+        List<RecommendResponseDTO> nearRecommendResponseDTOList = new ArrayList<>();
+
+        recommendList.forEach(near ->
+            nearRecommendResponseDTOList
+                .add(RecommendResponseDTO.builder()
+                    .mountainCode(near.get(qMountain).getCode())
+                    .address(near.get(qMountain).getAddress())
+                    .name(near.get(qMountain).getName())
+                    .value(Double.parseDouble(near.toArray()[0].toString()))
+                    .build())
+        );
+
+        return RecommendWrapperResponseDTO.builder()
+            .recommendResponseDTOList(nearRecommendResponseDTOList).build();
     }
 }
