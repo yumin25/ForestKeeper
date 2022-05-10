@@ -46,9 +46,9 @@ function Plogging() {
         let endLonCord = position.coords.longitude;
         let startLatCord = endLatCord;
         let startLonCord = endLonCord;
-        // console.log(startLatCord, startLonCord, endLatCord, endLonCord);
+        console.log(startLatCord, startLonCord, endLatCord, endLonCord);
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
-        // console.log(dist);
+        console.log(dist);
         setAllDistance((currentArray) => [...currentArray, dist]);
       });
     }
@@ -61,8 +61,8 @@ function Plogging() {
   };
   const stopTracking = () => {
     clearInterval(tracker);
-    // console.log(allDistance);
-    // console.log(trackingPath);
+    console.log(allDistance);
+    console.log(trackingPath);
   };
 
   // useEffect(() => {
