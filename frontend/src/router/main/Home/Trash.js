@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import "./Home.css";
 import { Route, Routes } from "react-router-dom";
+import Send from "../../../config/Send";
+import axios from "axios";
 
-function NaverMapAPI({ myLocation }) {
+function NaverMapAPI() {
   const navermaps = window.naver.maps;
-
   return (
     <NaverMap
       mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
@@ -15,28 +16,34 @@ function NaverMapAPI({ myLocation }) {
         position: "relative",
         zIndex: 1,
       }}
-      center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
+      center={{ lat: 37.554722, lng: 126.970833 }} // 지도 초기 위치
       defaultZoom={13} // 지도 초기 확대 배율
-    >
-      {myLocation.latitude !== 37.554722 &&
-        myLocation.longitude !== 126.970833 && (
-          <Marker
-            key={1}
-            position={
-              new navermaps.LatLng(myLocation.latitude, myLocation.longitude)
-            }
-          />
-        )}
-    </NaverMap>
+    ></NaverMap>
   );
 }
 
-function Map({ getLocation, myLocation }) {
+function Trash() {
+  axios.defaults.withCredentials = true;
+  function getTrash() {
+    Send.get(
+      `/trash`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <>
       <div id="map">
         <button
-          onClick={() => (document.location.href = "/recommend")}
+          onClick={() => getTrash()}
           style={{
             position: "absolute",
             height: "5vh",
@@ -51,25 +58,7 @@ function Map({ getLocation, myLocation }) {
             zIndex: 2,
           }}
         >
-          추천 등산로
-        </button>
-        <button
-          onClick={getLocation}
-          style={{
-            position: "absolute",
-            height: "5vh",
-            width: "18vw",
-            borderRadius: 15,
-            border: "none",
-            boxShadow: "0px 5px 10px 2px darkgray",
-            background: "white",
-            color: "#37CD8D",
-            marginTop: "1.5vh",
-            marginLeft: "35vw",
-            zIndex: 2,
-          }}
-        >
-          내 위치
+          쓰레기통 찾기
         </button>
 
         <RenderAfterNavermapsLoaded
@@ -77,7 +66,7 @@ function Map({ getLocation, myLocation }) {
           error={<p>Maps Load Error</p>}
           loading={<p>Maps Loading...</p>}
         >
-          <NaverMapAPI myLocation={myLocation}></NaverMapAPI>
+          <NaverMapAPI></NaverMapAPI>
         </RenderAfterNavermapsLoaded>
       </div>
     </>
