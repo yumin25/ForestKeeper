@@ -44,8 +44,8 @@ function Plogging() {
         setTrackingPath((currentArray) => [...currentArray, new window.naver.maps.LatLng(position.coords.latitude, position.coords.longitude)]);
         let endLatCord = position.coords.latitude;
         let endLonCord = position.coords.longitude;
-        let startLatCord = endLatCord;
-        let startLonCord = endLonCord;
+        let startLatCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].y : position.coords.latitude;
+        let startLonCord = trackingPath[0] ? trackingPath[trackingPath.length - 1].x : position.coords.longitude;
         console.log(startLatCord, startLonCord, endLatCord, endLonCord);
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
         console.log(dist);
