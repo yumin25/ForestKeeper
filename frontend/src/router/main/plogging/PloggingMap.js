@@ -147,7 +147,14 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
       <button id="stop" className="btn-recording">
         <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center" }}>
           <div>
-            <ReactTimerStopwatch id="timer" isOn={isOn} className="react-stopwatch-timer__table" watchType="stopwatch" fromTime={fromTime} />
+            <ReactTimerStopwatch
+              id="timer"
+              isOn={isOn}
+              className="react-stopwatch-timer__table"
+              watchType="stopwatch"
+              fromTime={fromTime}
+              style={{ width: "16.5vw !important", height: "12vw !important" }}
+            />
           </div>
           {allDistance.length === 0 ? (
             <p style={{ color: "white", fontSize: "5vw", fontWeight: "700", marginTop: 0, marginBottom: 0 }}>0 km</p>
