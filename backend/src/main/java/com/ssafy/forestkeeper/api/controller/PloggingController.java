@@ -55,26 +55,26 @@ public class PloggingController {
     @PostMapping
     public ResponseEntity<?> registerPlogging(@RequestPart(value = "dto", required = true) PloggingRegisterDTO ploggingRegisterDTO,
     		@RequestPart(value = "image", required = false) MultipartFile multipartFile) {
-        PloggingExperienceResponseDTO ploggingExperienceResponseDTO = null;
+//        PloggingExperienceResponseDTO ploggingExperienceResponseDTO = null;
         
         try {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
-        	if(!multipartFile.isEmpty()) {
-                ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
-        		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
-        		ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
-        	}
-            else {
-                ploggingExperienceResponseDTO = PloggingExperienceResponseDTO.builder().exp(0).build();
-            }
+//        	if(multipartFile != null) {
+//                ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
+//        		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
+//        		ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
+//        	}
+//            else {
+//                ploggingExperienceResponseDTO = PloggingExperienceResponseDTO.builder().exp(0).build();
+//            }
         	
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
-        //return ResponseEntity.status(201).body(BaseResponseDTO.of("플로깅 등록에 성공했습니다.", 201));
-        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 201, ploggingExperienceResponseDTO));
+        return ResponseEntity.status(201).body(BaseResponseDTO.of("플로깅 등록에 성공했습니다.", 201));
+//        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 201, ploggingExperienceResponseDTO));
     }
 
     @ApiOperation(value = "플로깅 상세 조회")
