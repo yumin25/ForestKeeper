@@ -28,7 +28,6 @@
 }
 
 .react-stopwatch-timer__table {
-  /* position: absolute; */
   width: 16.5vw;
   height: 12vw;
   color: white;
@@ -42,7 +41,7 @@
     margin-top: 83vh;
     margin-left: 85vw;
     opacity: 0;
-    z-index: 1;
+    z-index: 2;
   }
   to {
     width: 75vw;
