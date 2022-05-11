@@ -1,5 +1,7 @@
 package com.ssafy.forestkeeper.application.dto.request.plogging;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModel;
@@ -31,4 +33,9 @@ public class PloggingRegisterDTO {
     @ApiModelProperty(name = "산 코드")
     @NotBlank
     private String mountainCode;
+    
+    @ApiModelProperty(name = "이동 좌표")
+    @NotBlank
+    private List<Coordinates> coords;
+    
 }

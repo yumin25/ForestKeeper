@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.forestkeeper.application.dto.request.plogging.Coordinates;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
@@ -52,6 +53,30 @@ public class PloggingServiceImpl implements PloggingService{
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
+			
+		Plogging plogging = Plogging.builder()
+								.distance(ploggingRegisterDTO.getDistance())
+								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))
+								.endTime(LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter))
+								.exp(0L)
+								.durationTime(getDuration(duration))
+								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
+								.mountain(mountain)
+								.coords(getCoords(ploggingRegisterDTO.getCoords()))
+								.build();
+		return ploggingRepository.save(plogging);
+	}
+	
+	public String getCoords(List<Coordinates> list) {
+    	StringBuilder sb = new StringBuilder("/");
+    	for(Coordinates c : list) {
+    		sb.append(c.getX()).append(",").append(c.getY()).append("/");
+    	}
+    	
+    	return sb.toString();
+	}
+	
+	public String getDuration(Duration duration) {
 		StringBuilder sb = new StringBuilder();
 		String HM = duration.toString().split("T")[1];
 		if(duration.toString().contains("H")) {
@@ -62,16 +87,7 @@ public class PloggingServiceImpl implements PloggingService{
 			sb.append("0 : ");
 			sb.append(HM.split("M")[0]);
 		}
-		Plogging plogging = Plogging.builder()
-								.distance(ploggingRegisterDTO.getDistance())
-								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))
-								.endTime(LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter))
-								.exp(0L)
-								.durationTime(sb.toString())
-								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
-								.mountain(mountain)
-								.build();
-		return ploggingRepository.save(plogging);
+		return sb.toString();
 	}
 
 	@Override
