@@ -8,8 +8,8 @@ const Recommend = ({ title, recommendList }) => {
     <div>
       {title}
       <Swiper
-        slidesPerView={4}
-        spaceBetween={30}
+        slidesPerView={1.6}
+        spaceBetween={10}
         centeredSlides={true}
         loop={true}
         className="mySwiper"

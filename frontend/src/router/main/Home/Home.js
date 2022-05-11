@@ -7,6 +7,8 @@ import { Route, Routes } from "react-router-dom";
 import SearchInput from "./SearchInput";
 import Map from "./Map";
 import SearchList from "./SearchList";
+import Recommend from "./Recommend";
+import Send from "../../../config/Send";
 
 function Home() {
   const [pageState, setPageState] = useState("home");
@@ -16,6 +18,37 @@ function Home() {
     longitude: 126.970833,
   });
   const [mountainCode, setMountainCode] = useState();
+  const [nearMountain, setNearMountain] = useState([]);
+  const [avgMountain, setAvgMountain] = useState([]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        Send.get("/mountain/recommend", {
+          params: {
+            by: "distance",
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        }).then(({ data }) => {
+          console.log(data.recommendResponseDTOList);
+          setNearMountain(data.recommendResponseDTOList)
+        });
+      });
+    } else {
+      window.alert("현재위치를 알수 없습니다.");
+    }
+
+    Send.get("/mountain/recommend", {
+      params: {
+        by: "height",
+      },
+    }).then(({ data }) => {
+      console.log(data.recommendResponseDTOList);
+      setAvgMountain(data.recommendResponseDTOList)
+    });
+  }, []);
+
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -71,6 +104,7 @@ function Home() {
             onSubmit={onSubmit}
             goSearch={goSearch}
           ></SearchInput>
+          <Recommend title="방문 했던 산과 비슷한 높이" recommendList={nearMountain} />
           <Map getLocation={getLocation} myLocation={myLocation}></Map>
         </>
       ) : (
