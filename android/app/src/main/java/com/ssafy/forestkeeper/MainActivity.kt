@@ -6,7 +6,6 @@ import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -23,7 +22,6 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    val MY_PERMISSION_ACCESS_ALL = 100
     var cameraPath = ""
     var mWebViewImageUpload: ValueCallback<Array<Uri>>? = null
 
@@ -34,12 +32,14 @@ class MainActivity : AppCompatActivity() {
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
         }
         else {
             val permissions: Array<String> = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
             ActivityCompat.requestPermissions(this, permissions, 0)
@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 callback.invoke(origin, true, false)
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri>>?,
