@@ -42,8 +42,22 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     stopButton.style.animation = "reverse-stretch 1s both";
   };
   const timeRecord = () => {
-    const timeValue = document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText;
-    console.log(timeValue);
+    let timeHour = Number(watch().slice(11, 13)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(0, 2));
+    let timeMin = Number(watch().slice(14, 16)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(3, 5));
+    if (timeMin >= 60) {
+      timeHour += 1;
+      timeMin -= 60;
+    }
+    timeHour = String(timeHour);
+    timeMin = String(timeMin);
+    if (timeHour.length < 2) {
+      timeHour = "0" + timeHour;
+    }
+    if (timeMin.length < 2) {
+      timeMin = "0" + timeMin;
+    }
+    const endTime = watch().slice(0, 11) + timeHour + ":" + timeMin;
+    return endTime;
   };
 
   const makeZeroNum = (num, n) => {
@@ -68,31 +82,27 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
 
     var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
     // + ":" + makeZeroNum(s, 2);
-    console.log(result);
+    return result;
   };
   // 요청보내기
-  const imgFile =
-    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDExMDVfMTg2%2FMDAxNjA0NTczODQzMDUy.6Rfm1wBLiJqX0j_jacirUtOQPuo6kIz89XZ3-JRg0qcg.9Yjpdz3fQJH7F2HIiXQ4u8uncSKvAKjX0-iKRZFWgi4g.JPEG.violet110113%2Fy8hfb1bf61czzvoru310.jpg&type=sc960_832";
   const recordPlogging = () => {
-    let formData = new FormData();
-    formData.append("image", imgFile);
-    // console.log(imgFile.src);
-
     const data = {
-      mountainName: "아차산",
-      startTime: "2022-05-04 11:04",
-      endTime: "2022-05-04 11:14",
-      distance: "1.1",
+      mountainName: "2758d668-3c79-4f9d-bbd5-4471932e5706",
+      startTime: watch(),
+      endTime: timeRecord(),
+      distance: allDistance.reduce(reducer).toFixed(2),
+      coords: trackingPath ? trackingPath : [],
     };
-    formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    console.log(data);
+    // formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
-    File.post("/plogging", formData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    // File.post("/plogging", formData)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
   };
 
   return (
@@ -153,9 +163,8 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             onClick={() => {
               endRecording();
               setIsOn(false);
-              timeRecord();
               stopTracking();
-              // recordPlogging();
+              recordPlogging();
             }}
           />
         </div>

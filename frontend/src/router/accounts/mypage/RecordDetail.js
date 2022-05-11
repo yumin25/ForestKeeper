@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../../../res/img/logo.png";
+import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 
 function RecordDetail() {
   const navigate = useNavigate();
@@ -45,7 +46,29 @@ function RecordDetail() {
                 </div>
               </div>
             </div>
-            <img src={logo} alt="img" style={{ margin: "auto", height: "65vw", width: "65vw" }} />
+            {/* <img src={logo} alt="img" style={{ margin: "auto", height: "65vw", width: "65vw" }} /> */}
+            {/* <RenderAfterNavermapsLoaded
+              ncpClientId={"cechhl2v8i"} // 자신의 네이버 계정에서 발급받은 Client ID
+              error={<p>Maps Load Error</p>}
+              loading={<p>Maps Loading...</p>}
+            >
+              <NaverMap
+                mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
+                style={{
+                  width: "65vw", // 네이버지도 가로 길이
+                  height: "65vh", // 네이버지도 세로 길이
+                  position: "relative",
+                  zIndex: 1,
+                }}
+                center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
+                defaultZoom={13} // 지도 초기 확대 배율
+              >
+                {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
+                  <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
+                )}
+                <Polyline path={trackingPath} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
+              </NaverMap>
+            </RenderAfterNavermapsLoaded> */}
           </div>
         </>
       </div>
