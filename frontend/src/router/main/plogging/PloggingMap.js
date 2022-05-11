@@ -86,23 +86,24 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
   };
   // 요청보내기
   const recordPlogging = () => {
+    const formData = new FormData();
     const data = {
-      mountainName: "2758d668-3c79-4f9d-bbd5-4471932e5706",
+      mountainCode: "114100401",
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
-      coords: trackingPath ? trackingPath : [],
+      coords: trackingPath ? trackingPath[0].slice(0, 10) : [],
     };
     console.log(data);
-    // formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
-    // File.post("/plogging", formData)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    File.post("/plogging", formData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
