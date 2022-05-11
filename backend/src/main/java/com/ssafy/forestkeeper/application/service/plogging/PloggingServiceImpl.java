@@ -81,7 +81,7 @@ public class PloggingServiceImpl implements PloggingService{
 		Image image = imageRepository.findByPloggingId(ploggingId).orElse(null);
 		String imagePath;
 		if(image == null) imagePath = "";
-		else imagePath = hosting + image.getSavedFileName();
+		else imagePath = hosting + "plogging/" +image.getSavedFileName();
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
@@ -138,6 +138,7 @@ public class PloggingServiceImpl implements PloggingService{
 				.build());
 	}
 
+	//산상세페이지 플로깅 관련 정보
 	@Override
 	public MountainPloggingInfoResponseDTO getMountainPlogging(String mountainCode) {
 		Mountain mountain = mountainRepository.findByCode(mountainCode)
