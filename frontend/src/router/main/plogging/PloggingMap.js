@@ -159,7 +159,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
           <img
             src={stop}
             alt=""
-            style={{ zIndex: 3, height: "3.5vh", width: "3.5vh" }}
+            style={{ zIndex: 1, height: "3.5vh", width: "3.5vh" }}
             onClick={() => {
               endRecording();
               setIsOn(false);
