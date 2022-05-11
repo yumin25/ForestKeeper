@@ -131,7 +131,7 @@ public class MountainServiceImpl implements MountainService {
                     .mountainCode(near.get(qMountain).getCode())
                     .address(near.get(qMountain).getAddress())
                     .name(near.get(qMountain).getName())
-                    .value(Double.parseDouble(near.toArray()[0].toString()))
+                    .value(Math.round(Double.parseDouble(near.toArray()[0].toString())*10)/10.0)
                     .build()));
 
         return RecommendWrapperResponseDTO.builder()
@@ -154,7 +154,7 @@ public class MountainServiceImpl implements MountainService {
                     .mountainCode(near.get(qMountain).getCode())
                     .address(near.get(qMountain).getAddress())
                     .name(near.get(qMountain).getName())
-                    .value(Double.parseDouble(near.toArray()[0].toString()))
+                    .value(near.get(qMountain).getHeight())
                     .build())
         );
 
