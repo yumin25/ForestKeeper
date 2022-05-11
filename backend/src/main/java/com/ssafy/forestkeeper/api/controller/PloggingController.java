@@ -57,7 +57,7 @@ public class PloggingController {
         PloggingExperienceResponseDTO ploggingExperienceResponseDTO;
         try {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
-        	if(multipartFile !=null) {
+        	if(!multipartFile.isEmpty()) {
                 ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
         		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
         		ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
