@@ -69,12 +69,12 @@ public class UserInfoController {
     
     @ApiOperation(value = "방문한 산 목록 조회")
     @GetMapping("/{mountainName}")
-    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 이름", required = true) @PathVariable @NotBlank String mountainName) {
+    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 코드", required = true) @PathVariable @NotBlank String mountainCode) {
 
     	PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;
     	
         try {
-        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainName);
+        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

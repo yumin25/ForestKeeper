@@ -54,7 +54,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
-                        		.imagePath(hosting + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
                                 .build()
                 )
         );
@@ -81,9 +81,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 	    return MountainNameList;
 	}
 	
+	//유저상세 페이지내 산별 플로깅 목록
 	@Override
-	public PloggingListWrapperResponseDTO getPloggingInMountain(String mountainName) {
-		Mountain mountain = mountainRepository.findByName(mountainName)
+	public PloggingListWrapperResponseDTO getPloggingInMountain(String mountainCode) {
+		Mountain mountain = mountainRepository.findByCode(mountainCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
         List<Plogging> ploggingList = ploggingRepository.findByUserIdAndMountainId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),mountain.getId())
                 .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
@@ -99,7 +100,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
-                        		.imagePath(hosting + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
                                 .build()
                 )
         );
