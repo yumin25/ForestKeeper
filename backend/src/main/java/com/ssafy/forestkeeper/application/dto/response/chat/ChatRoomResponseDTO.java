@@ -1,5 +1,6 @@
 package com.ssafy.forestkeeper.application.dto.response.chat;
 
+import com.ssafy.forestkeeper.application.dto.chat.ChatMessageDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,11 +10,11 @@ import lombok.ToString;
 
 import java.util.List;
 
-@ApiModel("ChatRoomWithMessageResponseDTO")
+@ApiModel("ChatRoomResponseDTO")
 @Builder
 @Getter
 @ToString
-public class ChatRoomWithMessageResponseDTO extends BaseResponseDTO {
+public class ChatRoomResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "채팅방 ID")
     private String roomId;
@@ -25,9 +26,9 @@ public class ChatRoomWithMessageResponseDTO extends BaseResponseDTO {
     private List<ChatRoomUserResponseDTO> userList;
 
     @ApiModelProperty(name = "메시지")
-    private List<ChatMessageResponseDTO> messageList;
+    private List<ChatMessageDTO> messageList;
 
-    public static ChatRoomWithMessageResponseDTO of(String message, Integer statusCode, ChatRoomWithMessageResponseDTO chatRoomResponseDTO) {
+    public static ChatRoomResponseDTO of(String message, Integer statusCode, ChatRoomResponseDTO chatRoomResponseDTO) {
 
         chatRoomResponseDTO.setStatusCode(statusCode);
         chatRoomResponseDTO.setMessage(message);
