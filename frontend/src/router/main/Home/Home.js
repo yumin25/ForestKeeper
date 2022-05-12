@@ -16,6 +16,8 @@ function Home() {
     longitude: 126.970833,
   });
   const [mountainCode, setMountainCode] = useState();
+ 
+
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -71,6 +73,7 @@ function Home() {
             onSubmit={onSubmit}
             goSearch={goSearch}
           ></SearchInput>
+       
           <Map getLocation={getLocation} myLocation={myLocation}></Map>
         </>
       ) : (

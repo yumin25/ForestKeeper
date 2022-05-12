@@ -57,7 +57,7 @@ public class UserController {
             else if (result == 4094) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 이메일로 가입된 계정이 이미 존재합니다.", 409));
             else if (result == 4095) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
             
-            if(multipartFile != null) {
+            if(!multipartFile.isEmpty()) {
             	String savedFileName = s3Service.uploadFileToS3("user", multipartFile);
             	userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
             }

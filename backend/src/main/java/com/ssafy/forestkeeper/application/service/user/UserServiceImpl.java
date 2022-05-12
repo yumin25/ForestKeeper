@@ -80,13 +80,21 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
         Image image = imageRepository.findByUserId(user.getId()).orElse(null);
         String imagePath;
-        if(image == null) imagePath = "";
-        else imagePath = hosting + image.getSavedFileName();
+        String thumbnailPath;
+        if(image == null) {
+        	imagePath = "";
+        	thumbnailPath = "";
+        }
+        else {
+        	imagePath = hosting + "user/" + image.getSavedFileName();
+        	thumbnailPath = hosting + "thumb/" + image.getSavedFileName();
+        }
         return UserInfoDTO.builder()
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .imagePath(imagePath)
+                .thumbnailPath(thumbnailPath)
                 .build();
     }
 

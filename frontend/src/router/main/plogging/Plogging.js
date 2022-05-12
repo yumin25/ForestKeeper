@@ -60,6 +60,7 @@ function Plogging() {
     let endLat = degreesToRadians(endLatCord);
     let endLon = degreesToRadians(endLonCord);
     const Radius = 6371;
+
     let distance =
       Math.acos(
         Math.sin(startLat) * Math.sin(endLat) +
@@ -92,6 +93,7 @@ function Plogging() {
       navigator.geolocation.getCurrentPosition((position) => {
         var endLatCord = position.coords.latitude;
         var endLonCord = position.coords.longitude;
+
         var startLatCord =
           trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].y : 1;
         var startLonCord =
@@ -102,6 +104,7 @@ function Plogging() {
           endLatCord,
           endLonCord
         );
+
         if (dist < 1) {
           setAllDistance((currentArray) => [...currentArray, dist]);
         }
