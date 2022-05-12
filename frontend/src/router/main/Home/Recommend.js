@@ -3,10 +3,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import RecommendCard from "./RecommendCard";
 
-const Recommend = ({ title, recommendList }) => {
+const Recommend = ({ title, recommendList, near }) => {
   return (
     <div>
-      {title}
+      <div style={{margin:"5%"}}>{title}</div>
       <Swiper
         slidesPerView={1.6}
         spaceBetween={10}
@@ -14,11 +14,13 @@ const Recommend = ({ title, recommendList }) => {
         loop={true}
         className="mySwiper"
       >
-        {recommendList.map((mountain) => (
-          <SwiperSlide>
-            <RecommendCard mountain={mountain} />
-          </SwiperSlide>
-        ))}
+        {recommendList.length > 0
+          ? recommendList.map((mountain) => (
+              <SwiperSlide>
+                <RecommendCard mountain={mountain} near={near} />
+              </SwiperSlide>
+            ))
+          : "방문한 산이 없습니다."}
       </Swiper>
     </div>
   );

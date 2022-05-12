@@ -18,10 +18,12 @@ function Home() {
     longitude: 126.970833,
   });
   const [mountainCode, setMountainCode] = useState();
-  const [nearMountain, setNearMountain] = useState([]);
-  const [avgMountain, setAvgMountain] = useState([]);
+  const [nearMountain, setNearMountain] = useState([]); // 근처 산 리스트
+  const [avgMountain, setAvgMountain] = useState([]); // 방문한 평균높이 산 리스트
 
   useEffect(() => {
+
+    // 근처 산 리스트 요청
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         Send.get("/mountain/recommend", {
@@ -39,6 +41,7 @@ function Home() {
       window.alert("현재위치를 알수 없습니다.");
     }
 
+    // 비슷한 높이 산 요청
     Send.get("/mountain/recommend", {
       params: {
         by: "height",
@@ -46,6 +49,8 @@ function Home() {
     }).then(({ data }) => {
       console.log(data.recommendResponseDTOList);
       setAvgMountain(data.recommendResponseDTOList)
+    }).catch(err=>{
+
     });
   }, []);
 
@@ -104,7 +109,13 @@ function Home() {
             onSubmit={onSubmit}
             goSearch={goSearch}
           ></SearchInput>
-          <Recommend title="방문 했던 산과 비슷한 높이" recommendList={nearMountain} />
+         
+         {/* 추천 산 카드 확인 */}
+          {/* 
+          <Recommend title="근처 산" recommendList={nearMountain} near={true}/>  
+          <Recommend title="방문했던 평균 높이 산" recommendList={avgMountain} near={false}/> 
+          */}
+       
           <Map getLocation={getLocation} myLocation={myLocation}></Map>
         </>
       ) : (
