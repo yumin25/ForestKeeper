@@ -92,7 +92,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
-      coords: trackingPath ? trackingPath[0].slice(0, 10) : [],
+      coords: trackingPath ? trackingPath : [],
     };
     console.log(data);
     formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
