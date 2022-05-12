@@ -1,40 +1,40 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.chat.ChatMessageRequestDTO;
+import com.ssafy.forestkeeper.application.dto.chat.ChatMessageDTO;
 import com.ssafy.forestkeeper.application.service.chat.ChatMessageService;
+import com.ssafy.forestkeeper.util.redis.RedisPublisher;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+@Api(value = "Chat API", tags = {"Chat"})
 @CrossOrigin
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final SimpMessagingTemplate template;
+    private final RedisPublisher redisPublisher;
 
     private final ChatMessageService chatMessageService;
 
     @MessageMapping("/chat/enter")
-    public void enter(ChatMessageRequestDTO chatMessageRequestDTO) {
+    @ApiOperation(value = "채팅방 입장")
+    public void enter(String roomId) {
 
-        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageService.enterChatRoom(chatMessageRequestDTO));
+        chatMessageService.enterChatRoom(roomId);
 
     }
 
     @MessageMapping("/chat/room")
-//    public void send(ChatMessageRequestDTO chatMessageRequestDTO, @Header("Authorization") String accessToken) {
-    public void send(ChatMessageRequestDTO chatMessageRequestDTO) {
+    @ApiOperation(value = "메시지 전송")
+    public void send(ChatMessageDTO chatMessageDTO) {
 
-//        System.out.println("AT : " + accessToken);
-        System.out.println(chatMessageRequestDTO);
+        chatMessageService.setChatMessageValue(chatMessageDTO.getRoomId(), chatMessageDTO);
 
-//        chatMessageService.sendChatMessage(chatMessageRequestDTO, accessToken);
-
-        template.convertAndSend("/topic/room/" + chatMessageRequestDTO.getRoomId(), chatMessageRequestDTO);
+        redisPublisher.publish(chatMessageService.getTopic(chatMessageDTO.getRoomId()), chatMessageDTO);
 
     }
 

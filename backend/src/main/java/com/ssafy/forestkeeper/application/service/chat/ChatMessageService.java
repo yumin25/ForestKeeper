@@ -1,19 +1,30 @@
 package com.ssafy.forestkeeper.application.service.chat;
 
-import com.ssafy.forestkeeper.application.dto.request.chat.ChatMessageRequestDTO;
+import com.ssafy.forestkeeper.application.dto.chat.ChatMessageDTO;
 import com.ssafy.forestkeeper.application.dto.response.chat.ChatMessageResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.chat.ChatRoom;
+import org.springframework.data.redis.listener.ChannelTopic;
 
 import java.util.List;
 
 public interface ChatMessageService {
 
-    ChatMessageResponseDTO enterChatRoom(ChatMessageRequestDTO message);
+    void createChatRoom(ChatRoom chatRoom);
 
-    ChatMessageResponseDTO sendChatMessage(ChatMessageRequestDTO message, String accessToken);
+    void enterChatRoom(String roomId);
 
-    List<ChatMessageResponseDTO> getChatMessageList(ChatRoom chatRoom);
+    ChannelTopic getTopic(String roomId);
 
-    ChatMessageResponseDTO getLastChatMessage(ChatRoom chatRoom);
+    List<ChatMessageDTO> getChatMessageValue(String key);
+
+    void setChatMessageValue(String key, ChatMessageDTO value);
+
+    void setUserEnterInfo(String sessionId, String roomId);
+
+    String getUserEnterRoomId(String sessionId);
+
+    void removeUserEnterInfo(String sessionId);
+
+    ChatMessageResponseDTO getLastChatMessageValue(String roomId);
 
 }

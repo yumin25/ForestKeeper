@@ -14,16 +14,19 @@ import java.time.LocalDateTime;
 @ToString
 public class ChatMessageResponseDTO {
 
+    @ApiModelProperty(name = "사용자 ID")
+    private String userId;
+
+    @ApiModelProperty(name = "사용자 닉네임")
+    private String nickname;
+
     @ApiModelProperty(name = "메시지 내용")
     private String content;
 
     @ApiModelProperty(name = "메시지 보낸 시간")
     private LocalDateTime sendTime;
 
-    @ApiModelProperty(name = "메시지 보낸 사용자 ID")
-    private String userId;
-
-    @ApiModelProperty(name = "메시지 보낸 사용자 닉네임")
-    private String nickname;
+    @ApiModelProperty(name = "메시지 삭제 여부")
+    private boolean delete;
 
 }
