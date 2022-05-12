@@ -40,7 +40,9 @@ public class GlobalControllerAdvice {
     })
     public ResponseEntity<?> handleNotFoundException(RuntimeException e, HttpServletRequest req) {
 
-        notify(e, e.getMessage(), req);
+        System.out.println("404 : " + e.getMessage());
+
+//        notify(e, e.getMessage(), req);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDTO.of(e.getMessage(), 404));
 
@@ -62,18 +64,22 @@ public class GlobalControllerAdvice {
                     .append(". ");
         }
 
-        notify(e, stringBuilder.toString(), req);
+        System.out.println("409 : " + e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(stringBuilder.toString(), 409));
+//        notify(e, stringBuilder.toString(), req);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponseDTO.of(stringBuilder.toString(), 400));
 
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException e, HttpServletRequest req) {
 
+        System.out.println("401 : " + e.getMessage());
+
         String message = "회원 정보가 없습니다.";
 
-        notify(e, message, req);
+//        notify(e, message, req);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseDTO.of(message, 401));
 
@@ -82,9 +88,11 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
 
+        System.out.println("403 : " + e.getMessage());
+
         String message = "권한이 없습니다.";
 
-        notify(e, message, req);
+//        notify(e, message, req);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseResponseDTO.of(message, 403));
 
@@ -93,7 +101,9 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e, HttpServletRequest req) {
 
-        notify(e, e.getMessage(), req);
+        System.out.println("409 : " + e.getMessage());
+
+//        notify(e, e.getMessage(), req);
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(e.getMessage(), 409));
 
