@@ -2,15 +2,17 @@ package com.ssafy.forestkeeper.application.dto.request.chat;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
 
-@ApiModel("ChatRoomRegisterPostDTO")
+@ApiModel("ChatRoomRegisterRequestDTO")
+@Builder
 @Getter
 @ToString
-public class ChatRoomRegisterPostDTO {
+public class ChatRoomRegisterRequestDTO {
 
     @ApiModelProperty(name = "채팅방 이름")
     private String name;

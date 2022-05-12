@@ -1,10 +1,10 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.chat.ChatRoomRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.chat.ChatRoomRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.request.chat.ChatRoomUserRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.chat.ChatRoomGetListWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.chat.ChatRoomWithMessageResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.chat.ChatRoomResponseDTO;
 import com.ssafy.forestkeeper.application.service.chat.ChatRoomService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @Api(value = "Chat Room API", tags = {"Chat Room"})
 @CrossOrigin("*")
@@ -26,11 +28,10 @@ public class ChatRoomController {
     @ApiOperation(value = "채팅방 생성")
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> create(
-            @ApiParam(value = "채팅방 정보") @RequestBody ChatRoomRegisterPostDTO chatRoomRegisterPostDTO
+            @ApiParam(value = "채팅방 정보") ChatRoomRegisterRequestDTO chatRoomRegisterRequestDTO
     ) {
 
-        System.out.println(chatRoomRegisterPostDTO);
-        chatRoomService.createChatRoom(chatRoomRegisterPostDTO);
+        chatRoomService.createChatRoom(chatRoomRegisterRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDTO.of("채팅방이 생성되었습니다.", 201));
 
@@ -47,13 +48,11 @@ public class ChatRoomController {
 
     }
 
-    @ApiOperation(value = "채팅방 조회")
-    @GetMapping("/{roomId}")
+    @ApiOperation(value = "채팅방 입장")
+    @PostMapping("/{roomId}")
     public ResponseEntity<? extends BaseResponseDTO> get(@ApiParam(value = "채팅방 ID") @PathVariable String roomId) {
 
-        ChatRoomWithMessageResponseDTO chatRoomWithMessageResponseDTO = chatRoomService.getChatRoom(roomId);
-
-        return ResponseEntity.ok(ChatRoomWithMessageResponseDTO.of("채팅방 조회에 성공했습니다.", 200, chatRoomWithMessageResponseDTO));
+        return ResponseEntity.ok(ChatRoomResponseDTO.of("채팅방 입장에 성공했습니다.", 200, chatRoomService.enterChatRoom(roomId)));
 
     }
 
