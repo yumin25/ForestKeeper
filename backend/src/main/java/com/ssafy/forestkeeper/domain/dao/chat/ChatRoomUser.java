@@ -15,9 +15,9 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserChatRoomJoin extends BaseEntity {
+public class ChatRoomUser extends BaseEntity {
 
-    @Column(name = "user_chat_room_join_is_deleted")
+    @Column(name = "chat_room_user_is_deleted")
     private boolean delete;
 
     @ManyToOne
