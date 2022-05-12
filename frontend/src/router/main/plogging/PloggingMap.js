@@ -170,6 +170,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
     </div>
   );
 }
+
 function PloggingMap({
   getLocation,
   myLocation,
@@ -206,6 +207,7 @@ function PloggingMap({
           .getElementsByClassName("react-stopwatch-timer__table")[0]
           .innerText.slice(3, 5)
       );
+
     if (timeMin >= 60) {
       timeHour += 1;
       timeMin -= 60;
@@ -263,7 +265,16 @@ function PloggingMap({
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
-      coords: trackingPath ? trackingPath[0].slice(0, 10) : [],
+      // <<<<<<< HEAD
+      //       coords: trackingPath ? trackingPath[0].slice(0, 10) : [],
+      //     };
+      //     console.log(data);
+      //     formData.append(
+      //       "dto",
+      //       new Blob([JSON.stringify(data)], { type: "application/json" })
+      //     );
+      // =======
+      coords: trackingPath ? trackingPath : [],
     };
     console.log(data);
     formData.append(
@@ -328,7 +339,6 @@ function PloggingMap({
             watch();
             tracking();
             distTracking();
-            console.log("눌림");
           }}
         />
       </button>
