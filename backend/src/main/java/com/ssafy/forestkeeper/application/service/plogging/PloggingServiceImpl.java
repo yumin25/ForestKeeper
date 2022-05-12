@@ -68,7 +68,7 @@ public class PloggingServiceImpl implements PloggingService{
 	}
 	
 	public String getCoords(List<Coordinates> list) {
-    	StringBuilder sb = new StringBuilder("/");
+    	StringBuilder sb = new StringBuilder();
     	for(Coordinates c : list) {
     		sb.append(c.getX()).append(",").append(c.getY()).append("/");
     	}
@@ -98,6 +98,14 @@ public class PloggingServiceImpl implements PloggingService{
 		String imagePath;
 		if(image == null) imagePath = "";
 		else imagePath = hosting + "plogging/" +image.getSavedFileName();
+		
+		List<Coordinates> list = new ArrayList<>();
+		String[] coords = plogging.getCoords().split("/");
+		String[] xy;
+		for(String s : coords) {
+			xy = s.split(",");
+			list.add(new Coordinates(xy[0],xy[1],xy[0],xy[1]));
+		}
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
@@ -105,6 +113,7 @@ public class PloggingServiceImpl implements PloggingService{
 				.time(plogging.getDurationTime())
 				.exp(plogging.getExp())
 				.imagePath(imagePath)
+				.coords(list)
 				.build();
 	}
 

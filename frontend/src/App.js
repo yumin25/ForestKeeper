@@ -13,6 +13,7 @@ import Write from "./router/main/Home/MtnDetail/Write";
 import Trash from "./router/main/Home/Trash";
 import Temp from "./router/main/Home/Temp";
 import MyPage from "./router/accounts/mypage/MyPage";
+
 function App() {
   return (
     <>
@@ -24,6 +25,7 @@ function App() {
 
           <Route path="/trash" element={<Trash />} />
 
+          <Route path="/recommend" element={<Temp />} />
           <Route path="/accounts/mypage/settings" element={<Settings />} />
           <Route path="/detail/:mountainCode" element={<Detail />} />
           <Route path="/articleDetail" element={<ArticleDetail />} />
