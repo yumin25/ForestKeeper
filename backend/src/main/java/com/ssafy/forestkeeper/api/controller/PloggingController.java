@@ -87,7 +87,7 @@ public class PloggingController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 조회에 실패했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
         return ResponseEntity.ok(
             PloggingDetailResponseDTO.of("플로깅 조회에 성공했습니다.", 200, ploggingDetailResponseDTO));
