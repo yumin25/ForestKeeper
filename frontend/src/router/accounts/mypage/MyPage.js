@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../res/img/logo.png";
+import Send from "../../../config/Send";
 
 function MyPage({ userSlice }) {
   const navigate = useNavigate();
@@ -13,11 +14,32 @@ function MyPage({ userSlice }) {
   const menuHandlerTwo = (e) => {
     setMenu("2");
   };
+
+  const [ploggingList, setPloggingList] = useState([]);
+  const getPloggingList = () => {
+    Send.get(`/userinfo/plogging`, {
+      params: {
+        page: 1,
+      },
+    })
+      .then((res) => {
+        setPloggingList(res.data.list);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  const setId = (id, e) => {
+    e.preventDefault();
+    navigate("/accounts/mypage/recorddetail");
+    localStorage.setItem("ploggingId", id);
+  };
   useEffect(() => {
     if (!localStorage.getItem("idToken")) {
       navigate("/accounts/login");
     }
-  });
+    getPloggingList();
+  }, []);
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row-reverse", margin: "1vh", height: "5vh" }}>
@@ -119,35 +141,41 @@ function MyPage({ userSlice }) {
         {/* 활동기록 */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "2vh 1vw 0 1vw", height: "50vh" }}>
           {menu === "1" ? (
+            // 활동 내역
             <>
-              <Link to="/accounts/mypage/recorddetail" style={{ textDecoration: "none" }}>
-                <div
-                  style={{
-                    marginBottom: "2vh",
-                    width: "80vw",
-                    height: "12vh",
-                    minHeight: "100px",
-                    backgroundColor: "#EAF9E6",
-                    borderRadius: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                    <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
-                    <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-                      <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>2022.04.15</p>
-                      <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>아차산</div>
-                        <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>7.72 km</div>
-                        <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>42 : 15</div>
+              {ploggingList.map((content, index) => {
+                return (
+                  <div key={index} onClick={(e) => setId(content.ploggingId, e)}>
+                    <div
+                      style={{
+                        marginBottom: "2vh",
+                        width: "80vw",
+                        height: "12vh",
+                        minHeight: "100px",
+                        backgroundColor: "#EAF9E6",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
+                        <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
+                        <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+                          <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>{content.date}</p>
+                          <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{content.mountainName}</div>
+                            <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{content.distance}km</div>
+                            <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{content.time}</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                );
+              })}
             </>
           ) : (
+            // 등산 기록
             <>
               <div
                 style={{
