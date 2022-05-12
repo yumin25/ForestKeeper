@@ -54,7 +54,8 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
-                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+//                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+                        		.imagePath("")
                                 .build()
                 )
         );
@@ -100,7 +101,8 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
-                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+//                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
+                        		.imagePath("")
                                 .build()
                 )
         );
