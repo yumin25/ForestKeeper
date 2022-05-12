@@ -11,6 +11,7 @@ import Detail from "./router/main/Home/MtnDetail/Detail";
 import ArticleDetail from "./router/main/Home/MtnDetail/ArticleDetail";
 import Write from "./router/main/Home/MtnDetail/Write";
 import Trash from "./router/main/Home/Trash";
+import Temp from "./router/main/Home/Temp";
 function App() {
   return (
     <>
@@ -25,6 +26,7 @@ function App() {
 
           <Route path="/trash" element={<Trash />} />
 
+          <Route path="/recommend" element={<Temp />} />
           <Route path="/accounts/mypage/settings" element={<Settings />} />
           <Route path="/detail/:mountainCode" element={<Detail />} />
           <Route path="/articleDetail" element={<ArticleDetail />} />
