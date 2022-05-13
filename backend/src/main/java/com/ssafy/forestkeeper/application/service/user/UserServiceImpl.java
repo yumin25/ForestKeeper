@@ -3,11 +3,13 @@ package com.ssafy.forestkeeper.application.service.user;
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.enums.UserCode;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
+import com.ssafy.forestkeeper.exception.UserNotFoundException;
 import com.ssafy.forestkeeper.security.util.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,12 +63,15 @@ public class UserServiceImpl implements UserService {
 
     // 로그인
     @Override
-    public String login(UserLoginDTO userLoginDTO) {
+    public UserLoginResponseDTO login(UserLoginDTO userLoginDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword())
+        );
 
-        return jwtAuthenticationProvider.createToken(authentication);
+        return UserLoginResponseDTO.builder()
+                .accessToken(jwtAuthenticationProvider.createToken(authentication))
+                .build();
 
     }
 
@@ -119,52 +124,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean withdraw() {
+    public void withdraw() {
         User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
         user.changeDelete();
         userRepository.save(user);
-        return true;
     }
 
 
     @Override
     public boolean checkNickname(String nickname) {
         User user = userRepository.findUserByNicknameAndDelete(nickname, false);
-        if (user == null) return false;
-        return true;
+        return user != null;
     }
 
     @Override
     public boolean checkEmail(String email) {
         User user = userRepository.findUserByEmailAndDelete(email, false);
-        if (user == null) return false;
-        return true;
+        return user != null;
     }
 
     @Override
     public boolean isValidPassword(String password) {
-        Matcher m = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$").matcher(password); //영문자, 숫자, 특수문자 포함 8자 이상
-        if (!m.matches()) return false;
-        return true;
+        Matcher m = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$").matcher(password); // 영문자, 숫자, 특수문자 포함 8자 이상
+        return m.matches();
     }
 
     @Override
     public boolean isValidName(String name) {
-        if (name.length() < 2 || name.length() > 10) return false;  //2자 이상 10자 이하
-        if (!Pattern.matches("^[ㄱ-ㅎ가-힣]*$", name)) return false; //한글만 입력 허용
-        return true;
+        if (name.length() < 2 || name.length() > 10) return false;  // 2자 이상 10자 이하
+        return Pattern.matches("^[ㄱ-ㅎ가-힣]*$", name); // 한글만 입력 허용
     }
 
     @Override
     public boolean isValidNickname(String nickname) {
-        if (nickname.length() < 2 || nickname.length() > 10) return false;  //2자 이상 10자 이하
-        if (!Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname)) return false; //영어, 한글, 숫자만 입력 허용
-        return true;
+        if (nickname.length() < 2 || nickname.length() > 10) return false;  // 2자 이상 10자 이하
+        return Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname); // 영어, 한글, 숫자만 입력 허용
     }
 
     @Override
     public void updateUserImgPath(String originalFileName, String savedFileName) {
-        Image image = imageRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get().getId()).orElse(null);
+        Image image = imageRepository.findByUserId(
+                userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."))
+                        .getId()).orElse(null);
 
         if (image != null) {
             image.changeFileName(originalFileName, savedFileName);
@@ -173,7 +175,8 @@ public class UserServiceImpl implements UserService {
             imageRepository.save(Image.builder()
                     .originalFileName(originalFileName)
                     .savedFileName(savedFileName)
-                    .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
+                    .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                            .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                     .build());
         }
     }
@@ -183,7 +186,8 @@ public class UserServiceImpl implements UserService {
         imageRepository.save(Image.builder()
                 .originalFileName(originalFileName)
                 .savedFileName(savedFileName)
-                .user(userRepository.findByEmailAndDelete(email, false).get())
+                .user(userRepository.findByEmailAndDelete(email, false)
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .build());
     }
 

@@ -30,8 +30,9 @@ public class UserController {
 
     @ApiOperation(value = "회원가입")
     @PostMapping
-    public ResponseEntity<?> signup(@RequestPart(value = "dto", required = true) UserSignUpDTO userSignUpDTO,
+    public ResponseEntity<?> signup(@RequestPart(value = "dto") UserSignUpDTO userSignUpDTO,
                                     @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
+
         try {
             Integer result = userService.signUp(userSignUpDTO);
 
@@ -54,14 +55,9 @@ public class UserController {
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO) {
-        String result;
-        try {
-            result = userService.login(userLoginDTO);
-        } catch (Exception exception) {
-            return ResponseEntity.status(500).body(BaseResponseDTO.of("로그인에 실패하였습니다.", 500));
-        }
-        if (result.equals("401")) return ResponseEntity.status(401).body(BaseResponseDTO.of("아이디 또는 비밀번호를 잘못 입력하였습니다.", 401));
-        return ResponseEntity.status(200).body(UserLoginResponseDTO.of(result, "로그인 하였습니다.", 200));
+
+        return ResponseEntity.status(200).body(UserLoginResponseDTO.of("로그인에 성공했습니다.", 200, userService.login(userLoginDTO)));
+
     }
 
     @ApiOperation(value = "유저 정보 조회")
@@ -93,7 +89,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "닉네임 변경")
-    @GetMapping("/modify/nickname")
+    @PatchMapping("/modify/nickname")
     public ResponseEntity<?> modifyNickname(@RequestParam("nickname") String nickname) {
         Integer result = userService.modifyNickname(nickname);
 
@@ -116,18 +112,23 @@ public class UserController {
         return ResponseEntity.status(500).body(BaseResponseDTO.of("비밀번호 변경에 실패하였습니다.", 500));
     }
 
-    @ApiOperation(value = "탈퇴")
-    @GetMapping("/modify/withdraw")
+    @ApiOperation(value = "회원 탈퇴")
+    @DeleteMapping("/modify/withdraw")
     public ResponseEntity<?> withdraw() {
-        if (userService.withdraw()) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
-        return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
+        try {
+            userService.withdraw();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
+        }
+        return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
     }
 
-    @PutMapping("/modify/profile")
     @ApiOperation(value = "회원 프로필 사진 수정")
-    public Object updateUserImage(@RequestBody @ApiParam(value = "회원 프로필 사진.", required = true) MultipartFile image) {
+    @PatchMapping("/modify/profile")
+    public ResponseEntity<?> updateUserImage(@RequestBody @ApiParam(value = "회원 프로필 사진.", required = true) MultipartFile image) {
         String savedFileName = awsS3Service.uploadFileToS3("user", image);
         userService.updateUserImgPath(image.getOriginalFilename(), savedFileName);
         return ResponseEntity.status(201).body(BaseResponseDTO.of("이미지 업로드에 성공했습니다.", 201));
     }
+
 }
