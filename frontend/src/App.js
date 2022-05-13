@@ -20,8 +20,13 @@ function App() {
       <Router>
         <Routes>
           <Route path="/accounts/signup" element={<Signup />} />
+
           <Route path="/accounts/login" element={<Login />} />
-          <Route path="/accounts/mypage/recorddetail" element={<RecordDetail />} />
+
+          <Route
+            path="/accounts/mypage/recorddetail"
+            element={<RecordDetail />}
+          />
 
           <Route path="/trash" element={<Trash />} />
 
