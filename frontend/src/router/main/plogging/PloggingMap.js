@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 import ReactTimerStopwatch from "react-stopwatch-timer";
 import location from "../../../res/img/location.png";
@@ -30,6 +31,7 @@ function MapAPI({ myLocation, trackingPath }) {
   );
 }
 function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking, mtCode }) {
+  const navigate = useNavigate();
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
@@ -85,7 +87,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     return result;
   };
   // 요청보내기
-  const recordPlogging = () => {
+  const recordPlogging = (e) => {
     const formData = new FormData();
     const data = {
       mountainCode: mtCode,
@@ -100,6 +102,9 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     File.post("/plogging", formData)
       .then((res) => {
         console.log(res.data);
+        e.preventDefault();
+        navigate("/accounts/mypage/recorddetail");
+        localStorage.setItem("ploggingId", res.data.ploggingId);
       })
       .catch((e) => {
         console.log(e);
@@ -168,11 +173,11 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             src={stop}
             alt=""
             style={{ zIndex: 1, height: "3.5vh", width: "3.5vh" }}
-            onClick={() => {
+            onClick={(e) => {
               endRecording();
               setIsOn(false);
               stopTracking();
-              recordPlogging();
+              recordPlogging(e);
             }}
           />
         </div>
