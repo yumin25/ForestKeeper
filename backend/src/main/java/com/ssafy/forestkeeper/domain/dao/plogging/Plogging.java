@@ -41,6 +41,9 @@ public class Plogging extends BaseEntity {
     @Column(name = "plogging_exp")
     private long exp;
 
+    @Column(name = "plogging_coordinates", columnDefinition ="TEXT")
+    private String coords;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -48,5 +51,6 @@ public class Plogging extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
+    
 
 }

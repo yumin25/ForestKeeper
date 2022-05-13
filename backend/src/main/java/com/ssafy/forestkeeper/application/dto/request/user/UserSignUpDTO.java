@@ -1,13 +1,13 @@
 package com.ssafy.forestkeeper.application.dto.request.user;
 
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.validation.constraints.NotBlank;
 
 @ApiModel("UserSignUpDTO")
 @Getter

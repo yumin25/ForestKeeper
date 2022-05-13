@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @ToString
 public class CommunityGetListResponseDTO {
 
+    @ApiModelProperty(name = "커뮤니티 ID")
+    private String communityId;
+
     @ApiModelProperty(name = "작성자 닉네임")
     private String nickname;
 

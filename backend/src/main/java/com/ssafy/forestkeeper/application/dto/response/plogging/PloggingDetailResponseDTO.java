@@ -1,5 +1,10 @@
 package com.ssafy.forestkeeper.application.dto.response.plogging;
 
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+
+import com.ssafy.forestkeeper.application.dto.request.plogging.Coordinates;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 
 import io.swagger.annotations.ApiModel;
@@ -30,6 +35,12 @@ public class PloggingDetailResponseDTO extends BaseResponseDTO{
 
     @ApiModelProperty(name = "경험치")
     private long exp;
+    
+    @ApiModelProperty(name = "이미지 경로")
+    private String imagePath;
+    
+    @ApiModelProperty(name = "이동 좌표")
+    private List<Coordinates> coords;
     
     public static PloggingDetailResponseDTO of(String message, Integer statusCode, PloggingDetailResponseDTO ploggingDetailResponseDTO) {
 
