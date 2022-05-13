@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import "./Home.css";
 import { Route, Routes } from "react-router-dom";
-
+import Send from "../../../config/Send";
 function NaverMapAPI({ myLocation }) {
   const navermaps = window.naver.maps;
 
@@ -32,6 +32,21 @@ function NaverMapAPI({ myLocation }) {
 }
 
 function Map({ getLocation, myLocation }) {
+  function getTrash() {
+    Send.get(`/mountain/recommend`, {
+      params: {
+        by: "distance",
+        lat: myLocation.latitude,
+        lng: myLocation.longitude,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <>
       <div id="map">
@@ -70,6 +85,24 @@ function Map({ getLocation, myLocation }) {
           }}
         >
           내 위치
+        </button>
+        <button
+          onClick={getTrash}
+          style={{
+            position: "absolute",
+            height: "5vh",
+            width: "18vw",
+            borderRadius: 15,
+            border: "none",
+            boxShadow: "0px 5px 10px 2px darkgray",
+            background: "white",
+            color: "#37CD8D",
+            marginTop: "1.5vh",
+            marginLeft: "70vw",
+            zIndex: 2,
+          }}
+        >
+          추천
         </button>
 
         <RenderAfterNavermapsLoaded
