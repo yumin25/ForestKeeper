@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ssafy.forestkeeper.application.dto.request.plogging.Coordinates;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingRegisterResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingService;
@@ -56,9 +56,10 @@ public class PloggingController {
     public ResponseEntity<?> registerPlogging(@RequestPart(value = "dto", required = true) PloggingRegisterDTO ploggingRegisterDTO,
     		@RequestPart(value = "image", required = false) MultipartFile multipartFile) {
 //        PloggingExperienceResponseDTO ploggingExperienceResponseDTO = null;
-        
+    	PloggingRegisterResponseDTO ploggingRegisterResponseDTO;
         try {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
+        	ploggingRegisterResponseDTO = PloggingRegisterResponseDTO.builder().ploggingId(plogging.getId()).build();
 //        	if(multipartFile != null) {
 //                ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
 //        		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
@@ -73,7 +74,7 @@ public class PloggingController {
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("플로깅 등록에 성공했습니다.", 201));
+        return ResponseEntity.status(201).body(PloggingRegisterResponseDTO.of("플로깅 등록에 성공했습니다.", 200, ploggingRegisterResponseDTO));
 //        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 201, ploggingExperienceResponseDTO));
     }
 
