@@ -1,19 +1,20 @@
 package com.ssafy.forestkeeper.application.service.userinfo;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfoResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfoWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
@@ -66,20 +67,22 @@ public class UserInfoServiceImpl implements UserInfoService{
 	}
 
 	@Override
-	public Optional<List<String>> getMountainList(int page) {
-		Set<String> set = new HashSet<>();
+	public MountainUserInfoWrapperResponseDTO getMountainList(int page) {
+		Map<String, String> map = new HashMap<>();
         List<Plogging> ploggingList = ploggingRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId())
                 .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
         ploggingList.forEach(plogging ->
-        	set.add(plogging.getMountain().getName())
+        	map.put(plogging.getMountain().getCode(), plogging.getMountain().getName())
         );
-        List<String> list = new ArrayList<>();
-        set.forEach(mntn ->
-        	list.add(mntn)
-        );
-        Optional<List<String>> MountainNameList = Optional.ofNullable(list);
         
-	    return MountainNameList;
+        List<MountainUserInfoResponseDTO> list = new ArrayList<>();
+        for(String key : map.keySet()) {
+        	list.add(MountainUserInfoResponseDTO.builder().mountainCode(key).mountainName(map.get(key)).build());
+        }
+        
+	    return MountainUserInfoWrapperResponseDTO.builder()
+	    										.list(list)
+	    										.build();
 	}
 	
 	//유저상세 페이지내 산별 플로깅 목록
