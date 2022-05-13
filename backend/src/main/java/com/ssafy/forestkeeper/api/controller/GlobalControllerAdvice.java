@@ -42,7 +42,7 @@ public class GlobalControllerAdvice {
 
         System.out.println("404 : " + e.getMessage());
 
-//        notify(e, e.getMessage(), req);
+        notify(e, e.getMessage(), req);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDTO.of(e.getMessage(), 404));
 
@@ -66,7 +66,7 @@ public class GlobalControllerAdvice {
 
         System.out.println("409 : " + e.getMessage());
 
-//        notify(e, stringBuilder.toString(), req);
+        notify(e, stringBuilder.toString(), req);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponseDTO.of(stringBuilder.toString(), 400));
 
@@ -79,7 +79,7 @@ public class GlobalControllerAdvice {
 
         String message = "회원 정보가 없습니다.";
 
-//        notify(e, message, req);
+        notify(e, message, req);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseDTO.of(message, 401));
 
@@ -92,7 +92,7 @@ public class GlobalControllerAdvice {
 
         String message = "권한이 없습니다.";
 
-//        notify(e, message, req);
+        notify(e, message, req);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseResponseDTO.of(message, 403));
 
@@ -103,7 +103,7 @@ public class GlobalControllerAdvice {
 
         System.out.println("409 : " + e.getMessage());
 
-//        notify(e, e.getMessage(), req);
+        notify(e, e.getMessage(), req);
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(e.getMessage(), 409));
 
