@@ -39,8 +39,4 @@ public class ChatMessageDTO {
     @ApiModelProperty(name = "메시지 삭제 여부")
     private boolean delete;
 
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
 }
