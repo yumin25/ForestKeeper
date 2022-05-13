@@ -131,7 +131,7 @@ public class PloggingServiceImpl implements PloggingService{
 	public void registerExp(ExpRegisterDTO expRegisterDTO) {
 		Plogging plogging = ploggingRepository.findById(expRegisterDTO.getPloggingId())
 				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-		plogging.setExp(expRegisterDTO.getExp());
+		plogging.changeExp(expRegisterDTO.getExp());
 		ploggingRepository.save(plogging);
 	}
 

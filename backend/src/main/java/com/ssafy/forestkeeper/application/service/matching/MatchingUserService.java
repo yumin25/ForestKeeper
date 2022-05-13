@@ -1,4 +1,4 @@
-package com.ssafy.forestkeeper.application.service.mathcing;
+package com.ssafy.forestkeeper.application.service.matching;
 
 public interface MatchingUserService {
 
@@ -9,4 +9,5 @@ public interface MatchingUserService {
     int getParticipant(String matchingId);
 
     void cancelMatching(String matchingId);
+
 }

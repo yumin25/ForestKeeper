@@ -26,4 +26,5 @@ public class ChatRoomGetListWrapperResponseDTO extends BaseResponseDTO {
         return chatRoomGetListWrapperResponseDTO;
 
     }
+
 }
