@@ -79,14 +79,14 @@ function MyPage({ userSlice }) {
         setMtPloggingList(res.data.list);
         e.preventDefault();
         let newArray = [...isOpenPlogging];
-        newArray[index] = [res.data.list];
+        newArray[index] = res.data.list;
         setIsOpenPlogging(newArray);
       })
       .catch((e) => {
         console.log(e);
       });
   };
-
+  console.log(isOpenPlogging);
   useEffect(() => {
     if (!localStorage.getItem("idToken")) {
       navigate("/accounts/login");
@@ -287,7 +287,7 @@ function MyPage({ userSlice }) {
                         </p>
                       </div>
                       {isOpenPlogging[index] &&
-                        isOpenPlogging[index][0].map((plogging, idx) => {
+                        isOpenPlogging[index].map((plogging, idx) => {
                           return (
                             <div
                               style={{ margin: "auto", width: "70vw", height: "100px", display: "flex" }}
