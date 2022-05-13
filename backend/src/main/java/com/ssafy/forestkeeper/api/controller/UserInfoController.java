@@ -67,8 +67,8 @@ public class UserInfoController {
         return ResponseEntity.status(200).body(MountainNameListResponseDTO.of("산 목록 조회에 성공했습니다.", 200, MountainNameListResponseDTO.builder().list(mountainList.get()).build()));
     }
     
-    @ApiOperation(value = "방문한 산 목록 조회")
-    @GetMapping("/{mountainName}")
+    @ApiOperation(value = "산별 플로깅 목록 조회")
+    @GetMapping("/{mountainCode}")
     public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 코드", required = true) @PathVariable @NotBlank String mountainCode) {
 
     	PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;

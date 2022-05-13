@@ -155,7 +155,9 @@ public class PloggingServiceImpl implements PloggingService{
 //	}
 
 	@Override
-	public void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging) {
+	public void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId) {
+		Plogging plogging = ploggingRepository.findById(ploggingId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅 기록을 찾을 수 없습니다."));
     	imageRepository.save(Image.builder()
 				.originalFileName(originalFileName)
 				.savedFileName(savedFileName)
@@ -173,7 +175,7 @@ public class PloggingServiceImpl implements PloggingService{
 		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
 		long distance = 0L;
 		int visiter = 0;
-		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainId(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
+		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainIdOrderByStartTimeDesc(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
 		
 		if(ploggingList == null) {
 			return MountainPloggingInfoResponseDTO.builder()
