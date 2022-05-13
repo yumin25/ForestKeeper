@@ -74,7 +74,7 @@ public class PloggingController {
         try {
             ploggingService.registerExp(expRegisterDTO);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
@@ -88,11 +88,11 @@ public class PloggingController {
         try {
             ploggingCumulativeResponseDTO = ploggingService.getMountainPlogging(mountainCode);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 플로깅관련 정보 조회에 실패했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of("산별 플로깅 관련 정보 조회에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(200).body(MountainPloggingInfoResponseDTO.of("산별 플로깅관련 정보 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
+        return ResponseEntity.status(200).body(MountainPloggingInfoResponseDTO.of("산별 플로깅 관련 정보 조회에 성공했습니다.", 200, ploggingCumulativeResponseDTO));
     }
 
     @ApiOperation(value = "쓰레기통 전체 목록")
@@ -123,15 +123,12 @@ public class PloggingController {
             Optional<List<TrashCan>> list = ploggingService.getTrashCanList(region);
 
             if (list.isEmpty() || list.get().size() == 0) {
-                return ResponseEntity.status(404)
-                        .body(BaseResponseDTO.of("쓰레기통 데이터가 존재하지 않습니다.", 404));
+                return ResponseEntity.status(404).body(BaseResponseDTO.of("쓰레기통 데이터가 존재하지 않습니다.", 404));
             }
 
-            TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = TrashCanListWrapperResponseDTO.builder()
-                    .list(list.get()).build();
+            TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO = TrashCanListWrapperResponseDTO.builder().list(list.get()).build();
 
-            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("지역구 쓰레기통 조회에 성공했습니다.", 200,
-                    trashCanListWrapperResponseDTO));
+            return ResponseEntity.ok(TrashCanListWrapperResponseDTO.of("지역구 쓰레기통 조회에 성공했습니다.", 200, trashCanListWrapperResponseDTO));
 
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
