@@ -12,12 +12,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Entity
+@Builder
 @Getter
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class ChatMessage extends BaseEntity implements Serializable {
 
     // 인덱스

@@ -7,12 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.io.Serializable;
 
+@Entity
+@Builder
 @Getter
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class ChatRoom extends BaseEntity implements Serializable {
 
     // 채팅방 이름
