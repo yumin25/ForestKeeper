@@ -148,4 +148,5 @@ public class PloggingController {
         }
         return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 200, ploggingExperienceResponseDTO));
     }
+
 }
