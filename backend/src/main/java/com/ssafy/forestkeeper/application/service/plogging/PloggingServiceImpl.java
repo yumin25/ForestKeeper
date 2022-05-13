@@ -79,14 +79,24 @@ public class PloggingServiceImpl implements PloggingService{
 	public String getDuration(Duration duration) {
 		StringBuilder sb = new StringBuilder();
 		String HM = duration.toString().split("T")[1];
+		int M;
 		if(duration.toString().contains("H")) {
 			sb.append(HM.split("H")[0]);
 			sb.append(" : ");
-			sb.append(HM.split("H")[1].split("M")[0]);
-		}else {
+			M = Integer.parseInt(HM.split("H")[1].split("M")[0]);
+			if(M < 10) sb.append(0).append(M);
+			else sb.append(M);
+		}else if(duration.toString().contains("M")) {
 			sb.append("0 : ");
-			sb.append(HM.split("M")[0]);
+			M = Integer.parseInt(HM.split("M")[0]);
+			if(M < 10) sb.append(0).append(M);
+			else sb.append(M);
 		}
+		else {
+			sb.append("0 : 00");
+		}
+		
+		
 		return sb.toString();
 	}
 
