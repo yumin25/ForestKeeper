@@ -13,7 +13,7 @@ import File from "../../../config/File";
 import "./PloggingMap.css";
 
 function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
-  const ClickedStyle = {
+  const TrashStyle = {
     position: "absolute",
     border: "0.1px solid #8ABC9A",
     background: "#8ABC9A",
@@ -24,17 +24,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
     width: "22vw",
     zIndex: 2,
   };
-  const UnClickedStyle = {
-    position: "absolute",
-    border: "0.1px solid #8E8E92",
-    background: "white",
-    color: "#8E8E92",
-    borderRadius: 15,
-    fontSize: "1.7vh",
-    height: "4vh",
-    width: "25vw",
-    zIndex: 2,
-  };
+
   const navermaps = window.naver.maps;
   const [lat, setLat] = useState(myLocation.latitude);
   const [long, setLong] = useState(myLocation.longitude);
@@ -121,7 +111,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
 
   return (
     <div>
-      <button style={ClickedStyle} onClick={() => displayMarker()}>
+      <button style={TrashStyle} onClick={() => displayMarker()}>
         쓰레기통
       </button>
 
