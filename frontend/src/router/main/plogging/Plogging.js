@@ -119,6 +119,7 @@ function Plogging() {
         stopTracking={stopTracking}
         allDistance={allDistance}
         mtCode={mtCode}
+        trashList={trashList}
       ></PloggingMap>
     </>
   );
