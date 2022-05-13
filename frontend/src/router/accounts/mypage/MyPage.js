@@ -51,7 +51,7 @@ function MyPage({ userSlice }) {
         setMountainList(resp.data.list);
         for (let i = 0; i < resp.data.list.length / 2; i++) {
           isOpen.push(0);
-          isOpenPlogging.push([]);
+          isOpenPlogging.push([0]);
         }
       })
       .catch((e) => {
