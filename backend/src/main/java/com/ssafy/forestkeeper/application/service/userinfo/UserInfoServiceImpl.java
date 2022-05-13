@@ -40,7 +40,7 @@ public class UserInfoServiceImpl implements UserInfoService{
     
 	@Override
 	public PloggingListWrapperResponseDTO getPloggingList(int page) {
-        List<Plogging> ploggingList = ploggingRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),PageRequest.of(page - 1, 10))
+        List<Plogging> ploggingList = ploggingRepository.findByUserIdOrderByStartTimeDesc(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),PageRequest.of(page - 1, 10))
                 .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 	public PloggingListWrapperResponseDTO getPloggingInMountain(String mountainCode) {
 		Mountain mountain = mountainRepository.findByCode(mountainCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
-        List<Plogging> ploggingList = ploggingRepository.findByUserIdAndMountainId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),mountain.getId())
+        List<Plogging> ploggingList = ploggingRepository.findByUserIdAndMountainIdOrderByStartTimeDesc(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId(),mountain.getId())
                 .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
