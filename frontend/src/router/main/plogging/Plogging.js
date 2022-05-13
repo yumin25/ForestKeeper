@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PloggingMap from "./PloggingMap";
+import Send from "../../../config/Send";
 let tracker;
 let distanceTracker;
 function Plogging() {
@@ -81,9 +82,31 @@ function Plogging() {
     // console.log(trackingPath[trackingPath.length - 1].y, trackingPath[trackingPath.length - 1].x);
   };
 
+  const [mtCode, setMtCode] = useState();
+  const findMountain = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        Send.get("/mountain/recommend", {
+          params: {
+            by: "distance",
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        }).then(({ data }) => {
+          setMtCode(data.recommendResponseDTOList[0].mountainCode);
+        });
+      });
+    } else {
+      window.alert("현재위치를 알수 없습니다.");
+    }
+  };
   useEffect(() => {
     distTracking();
   }, [trackingPath]);
+
+  useEffect(() => {
+    findMountain();
+  }, []);
 
   return (
     <>
@@ -95,6 +118,7 @@ function Plogging() {
         distTracking={distTracking}
         stopTracking={stopTracking}
         allDistance={allDistance}
+        mtCode={mtCode}
       ></PloggingMap>
     </>
   );
