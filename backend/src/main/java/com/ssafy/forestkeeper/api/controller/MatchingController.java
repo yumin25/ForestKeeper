@@ -6,8 +6,8 @@ import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterP
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
-import com.ssafy.forestkeeper.application.service.mathcing.MatchingService;
-import com.ssafy.forestkeeper.application.service.mathcing.MatchingUserService;
+import com.ssafy.forestkeeper.application.service.matching.MatchingService;
+import com.ssafy.forestkeeper.application.service.matching.MatchingUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
