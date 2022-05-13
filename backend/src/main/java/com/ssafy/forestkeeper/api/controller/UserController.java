@@ -31,7 +31,7 @@ public class UserController {
     @ApiOperation(value = "회원가입")
     @PostMapping
     public ResponseEntity<?> signup(@RequestPart(value = "dto", required = true) UserSignUpDTO userSignUpDTO,
-                                      @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
+                                    @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         try {
             Integer result = userService.signUp(userSignUpDTO);
 
