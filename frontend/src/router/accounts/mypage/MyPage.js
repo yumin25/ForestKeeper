@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../res/img/logo.png";
+import logo from "../../../res/img/logo_temp.png";
 import Send from "../../../config/Send";
 
 function MyPage({ userSlice }) {
@@ -14,7 +14,7 @@ function MyPage({ userSlice }) {
   const menuHandlerTwo = (e) => {
     setMenu("2");
   };
-
+  // 활동내역 불러오기
   const [ploggingList, setPloggingList] = useState([]);
   const getPloggingList = () => {
     Send.get(`/userinfo/plogging`, {
@@ -23,7 +23,7 @@ function MyPage({ userSlice }) {
       },
     })
       .then((res) => {
-        console.log(res.data.list);
+        // console.log(res.data.list);
         setPloggingList(res.data.list);
       })
       .catch((e) => {
@@ -35,11 +35,64 @@ function MyPage({ userSlice }) {
     navigate("/accounts/mypage/recorddetail");
     localStorage.setItem("ploggingId", id);
   };
+
+  // 등산기록 불러오기
+  const [isOpen, setIsOpen] = useState([]);
+  const [isOpenPlogging, setIsOpenPlogging] = useState([]);
+  const [mountainList, setMountainList] = useState([]);
+  const getMountainList = () => {
+    Send.get(`/userinfo/mountain`, {
+      params: {
+        page: 1,
+      },
+    })
+      .then((resp) => {
+        // console.log(resp.data.list);
+        setMountainList(resp.data.list);
+        for (let i = 0; i < resp.data.list.length / 2; i++) {
+          isOpen.push(0);
+          isOpenPlogging.push([]);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  // 등산기록 상세
+  const opened = (index, e) => {
+    e.preventDefault();
+    let newArr = [...isOpen];
+    if (newArr[index] === 0) {
+      newArr[index] = 1;
+    } else if (newArr[index] === 1) {
+      newArr[index] = 0;
+    }
+    setIsOpen(newArr);
+    // console.log(isOpen);
+  };
+  const [mtPloggingList, setMtPloggingList] = useState([]);
+  const getMtPloggingList = (mountainCode, index, e) => {
+    Send.get(`/userinfo/${mountainCode}`)
+      .then((res) => {
+        // console.log(res.data.list);
+        setMtPloggingList(res.data.list);
+        e.preventDefault();
+        let newArray = [...isOpenPlogging];
+        newArray[index] = [res.data.list];
+        setIsOpenPlogging(newArray);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   useEffect(() => {
     if (!localStorage.getItem("idToken")) {
       navigate("/accounts/login");
     }
     getPloggingList();
+    getMountainList();
   }, []);
   return (
     <>
@@ -170,7 +223,7 @@ function MyPage({ userSlice }) {
                       }}
                     >
                       <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                        <img src={logo} alt="img" style={{ margin: "auto", height: "80px", width: "80px" }} />
+                        <img src={logo} alt="img" style={{ height: "80px", width: "80px" }} />
                         <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
                           <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>{content.date}</p>
                           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -188,23 +241,77 @@ function MyPage({ userSlice }) {
           ) : (
             // 등산 기록
             <>
-              <div
-                style={{
-                  marginBottom: "2vh",
-                  width: "80vw",
-                  height: "100px",
-                  backgroundColor: "#EAF9E6",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                  <div style={{ margin: "0 auto", width: "45vw" }}>
-                    <p style={{ margin: 0, fontSize: "4vh", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>관악산</p>
+              {mountainList.map((mountain, index) => {
+                return isOpen[index] === 0 ? (
+                  <div
+                    style={{
+                      marginBottom: "2vh",
+                      width: "80vw",
+                      height: "100px",
+                      backgroundColor: "#EAF9E6",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    key={index}
+                    onClick={(e) => {
+                      opened(index, e);
+                      getMtPloggingList(mountain.mountainCode, index, e);
+                    }}
+                  >
+                    <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
+                      <div style={{ margin: "0 auto", width: "45vw" }}>
+                        <p style={{ margin: 0, fontSize: "4vh", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>
+                          {mountain.mountainName}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                ) : (
+                  <div
+                    style={{
+                      marginBottom: "2vh",
+                      width: "80vw",
+                      height: `${100 + mtPloggingList.length * 100}px`,
+                      backgroundColor: "#EAF9E6",
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    key={index}
+                  >
+                    <div style={{ margin: "auto", width: "70vw", display: "flex", flexDirection: "column" }}>
+                      <div style={{ margin: "25px auto 0", paddingBottom: "15px", width: "45vw", height: "39px" }} onClick={(e) => opened(index, e)}>
+                        <p style={{ margin: 0, fontSize: "4vh", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>
+                          {mountain.mountainName}
+                        </p>
+                      </div>
+                      {isOpenPlogging[index][0] &&
+                        isOpenPlogging[index][0].map((plogging, idx) => {
+                          return (
+                            <div
+                              style={{ margin: "auto", width: "70vw", height: "100px", display: "flex" }}
+                              key={idx}
+                              onClick={(e) => setId(plogging.ploggingId, e)}
+                            >
+                              <img src={logo} alt="img" style={{ height: "80px", width: "80px" }} />
+                              <div
+                                style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}
+                              >
+                                <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>{plogging.date}</p>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                  <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{plogging.mountainName}</div>
+                                  <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{plogging.distance}km</div>
+                                  <div style={{ margin: 0, fontSize: "2vh", fontWeight: "700", color: "#8E8E92" }}>{plogging.time}</div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                );
+              })}
             </>
           )}
         </div>
