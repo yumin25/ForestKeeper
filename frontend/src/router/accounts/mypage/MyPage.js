@@ -286,7 +286,7 @@ function MyPage({ userSlice }) {
                           {mountain.mountainName}
                         </p>
                       </div>
-                      {isOpenPlogging[index][0] &&
+                      {isOpenPlogging[index] &&
                         isOpenPlogging[index][0].map((plogging, idx) => {
                           return (
                             <div
