@@ -49,7 +49,7 @@ function MyPage({ userSlice }) {
       .then((resp) => {
         // console.log(resp.data.list);
         setMountainList(resp.data.list);
-        for (let i = 0; i < resp.data.list.length / 2; i++) {
+        for (let i = 0; i < resp.data.list.length; i++) {
           isOpen.push(0);
           isOpenPlogging.push([0]);
         }
@@ -279,9 +279,10 @@ function MyPage({ userSlice }) {
                       alignItems: "center",
                     }}
                     key={index}
+                    onClick={(e) => opened(index, e)}
                   >
                     <div style={{ margin: "auto", width: "70vw", display: "flex", flexDirection: "column" }}>
-                      <div style={{ margin: "25px auto 0", paddingBottom: "15px", width: "45vw", height: "39px" }} onClick={(e) => opened(index, e)}>
+                      <div style={{ margin: "25px auto 0", paddingBottom: "15px", width: "45vw", height: "39px" }}>
                         <p style={{ margin: 0, fontSize: "4vh", color: "#8ABC9A", fontWeight: "700", textAlign: "center" }}>
                           {mountain.mountainName}
                         </p>
