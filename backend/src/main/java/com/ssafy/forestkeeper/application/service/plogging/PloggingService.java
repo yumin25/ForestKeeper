@@ -17,6 +17,6 @@ public interface PloggingService {
     void registerExp(ExpRegisterDTO expRegisterDTO);
     List<TrashCan> getTrashCanList();
     Optional<List<TrashCan>> getTrashCanList(String region);
-    void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging);
+    void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId);
     MountainPloggingInfoResponseDTO getMountainPlogging(String mountainName);
 }

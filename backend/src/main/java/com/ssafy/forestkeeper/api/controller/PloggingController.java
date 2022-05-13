@@ -61,7 +61,7 @@ public class PloggingController {
         	Plogging plogging = ploggingService.register(ploggingRegisterDTO);
         	ploggingRegisterResponseDTO = PloggingRegisterResponseDTO.builder().ploggingId(plogging.getId()).build();
 //        	if(multipartFile != null) {
-//                ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
+//              ploggingExperienceResponseDTO = ploggingAiService.detectLabels(multipartFile, plogging.getId());
 //        		String savedFileName = s3Service.uploadFileToS3("plogging", multipartFile);
 //        		ploggingService.registerPloggingImg(multipartFile.getOriginalFilename(), savedFileName, plogging);
 //        	}
@@ -166,10 +166,12 @@ public class PloggingController {
 
     @ApiOperation(value = "vision api로 분석 후 경험치 부여")
     @PostMapping("/ai")
-    public ResponseEntity<?> detectObject(@RequestParam MultipartFile multipartFile) {
+    public ResponseEntity<?> detectObject(@RequestBody MultipartFile image, @RequestBody String ploggingId) {
         PloggingExperienceResponseDTO ploggingExperienceResponseDTO;
         try {
-            ploggingExperienceResponseDTO = ploggingAiService.detectLabelsTest(multipartFile);
+            ploggingExperienceResponseDTO = ploggingAiService.detectLabels(image, ploggingId);
+    		String savedFileName = s3Service.uploadFileToS3("plogging", image);
+    		ploggingService.registerPloggingImg(image.getOriginalFilename(), savedFileName, ploggingId);
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
