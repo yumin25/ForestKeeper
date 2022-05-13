@@ -140,7 +140,17 @@ function MyPage({ userSlice }) {
           </div>
         </div>
         {/* 활동기록 */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "2vh 1vw 0 1vw", height: "50vh" }}>
+        <div
+          style={{
+            overflowY: "auto",
+            overflowX: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "2vh 1vw 0 1vw",
+            height: "56vh",
+          }}
+        >
           {menu === "1" ? (
             // 활동 내역
             <>
