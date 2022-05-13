@@ -1,12 +1,12 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+import "swiper/swiper.min.css";
 import RecommendCard from "./RecommendCard";
 
 const Recommend = ({ title, recommendList, near }) => {
   return (
     <div>
-      <div style={{margin:"5%"}}>{title}</div>
+      <div style={{ margin: "5%" }}>{title}</div>
       <Swiper
         slidesPerView={1.6}
         spaceBetween={10}
