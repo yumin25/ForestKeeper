@@ -30,7 +30,7 @@ public class UserController {
 
     @ApiOperation(value = "회원가입")
     @PostMapping
-    public ResponseEntity<?> register(@RequestPart(value = "dto", required = true) UserSignUpDTO userSignUpDTO,
+    public ResponseEntity<?> signup(@RequestPart(value = "dto", required = true) UserSignUpDTO userSignUpDTO,
                                       @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         try {
             Integer result = userService.signUp(userSignUpDTO);
@@ -45,7 +45,7 @@ public class UserController {
             else if (result == 4095)
                 return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
 
-            if (!multipartFile.isEmpty()) {
+            if (multipartFile != null) {
                 String savedFileName = awsS3Service.uploadFileToS3("user", multipartFile);
                 userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
             }
