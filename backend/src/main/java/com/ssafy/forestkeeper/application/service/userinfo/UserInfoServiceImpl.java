@@ -15,6 +15,7 @@ import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfo
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserPloggingInfoDTO;
+import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
@@ -46,7 +47,12 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
 		
-    	ploggingList.forEach(plogging ->
+    	Image image;
+    	String imagePath;
+    	for(Plogging plogging : ploggingList) {
+    		image = imageRepository.findByPloggingId(plogging.getId()).orElse(null);
+    		if(image == null) imagePath = "";
+    		else imagePath = hosting + "thumb/" + image.getSavedFileName();
     		ploggingListResponseDTOList.add(
                         PloggingListResponseDTO.builder()
                         		.date(plogging.getStartTime().toLocalDate().toString())
@@ -55,11 +61,9 @@ public class UserInfoServiceImpl implements UserInfoService{
                         		.time(plogging.getDurationTime())
                         		.exp(plogging.getExp())
                         		.mountainName(plogging.getMountain().getName())
-//                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
-                        		.imagePath("")
-                                .build()
-                )
-        );
+                        		.imagePath(imagePath)
+                                .build());
+    	}
 
         return PloggingListWrapperResponseDTO.builder()
                 .list(ploggingListResponseDTOList)
@@ -94,21 +98,23 @@ public class UserInfoServiceImpl implements UserInfoService{
                 .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
 
     	List<PloggingListResponseDTO> ploggingListResponseDTOList = new ArrayList<>();
-
-    	ploggingList.forEach(plogging ->
+    	Image image;
+    	String imagePath;
+    	for(Plogging plogging : ploggingList) {
+    		image = imageRepository.findByPloggingId(plogging.getId()).orElse(null);
+    		if(image == null) imagePath = "";
+    		else imagePath = hosting + "thumb/" + image.getSavedFileName();
     		ploggingListResponseDTOList.add(
-                        PloggingListResponseDTO.builder()
-                        		.date(plogging.getStartTime().toLocalDate().toString())
-                        		.ploggingId(plogging.getId())
-                        		.distance(plogging.getDistance())
-                        		.time(plogging.getDurationTime())
-                        		.exp(plogging.getExp())
-                        		.mountainName(plogging.getMountain().getName())
-//                        		.imagePath(hosting + "plogging/" + imageRepository.findByPloggingId(plogging.getId()).get().getSavedFileName())
-                        		.imagePath("")
-                                .build()
-                )
-        );
+                    PloggingListResponseDTO.builder()
+                    		.date(plogging.getStartTime().toLocalDate().toString())
+                    		.ploggingId(plogging.getId())
+                    		.distance(plogging.getDistance())
+                    		.time(plogging.getDurationTime())
+                    		.exp(plogging.getExp())
+                    		.mountainName(plogging.getMountain().getName())
+                    		.imagePath(imagePath)
+                            .build());
+    	}
 
         return PloggingListWrapperResponseDTO.builder()
                 .list(ploggingListResponseDTOList)
