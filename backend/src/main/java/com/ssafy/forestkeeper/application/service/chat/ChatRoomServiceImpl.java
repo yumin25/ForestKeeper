@@ -11,6 +11,7 @@ import com.ssafy.forestkeeper.domain.repository.chat.ChatRoomRepository;
 import com.ssafy.forestkeeper.domain.repository.chat.ChatRoomUserRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.ChatRoomNotFoundException;
+import com.ssafy.forestkeeper.exception.ChatRoomUserNotFoundException;
 import com.ssafy.forestkeeper.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -86,7 +87,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         // 채팅방 참여 인원
         List<User> userList = chatRoomUserRepository.findUserByRoomIdAndDelete(roomId, false)
-                .orElseThrow(() -> new UserNotFoundException("해당 채팅방에 대한 회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException("채팅방 내 회원 정보가 존재하지 않습니다."));
 
         System.out.println("userList: " + userList);
 
@@ -183,11 +184,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRoomRepository.save(room);
 
         ChatRoomUser chatRoomUser = chatRoomUserRepository.findByUserAndChatRoom(me, room)
-                .orElseThrow();
+                .orElseThrow(() -> new ChatRoomUserNotFoundException("채팅방 내 회원 정보가 존재하지 않습니다."));
 
         chatRoomUser.changeDelete();
 
         chatRoomUserRepository.save(chatRoomUser);
 
     }
+
 }

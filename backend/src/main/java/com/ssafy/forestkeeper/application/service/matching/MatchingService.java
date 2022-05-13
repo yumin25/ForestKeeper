@@ -1,4 +1,4 @@
-package com.ssafy.forestkeeper.application.service.mathcing;
+package com.ssafy.forestkeeper.application.service.matching;
 
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
 import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;

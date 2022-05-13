@@ -41,10 +41,8 @@ public class ChatRoomController {
     @GetMapping
     public ResponseEntity<? extends BaseResponseDTO> getList() {
 
-        ChatRoomGetListWrapperResponseDTO chatRoomGetListWrapperResponseDTO = chatRoomService.getChatRoomList();
-
         return ResponseEntity
-                .ok(ChatRoomGetListWrapperResponseDTO.of("채팅방 목록 조회에 성공했습니다.", 200, chatRoomGetListWrapperResponseDTO));
+                .ok(ChatRoomGetListWrapperResponseDTO.of("채팅방 목록 조회에 성공했습니다.", 200, chatRoomService.getChatRoomList()));
 
     }
 

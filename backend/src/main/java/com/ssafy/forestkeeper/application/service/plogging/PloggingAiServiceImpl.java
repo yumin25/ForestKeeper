@@ -61,7 +61,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
 
         Plogging plogging = ploggingRepository.findById(ploggingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-        plogging.setExp(score);
+        plogging.changeExp(score);
         ploggingRepository.save(plogging);
     }
 
@@ -140,7 +140,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
 
         Plogging plogging = ploggingRepository.findById(ploggingId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-        plogging.setExp(exp);
+        plogging.changeExp(exp);
         ploggingRepository.save(plogging);
         return PloggingExperienceResponseDTO.builder().exp(exp).build();
     }

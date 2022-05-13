@@ -9,12 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@Entity
+@Builder
 @Getter
 @ToString
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class ChatRoomUser extends BaseEntity {
 
     @Column(name = "chat_room_user_is_deleted")

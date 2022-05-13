@@ -1,6 +1,7 @@
 package com.ssafy.forestkeeper.security.service;
 
 import com.ssafy.forestkeeper.domain.dao.user.User;
+import com.ssafy.forestkeeper.domain.enums.UserCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,32 +11,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CustomUserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     @Autowired
     private User user;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    List<GrantedAuthority> roles = new ArrayList<>();
 
-    public CustomUserDetailsImpl(User user){
+    public UserDetailsImpl(User user) {
         super();
-        this.user=user;
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getUserCode().name()));
-        System.out.println("!!!" + authorities);
+        this.user = user;
+
+        if (user.getUserCode().equals(UserCode.USER)) {
+            roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (user.getUserCode().equals(UserCode.ADMIN)) {
+            roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoleList().forEach(r-> {
-            authorities.add(() -> r);
-        });
-        return authorities;
-    }
-
-    public User getUser(){
-        return this.user;
+        return this.roles;
     }
 
     @Override

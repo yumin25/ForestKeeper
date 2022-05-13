@@ -119,7 +119,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public void setChatMessageValue(String key, ChatMessageDTO value) {
 
         ChatRoom chatRoom = chatRoomRepository.findByIdAndDelete(value.getRoomId(), false)
-                .orElseThrow(() -> new ChatRoomNotFoundException("해당 채팅방이 존재하지 않습니다."));
+                .orElseThrow(() -> new ChatRoomNotFoundException("채팅방 정보가 존재하지 않습니다."));
         ChatMessage chatMessage;
 
         switch (value.getMessageCode()) {
@@ -130,7 +130,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                         .chatRoom(chatRoom)
                         .index(index)
                         .user(userRepository.findByNicknameAndDelete(value.getNickname(), false)
-                                .orElseThrow(() -> new UserNotFoundException("해당 사용자가 존재하지 않습니다.")))
+                                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                         .content(value.getContent())
                         .sendTime(value.getSendTime())
                         .build();
