@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +14,7 @@ import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfo
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfoWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserPloggingInfoDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
@@ -113,5 +113,42 @@ public class UserInfoServiceImpl implements UserInfoService{
         return PloggingListWrapperResponseDTO.builder()
                 .list(ploggingListResponseDTOList)
                 .build();
+	}
+	
+	@Override
+	public UserPloggingInfoDTO getUserAccumulative() {
+        List<Plogging> ploggingList = ploggingRepository.findByUserId(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(),false).get().getId())
+                .orElseThrow(() -> new IllegalArgumentException("플로깅 기록을 찾을 수 없습니다."));
+        double distance = (double)0;
+        int exp = 0;
+        int minute = 0;
+        int hour = 0;
+        String[] str;
+        for(Plogging plogging : ploggingList) {
+        	distance += plogging.getDistance();
+        	exp += plogging.getExp();
+        	str = plogging.getDurationTime().split(" : ");
+        	System.out.println(plogging.getDurationTime());
+        	hour += Integer.parseInt(str[0]);
+        	minute += Integer.parseInt(str[1]);
+        }
+        String time = calcDuration(hour, minute);
+        
+	    return UserPloggingInfoDTO.builder()
+	    						.distance(distance)
+	    						.time(time)
+	    						.exp(exp)
+	    						.build();
+	}
+	
+	public String calcDuration(int hour, int minute) {
+		hour += minute/60;
+		minute = minute%60;
+		StringBuilder sb = new StringBuilder();
+		sb.append(hour).append(" : ");
+		if(minute <10) sb.append(0).append(minute);
+		else sb.append(minute);
+		
+		return sb.toString();
 	}
 }
