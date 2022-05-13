@@ -36,4 +36,5 @@ public class ChatRoomResponseDTO extends BaseResponseDTO {
         return chatRoomResponseDTO;
 
     }
+
 }

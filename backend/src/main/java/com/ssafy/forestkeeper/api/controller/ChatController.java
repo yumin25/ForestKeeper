@@ -20,16 +20,16 @@ public class ChatController {
 
     private final ChatMessageService chatMessageService;
 
-    @MessageMapping("/chat/enter")
     @ApiOperation(value = "채팅방 입장")
+    @MessageMapping("/chat/enter")
     public void enter(String roomId) {
 
         chatMessageService.enterChatRoom(roomId);
 
     }
 
-    @MessageMapping("/chat/room")
     @ApiOperation(value = "메시지 전송")
+    @MessageMapping("/chat/room")
     public void send(ChatMessageDTO chatMessageDTO) {
 
         chatMessageService.setChatMessageValue(chatMessageDTO.getRoomId(), chatMessageDTO);
