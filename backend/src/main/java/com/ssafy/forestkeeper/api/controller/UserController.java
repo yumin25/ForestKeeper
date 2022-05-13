@@ -2,12 +2,10 @@ package com.ssafy.forestkeeper.api.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.ssafy.forestkeeper.application.service.s3.S3Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
 import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
-import com.ssafy.forestkeeper.application.service.s3.S3Service;
 import com.ssafy.forestkeeper.application.service.user.UserService;
-import com.ssafy.forestkeeper.domain.dao.image.Image;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-    
+
     private final S3Service s3Service;
 
     @ApiOperation(value = "회원가입")
@@ -56,7 +51,7 @@ public class UserController {
             else if (result == 4093) return ResponseEntity.status(409).body(BaseResponseDTO.of("비밀번호 형식이 잘못되었습니다.", 409));
             else if (result == 4094) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 이메일로 가입된 계정이 이미 존재합니다.", 409));
             else if (result == 4095) return ResponseEntity.status(409).body(BaseResponseDTO.of("해당 닉네임으로 가입된 계정이 이미 존재합니다.", 409));
-            
+
             if(!multipartFile.isEmpty()) {
             	String savedFileName = s3Service.uploadFileToS3("user", multipartFile);
             	userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
@@ -118,7 +113,6 @@ public class UserController {
         Integer result = userService.modifyNickname(nickname);
 
         if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
-        else if(result == 201) return ResponseEntity.status(201).body(BaseResponseDTO.of("닉네임을 변경하였습니다.", 201));
         else if(result == 4091) return ResponseEntity.status(409).body(BaseResponseDTO.of("사용 중인 닉네임입니다.", 409));
         else if(result == 4092) return ResponseEntity.status(409).body(BaseResponseDTO.of("닉네임 형식이 잘못되었습니다.", 409));
         else return ResponseEntity.status(500).body(BaseResponseDTO.of("닉네임 변경에 실패하였습니다.", 500));
@@ -143,7 +137,7 @@ public class UserController {
         if(userService.withdraw()) return ResponseEntity.status(201).body(BaseResponseDTO.of("탈퇴하였습니다.", 201));
         return ResponseEntity.status(500).body(BaseResponseDTO.of("탈퇴에 실패하였습니다.", 500));
     }
-    
+
 	@PutMapping("/modify/profile")
 	@ApiOperation(value = "회원 프로필 사진 수정")
 	public Object updateUserImage(@RequestBody @ApiParam(value = "회원 프로필 사진.", required = true) MultipartFile image) {
