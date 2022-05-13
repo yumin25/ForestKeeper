@@ -31,8 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/userinfo")
 public class UserInfoController {
 	
-	private final PloggingService ploggingService;
-
 	private final UserInfoService userInfoService;
 
 	@ApiOperation(value = "플로깅 목록 조회")
@@ -62,21 +60,21 @@ public class UserInfoController {
         try {
         	mountainList = userInfoService.getMountainList(page);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("산 목록 조회에 실패했습니다.", 409));
         }
         return ResponseEntity.status(200).body(MountainNameListResponseDTO.of("산 목록 조회에 성공했습니다.", 200, MountainNameListResponseDTO.builder().list(mountainList.get()).build()));
     }
     
-    @ApiOperation(value = "방문한 산 목록 조회")
-    @GetMapping("/{mountainName}")
-    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 이름", required = true) @PathVariable @NotBlank String mountainName) {
+    @ApiOperation(value = "산별 플로깅 목록 조회")
+    @GetMapping("/{mountainCode}")
+    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 코드", required = true) @PathVariable @NotBlank String mountainCode) {
 
     	PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;
     	
         try {
-        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainName);
+        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

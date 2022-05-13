@@ -1,38 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
-
-// function NaverMapAPI() {
-//   return (
-//     <NaverMap
-//       mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
-//       style={{
-//         width: "100vw", // 네이버지도 가로 길이
-//         height: "92.5vh", // 네이버지도 세로 길이
-//         position: "relative",
-//         zIndex: 1,
-//       }}
-//       defaultCenter={{ lat: 37.554722, lng: 126.970833 }} // 지도 초기 위치
-//       defaultZoom={13} // 지도 초기 확대 배율
-//     >
-//       <Marker
-//         position={new window.naver.maps.LatLng({ myLocation })}
-//         animation={window.naver.maps.Animation.BOUNCE}
-//         onClick={() => {
-//           alert("여기는 네이버 입니다.");
-//         }}
-//       />
-//     </NaverMap>
-//   );
-// }
-console.log(window);
+import PloggingMap from "./PloggingMap";
+import Send from "../../../config/Send";
+let tracker;
+let distanceTracker;
 function Plogging() {
-  const navermaps = window.naver.maps;
-  const [myLocation, setMyLocation] = useState("");
-  // 현재 위치
+  const [trashList, setTrashList] = useState([]);
   useEffect(() => {
+    getTrash();
+  }, []);
+
+  function getTrash() {
+    Send.get(
+      `/plogging/trash`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+      .then((res) => {
+        setTrashList(res.data.list);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  const [myLocation, setMyLocation] = useState({
+    latitude: 37.554722,
+    longitude: 126.970833,
+  });
+
+  const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
         setMyLocation({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -41,35 +42,112 @@ function Plogging() {
     } else {
       window.alert("현재위치를 알수 없습니다.");
     }
-  }, []);
+  };
+
+  // distance
+  const computeDistance = (
+    startLatCord,
+    startLonCord,
+    endLatCord,
+    endLonCord
+  ) => {
+    const degreesToRadians = (degrees) => {
+      const radians = (degrees * Math.PI) / 180;
+      return radians;
+    };
+    let startLat = degreesToRadians(startLatCord);
+    let startLon = degreesToRadians(startLonCord);
+    let endLat = degreesToRadians(endLatCord);
+    let endLon = degreesToRadians(endLonCord);
+    const Radius = 6371;
+
+    let distance =
+      Math.acos(
+        Math.sin(startLat) * Math.sin(endLat) +
+          Math.cos(startLat) * Math.cos(endLat) * Math.cos(startLon - endLon)
+      ) * Radius;
+    return (
+      Math.floor(distance) +
+      (Math.round(distance * 100) - Math.floor(distance) * 100) / 100
+    );
+  };
+  const [allDistance, setAllDistance] = useState([]);
+
+  // gps
+  const [trackingPath, setTrackingPath] = useState([]);
+  const handleTrackingPath = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setTrackingPath((currentArray) => [
+          ...currentArray,
+          new window.naver.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          ),
+        ]);
+      });
+    }
+  };
+  const handleAllDistance = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        var endLatCord = position.coords.latitude;
+        var endLonCord = position.coords.longitude;
+
+        var startLatCord =
+          trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].y : 1;
+        var startLonCord =
+          trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].x : 2;
+        let dist = computeDistance(
+          startLatCord,
+          startLonCord,
+          endLatCord,
+          endLonCord
+        );
+
+        if (dist < 1) {
+          setAllDistance((currentArray) => [...currentArray, dist]);
+        }
+        // console.log(startLatCord, startLonCord, endLatCord, endLonCord);
+        // console.log(trackingPath[trackingPath.length - 1]);
+        // console.log(dist);
+        // console.log(allDistance);
+      });
+    }
+  };
+  const tracking = () => {
+    tracker = setInterval(function () {
+      getLocation();
+      handleTrackingPath();
+    }, 2000);
+  };
+  const distTracking = () => {
+    handleAllDistance();
+  };
+  const stopTracking = () => {
+    clearInterval(tracker);
+    clearInterval(distanceTracker);
+    // console.log(allDistance);
+    // console.log(trackingPath);
+    // console.log(trackingPath[trackingPath.length - 1].y, trackingPath[trackingPath.length - 1].x);
+  };
+
+  useEffect(() => {
+    distTracking();
+  }, [trackingPath]);
 
   return (
     <>
-      <RenderAfterNavermapsLoaded
-        ncpClientId={"vyzp4gjptr"} // 자신의 네이버 계정에서 발급받은 Client ID
-        error={<p>Maps Load Error</p>}
-        loading={<p>Maps Loading...</p>}
-      >
-        <NaverMap
-          mapDivId={"react-naver-map"} // default: react-naver-map
-          style={{
-            width: "100vw", // 네이버지도 가로 길이
-            height: "92.5vh", // 네이버지도 세로 길이
-            position: "relative",
-            zIndex: 1,
-          }}
-          defaultCenter={{ lat: 37.554722, lng: 126.970833 }} // 지도 초기 위치
-          defaultZoom={13} // 지도 초기 확대 배율
-        >
-          <Marker
-            position={new navermaps.LatLng(myLocation)}
-            animation={navermaps.Animation.BOUNCE}
-            onClick={() => {
-              alert("여기는 네이버 입니다.");
-            }}
-          />
-        </NaverMap>
-      </RenderAfterNavermapsLoaded>
+      <PloggingMap
+        getLocation={getLocation}
+        myLocation={myLocation}
+        trackingPath={trackingPath}
+        tracking={tracking}
+        distTracking={distTracking}
+        stopTracking={stopTracking}
+        allDistance={allDistance}
+        trashList={trashList}
+      ></PloggingMap>
     </>
   );
 }
