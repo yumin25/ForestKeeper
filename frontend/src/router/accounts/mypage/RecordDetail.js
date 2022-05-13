@@ -37,7 +37,7 @@ function RecordDetail() {
       <div
         style={{ display: "flex", margin: "1vh" }}
         onClick={(e) => {
-          navigate(-1);
+          navigate("/accounts/mypage");
           delId(e);
         }}
       >

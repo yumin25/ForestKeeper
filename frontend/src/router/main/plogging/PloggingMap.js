@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  RenderAfterNavermapsLoaded,
-  NaverMap,
-  Marker,
-  Polyline,
-} from "react-naver-maps";
+import { useNavigate } from "react-router-dom";
+import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 import ReactTimerStopwatch from "react-stopwatch-timer";
 import location from "../../../res/img/location.png";
 import play from "../../../res/img/play.png";
@@ -45,9 +41,6 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
     northEast = bounds.getNE(),
     lngSpan = northEast.lng() - southWest.lng(),
     latSpan = northEast.lat() - southWest.lat();
-  // useEffect(() => {
-  //   displayMarker();
-  // }, [lat, long]);
 
   useEffect(() => {
     if (isClicked == false) {
@@ -72,10 +65,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   function displayMarker() {
     count++;
     console.log(count);
-    var position = new navermaps.LatLng(
-      southWest.lat() + latSpan * Math.random(),
-      southWest.lng() + lngSpan * Math.random()
-    );
+    var position = new navermaps.LatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
     let num = 0;
 
     if (count != 0 && count % 2 == 0) {
@@ -99,10 +89,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
         ) {
           num += 1;
           var marker = new navermaps.Marker({
-            position: new navermaps.LatLng(
-              trashList[i].latitude,
-              trashList[i].longitude
-            ),
+            position: new navermaps.LatLng(trashList[i].latitude, trashList[i].longitude),
             map: map,
           });
         }
@@ -130,25 +117,10 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
           center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
           defaultZoom={13} // 지도 초기 확대 배율
         >
-          {myLocation.latitude !== 37.554722 &&
-            myLocation.longitude !== 126.970833 && (
-              <Marker
-                key={1}
-                position={
-                  new navermaps.LatLng(
-                    myLocation.latitude,
-                    myLocation.longitude
-                  )
-                }
-              />
-            )}
-          <Polyline
-            path={trackingPath}
-            strokeColor={"red"}
-            strokeStyle={"solid"}
-            strokeOpacity={1}
-            strokeWeight={3}
-          />
+          {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
+            <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
+          )}
+          <Polyline path={trackingPath} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
         </NaverMap>
       ) : (
         <div
@@ -164,16 +136,8 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   );
 }
 
-function PloggingMap({
-  getLocation,
-  myLocation,
-  tracking,
-  stopTracking,
-  trackingPath,
-  allDistance,
-  distTracking,
-  trashList,
-}) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking, mtCode, trashList }) {
+  const navigate = useNavigate();
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
@@ -186,20 +150,8 @@ function PloggingMap({
     stopButton.style.animation = "reverse-stretch 1s both";
   };
   const timeRecord = () => {
-    let timeHour =
-      Number(watch().slice(11, 13)) +
-      Number(
-        document
-          .getElementsByClassName("react-stopwatch-timer__table")[0]
-          .innerText.slice(0, 2)
-      );
-    let timeMin =
-      Number(watch().slice(14, 16)) +
-      Number(
-        document
-          .getElementsByClassName("react-stopwatch-timer__table")[0]
-          .innerText.slice(3, 5)
-      );
+    let timeHour = Number(watch().slice(11, 13)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(0, 2));
+    let timeMin = Number(watch().slice(14, 16)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(3, 5));
 
     if (timeMin >= 60) {
       timeHour += 1;
@@ -237,24 +189,15 @@ function PloggingMap({
     var min = date.getMinutes();
     // var s = date.getSeconds();
 
-    var result =
-      y +
-      "-" +
-      makeZeroNum(m, 2) +
-      "-" +
-      makeZeroNum(d, 2) +
-      " " +
-      makeZeroNum(h, 2) +
-      ":" +
-      makeZeroNum(min, 2);
+    var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
     // + ":" + makeZeroNum(s, 2);
     return result;
   };
   // 요청보내기
-  const recordPlogging = () => {
+  const recordPlogging = (e) => {
     const formData = new FormData();
     const data = {
-      mountainCode: "114100401",
+      mountainCode: mtCode,
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
@@ -270,14 +213,14 @@ function PloggingMap({
       coords: trackingPath ? trackingPath : [],
     };
     console.log(data);
-    formData.append(
-      "dto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
+    formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
     File.post("/plogging", formData)
       .then((res) => {
         console.log(res.data);
+        e.preventDefault();
+        navigate("/accounts/mypage/recorddetail");
+        localStorage.setItem("ploggingId", res.data.ploggingId);
       })
       .catch((e) => {
         console.log(e);
@@ -382,11 +325,11 @@ function PloggingMap({
             src={stop}
             alt=""
             style={{ zIndex: 1, height: "3.5vh", width: "3.5vh" }}
-            onClick={() => {
+            onClick={(e) => {
               endRecording();
               setIsOn(false);
               stopTracking();
-              recordPlogging();
+              recordPlogging(e);
             }}
           />
         </div>
@@ -397,12 +340,7 @@ function PloggingMap({
           error={<p>Maps Load Error</p>}
           loading={<p>Maps Loading...</p>}
         >
-          <MapAPI
-            myLocation={myLocation}
-            trackingPath={trackingPath}
-            trashList={trashList}
-            isOn={isOn}
-          />
+          <MapAPI myLocation={myLocation} trackingPath={trackingPath} trashList={trashList} isOn={isOn} />
         </RenderAfterNavermapsLoaded>
       </div>
     </>
