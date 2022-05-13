@@ -42,7 +42,9 @@ public class S3Service {
 
 	            amazonS3Client.putObject(new PutObjectRequest(bucket, category + "/" + fileName, byteArrayIs, objectMetadata));
 	            if(category.equals("user")) {
-	            	uploadThumbFile(multipartFile, fileName);
+	            	uploadThumbFile(multipartFile, fileName, 100);
+	            }else {
+	            	uploadThumbFile(multipartFile, fileName, 100);
 	            }
 	            
 	        } catch (IOException e) {
@@ -54,11 +56,11 @@ public class S3Service {
 	    }
 	    
 	    // upload thumbnail image file
-	    public void uploadThumbFile(MultipartFile image, String fileName) {
+	    public void uploadThumbFile(MultipartFile image, String fileName, int size) {
 	      try {
 	        // make thumbnail image for s3
 	        BufferedImage bufferImage = ImageIO.read(image.getInputStream());
-	        BufferedImage thumbnailImage = Thumbnails.of(bufferImage).size(100, 100).asBufferedImage();
+	        BufferedImage thumbnailImage = Thumbnails.of(bufferImage).size(size, size).asBufferedImage();
 
 	        ByteArrayOutputStream thumbOutput = new ByteArrayOutputStream();
 	        String imageType = image.getContentType();
