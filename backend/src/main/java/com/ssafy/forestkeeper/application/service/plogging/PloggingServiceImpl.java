@@ -155,7 +155,9 @@ public class PloggingServiceImpl implements PloggingService{
 //	}
 
 	@Override
-	public void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging) {
+	public void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId) {
+		Plogging plogging = ploggingRepository.findById(ploggingId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅 기록을 찾을 수 없습니다."));
     	imageRepository.save(Image.builder()
 				.originalFileName(originalFileName)
 				.savedFileName(savedFileName)
