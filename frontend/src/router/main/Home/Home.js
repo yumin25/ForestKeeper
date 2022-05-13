@@ -5,7 +5,7 @@ import "./Home.css";
 import search from "../../../res/img/search.png";
 import { Route, Routes } from "react-router-dom";
 import SearchInput from "./SearchInput";
-import Map from "./Map";
+import HomeDetail from "./HomeDetail";
 import SearchList from "./SearchList";
 
 function Home() {
@@ -16,21 +16,6 @@ function Home() {
     longitude: 126.970833,
   });
   const [mountainCode, setMountainCode] = useState();
- 
-
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position);
-        setMyLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      });
-    } else {
-      window.alert("현재위치를 알수 없습니다.");
-    }
-  }
 
   function goSearch() {
     if (keyword !== "" && keyword != undefined) {
@@ -73,8 +58,8 @@ function Home() {
             onSubmit={onSubmit}
             goSearch={goSearch}
           ></SearchInput>
-       
-          <Map getLocation={getLocation} myLocation={myLocation}></Map>
+
+          <HomeDetail></HomeDetail>
         </>
       ) : (
         <SearchList
