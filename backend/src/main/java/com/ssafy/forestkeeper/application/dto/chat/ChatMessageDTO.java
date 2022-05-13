@@ -1,5 +1,9 @@
 package com.ssafy.forestkeeper.application.dto.chat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.ssafy.forestkeeper.domain.enums.MessageCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,6 +38,8 @@ public class ChatMessageDTO {
     private String content;
 
     @ApiModelProperty(name = "메시지 보낸 시간")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime sendTime;
 
     @ApiModelProperty(name = "메시지 삭제 여부")
