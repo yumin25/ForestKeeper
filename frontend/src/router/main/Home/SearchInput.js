@@ -4,8 +4,16 @@ import axios from "axios";
 function SearchInput({ keyword, keywordHandler, onSubmit, goSearch }) {
   return (
     <>
-      <div id="searchBar" style={{ height: "7vh" }}>
-        <div style={{ display: "flex", marginTop: "3.5vh" }}>
+      <div
+        id="searchBar"
+        style={{
+          height: "7vh",
+          marginTop: "3.5vh",
+
+          marginBottom: "1vh",
+        }}
+      >
+        <div style={{ display: "flex" }}>
           <div>
             {keyword === "" ? (
               <input
@@ -20,7 +28,7 @@ function SearchInput({ keyword, keywordHandler, onSubmit, goSearch }) {
                   borderRadius: 10,
                   border: "none",
                   paddingLeft: "5vw",
-                  marginBottom: "1vh",
+
                   marginLeft: "4.5vw",
                 }}
               ></input>
@@ -37,7 +45,6 @@ function SearchInput({ keyword, keywordHandler, onSubmit, goSearch }) {
                   borderRadius: 10,
                   border: "none",
                   paddingLeft: "5vw",
-                  marginBottom: "1vh",
                   marginLeft: "4.5vw",
                 }}
               ></input>
