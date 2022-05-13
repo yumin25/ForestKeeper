@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/user/userinfo").permitAll()
                 .antMatchers("/api/user/modify/**").hasRole("USER")
+                .antMatchers("/ws-fk/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
