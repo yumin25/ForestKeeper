@@ -173,7 +173,7 @@ public class PloggingServiceImpl implements PloggingService{
 		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
 		long distance = 0L;
 		int visiter = 0;
-		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainId(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
+		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainIdOrderByStartTimeDesc(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
 		
 		if(ploggingList == null) {
 			return MountainPloggingInfoResponseDTO.builder()
