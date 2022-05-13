@@ -16,12 +16,15 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   const TrashStyle = {
     position: "absolute",
     border: "0.1px solid #8ABC9A",
+    borderRadius: 15,
     background: "#8ABC9A",
     color: "white",
     borderRadius: 15,
     fontSize: "1.7vh",
+    left: "70vw",
+    top: "3vh",
     height: "5vh",
-    width: "22vw",
+    width: "28vw",
     zIndex: 2,
   };
 
@@ -112,7 +115,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   return (
     <div>
       <button style={TrashStyle} onClick={() => displayMarker()}>
-        쓰레기통
+        쓰레기통 찾기
       </button>
 
       {isOn === true ? (
