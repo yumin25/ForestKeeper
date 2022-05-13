@@ -23,6 +23,7 @@ function MyPage({ userSlice }) {
       },
     })
       .then((res) => {
+        console.log(res.data.list);
         setPloggingList(res.data.list);
       })
       .catch((e) => {

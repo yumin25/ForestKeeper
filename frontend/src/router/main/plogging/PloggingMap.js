@@ -29,7 +29,7 @@ function MapAPI({ myLocation, trackingPath }) {
     </NaverMap>
   );
 }
-function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking }) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking, mtCode }) {
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
@@ -88,7 +88,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
   const recordPlogging = () => {
     const formData = new FormData();
     const data = {
-      mountainCode: "114100401",
+      mountainCode: mtCode,
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
