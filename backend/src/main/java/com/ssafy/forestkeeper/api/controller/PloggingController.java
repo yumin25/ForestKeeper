@@ -166,7 +166,7 @@ public class PloggingController {
 
     @ApiOperation(value = "vision api로 분석 후 경험치 부여")
     @PostMapping("/ai")
-    public ResponseEntity<?> detectObject(@RequestBody MultipartFile image, @RequestBody String ploggingId) {
+    public ResponseEntity<?> detectObject(@RequestParam MultipartFile image, @RequestParam String ploggingId) {
         PloggingExperienceResponseDTO ploggingExperienceResponseDTO;
         try {
             ploggingExperienceResponseDTO = ploggingAiService.detectLabels(image, ploggingId);
@@ -175,6 +175,6 @@ public class PloggingController {
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("경험치 부여에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 201, ploggingExperienceResponseDTO));
+        return ResponseEntity.status(201).body(PloggingExperienceResponseDTO.of("경험치 부여에 성공했습니다.", 200, ploggingExperienceResponseDTO));
     }
 }
