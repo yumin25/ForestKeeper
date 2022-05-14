@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="./readme_assets/doners_intro.png" alt="Doners" />
+  <img src="./readme_assets/forestkeeper_logo.png" alt="forestkeeper_logo" />
   <br />
   <br />
 </div>
