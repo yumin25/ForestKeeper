@@ -349,6 +349,7 @@ function Star({ mountainCode, url }) {
         style={{
           height: "42.5vh",
           width: "80vw",
+          marginTop: "4vh",
           marginLeft: "10vw",
         }}
       >
