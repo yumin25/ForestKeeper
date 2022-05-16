@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ApiModel("PloggingExperienceResponseDTO")
 @Getter
 @ToString
@@ -14,6 +16,9 @@ import lombok.ToString;
 public class PloggingExperienceResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "경험치")
     private int exp;
+
+    @ApiModelProperty(name = "타입")
+    private List<String> type;
 
     public static PloggingExperienceResponseDTO of(String message, Integer statusCode, PloggingExperienceResponseDTO ploggingExperienceResponseDTO){
         ploggingExperienceResponseDTO.setMessage(message);

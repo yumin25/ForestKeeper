@@ -1,26 +1,15 @@
 package com.ssafy.forestkeeper.domain.dao.image;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.user.User;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
 
 @Entity
 @Builder
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +31,11 @@ public class Image extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plogging_id")
     private Plogging plogging;
+
+    public void changeFileName(String originalFileName, String savedFileName) {
+        this.originalFileName = originalFileName;
+        this.savedFileName = savedFileName;
+    }
 
     public void changeResize() {
         this.resize = true;

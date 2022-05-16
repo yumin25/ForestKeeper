@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,19 +34,22 @@ public class JwtAuthenticationProvider {
     private final UserDetailsService userDetailsService;
 
     // JWT 토큰 생성
-    public String createToken(String userAccount) {
+    public String createToken(Authentication authentication) {
 
-        Claims claims = Jwts.claims().setSubject(userAccount); // JWT payload 에 저장되는 정보 단위
-        claims.put("roles", "ROLE_USER"); // 정보는 key / value 쌍으로 저장됨
+        String authorities = authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
         Date now = new Date();
 
         return Jwts.builder()
-                .setClaims(claims) // 정보 저장
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities) // 정보 저장
                 .setIssuer(TOKEN_ISSUER) // 토큰 발급자
                 .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + tokenValidTime)) // set Expire Time
-                .signWith(SignatureAlgorithm.HS512, secretKey)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
+                .setExpiration(new Date(now.getTime() + tokenValidTime)) // 만료 시간
+                .signWith(SignatureAlgorithm.HS512, secretKey)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret 값 세팅
                 .compact();
 
     }
@@ -100,4 +105,5 @@ public class JwtAuthenticationProvider {
         return false;
 
     }
+
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import temp from "../../../../res/img/temp.png";
+import logo_temp from "../../../../res/img/logo_temp.png";
 import first from "../../../../res/img/medal.png";
 import second from "../../../../res/img/medal(1).png";
 import third from "../../../../res/img/medal(2).png";
 import axios from "axios";
+import Send from "../../../../config/Send";
 import "./Star.css";
 function UserItem({ user, tab }) {
   return (
@@ -15,24 +16,52 @@ function UserItem({ user, tab }) {
           marginBottom: "1.5vh",
         }}
       >
-        <div className="lowRank">{user.rank}</div>
         <div style={{ marginRight: "3vw" }}>
-          <img
-            src={temp}
-            style={{
-              width: "8vw",
-              height: "8vw",
-              borderRadius: 100,
-            }}
-          />
+          {user.imagePath == "" || user.imagePath == null ? (
+            <img
+              src={logo_temp}
+              style={{
+                width: "4.5vh",
+                height: "4.5vh",
+                borderRadius: 100,
+              }}
+            />
+          ) : (
+            <img
+              src={user.imagePath}
+              style={{
+                width: "4.5vh",
+                height: "4.5vh",
+                borderRadius: 100,
+              }}
+            />
+          )}
         </div>
-        <div className="lowNickname">{user.nickname}</div>
+        <div
+          className="lowNickname"
+          style={{ marginTop: "1vh", fontSize: "1.6vh" }}
+        >
+          {user.nickname}
+        </div>
         {tab == "count" ? (
-          <div id="result" className="topResult">
+          <div
+            id="result"
+            className="topResult"
+            style={{
+              position: "absolute",
+              right: "10vw",
+              marginTop: "0.8vh",
+              fontSize: "1.8vh",
+            }}
+          >
             {user.count} 회
           </div>
         ) : (
-          <div id="result" className="topResult">
+          <div
+            id="result"
+            className="topResult"
+            style={{ marginTop: "0.8vh", fontSize: "1.8vh" }}
+          >
             {user.distance} km
           </div>
         )}
@@ -42,8 +71,32 @@ function UserItem({ user, tab }) {
 }
 
 function Star({ mountainCode, url }) {
-  const [users, setUsers] = useState([]);
-  const LowRanker = users.slice(3, users.length);
+  const [users, setUsers] = useState([
+    {
+      nickname: "",
+      count: 0,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      nickname: "",
+      count: 0,
+      distance: 0.0,
+      imagePath: "",
+    },
+    {
+      nickname: "",
+      count: 0,
+      distance: 0.0,
+      imagePath: "",
+    },
+  ]);
+  // const LowRanker = users.slice(3, users.length);
+  const [LowRanker, setLowRanker] = useState(users.slice(3, users.length));
+
+  console.log(users);
+  const [rank, setRank] = useState(2);
+  const [rankNum, setRankNum] = useState([4, 5, 6, 7, 8, 9, 10]);
   const [tab, setTab] = useState("count");
 
   useEffect(() => {
@@ -52,12 +105,12 @@ function Star({ mountainCode, url }) {
 
   function getRank() {
     console.log(mountainCode);
-    axios
-      .get(url + `/mountain/rank/${mountainCode}`, {
-        params: {
-          by: tab,
-        },
-      })
+    setRank(2);
+    Send.get(url + `/mountain/rank/${mountainCode}`, {
+      params: {
+        by: tab,
+      },
+    })
       .then(function (response) {
         console.log(response.data);
         setUsers(response.data.mountainRankResponseDTOList);
@@ -85,7 +138,6 @@ function Star({ mountainCode, url }) {
     border: "none",
     marginRight: "1vw",
   };
-
   return (
     <>
       <div id="tab" style={{ marginLeft: "9vw", marginRight: "6vw" }}>
@@ -111,23 +163,29 @@ function Star({ mountainCode, url }) {
         id="topRanker"
         style={{
           height: "20vh",
-          width: "73vw",
+          width: "80vw",
           marginTop: "2.5vh",
-          marginBottom: "2.5vh",
+          marginBottom: "1vh",
           marginLeft: "10vw",
           display: "flex",
         }}
       >
-        <div id="second" style={{ width: "19vw", marginRight: "5.5vw" }}>
+        <div id="second" style={{ width: "19vw", marginRight: "10vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img src={temp} className="topImage" />
+              {users[1] &&
+              users[1].imagePath != "" &&
+              users[1].imagePath !== null ? (
+                <img src={users[1].imagePath} className="topImage" />
+              ) : (
+                <img src={logo_temp} className="topImage" />
+              )}
             </div>
             <div id="rankImg">
               <img
                 src={second}
                 style={{
-                  top: "33.5vh",
+                  top: "36vh",
                   left: "19.5vw",
                   position: "absolute",
                   width: "8.8vw",
@@ -137,41 +195,67 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div className="topNickname">
-            {users.length >= 2 && users[1].nickname}
+          <div>
+            <div className="topNickname" style={{ fontSize: "1.6vh" }}>
+              {users.length >= 2 && users[1].nickname}
+            </div>
+            {tab == "count"
+              ? users.length >= 2 && (
+                  <div
+                    id="result"
+                    className="topResult"
+                    style={{ fontSize: "1.8vh" }}
+                  >
+                    {users[1].count} 회
+                  </div>
+                )
+              : users.length >= 2 && (
+                  <div
+                    id="result"
+                    className="topResult"
+                    style={{ fontSize: "1.8vh" }}
+                  >
+                    {users[1].distance} km
+                  </div>
+                )}
           </div>
-          {tab == "count"
-            ? users.length >= 2 && (
-                <div id="result" className="topResult">
-                  {users[1].count} 회
-                </div>
-              )
-            : users.length >= 2 && (
-                <div id="result" className="topResult">
-                  {users[1].distance} km
-                </div>
-              )}
         </div>
 
-        <div id="first" style={{ width: "23vw", marginRight: "5.5vw" }}>
+        <div id="first" style={{ width: "23vw", marginRight: "10vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center" }}>
-              <img
-                src={temp}
-                style={{
-                  position: "relative",
-                  width: "21vw",
-                  height: "21vw",
-                  borderRadius: 100,
-                }}
-              />
+              {users[0] &&
+              users[0].imagePath != "" &&
+              users[0].imagePath !== null ? (
+                <img
+                  src={users[0].imagePath}
+                  style={{
+                    position: "relative",
+                    width: "21vw",
+                    height: "21vw",
+                    borderRadius: 100,
+                  }}
+                  className="topImage"
+                />
+              ) : (
+                <img
+                  src={logo_temp}
+                  style={{
+                    position: "relative",
+                    width: "21vw",
+                    height: "21vw",
+                    borderRadius: 100,
+                  }}
+                  className="topImage"
+                />
+              )}
             </div>
             <div id="rankImg">
               <img
                 src={first}
                 style={{
-                  top: "28vh",
-                  left: "47.5vw",
+                  top: "30vh",
+                  left: "50.5vw",
                   position: "absolute",
                   width: "9.3vw",
                   height: "9vw",
@@ -180,18 +264,30 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div id="nickname" className="topNickname">
+          <div
+            id="nickname"
+            className="topNickname"
+            style={{ fontSize: "1.6vh" }}
+          >
             {users.length >= 1 && users[0].nickname}
           </div>
 
           {tab == "count"
             ? users.length >= 1 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[0].count} 회
                 </div>
               )
             : users.length >= 1 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[0].distance} km
                 </div>
               )}
@@ -200,14 +296,20 @@ function Star({ mountainCode, url }) {
         <div id="third" style={{ width: "19vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
-              <img src={temp} className="topImage" />
+              {users[2] &&
+              users[2].imagePath != "" &&
+              users[2].imagePath != null ? (
+                <img src={users[2].imagePath} className="topImage" />
+              ) : (
+                <img src={logo_temp} className="topImage" />
+              )}
             </div>
             <div id="rankImg">
               <img
                 src={third}
                 style={{
-                  top: "33.5vh",
-                  left: "72.5vw",
+                  top: "36vh",
+                  left: "80.5vw",
                   position: "absolute",
                   width: "8.3vw",
                   height: "8vw",
@@ -216,17 +318,25 @@ function Star({ mountainCode, url }) {
               />
             </div>
           </div>
-          <div className="topNickname">
+          <div className="topNickname" style={{ fontSize: "1.6vh" }}>
             {users.length >= 3 && users[2].nickname}
           </div>
           {tab == "count"
             ? users.length >= 3 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[2].count} 회
                 </div>
               )
             : users.length >= 3 && (
-                <div id="result" className="topResult">
+                <div
+                  id="result"
+                  className="topResult"
+                  style={{ fontSize: "1.8vh" }}
+                >
                   {users[2].distance} km
                 </div>
               )}
@@ -242,8 +352,30 @@ function Star({ mountainCode, url }) {
           marginLeft: "10vw",
         }}
       >
-        {LowRanker &&
-          LowRanker.map((user) => <UserItem tab={tab} user={user}></UserItem>)}
+        <div style={{ display: "flex" }}>
+          <div>
+            {rankNum &&
+              rankNum.map((num) => (
+                <div
+                  style={{
+                    height: "3.5vh",
+                    marginBottom: "1.5vh",
+                    fontSize: "1.6vh",
+                    paddingTop: "1vh",
+                    marginRight: "3vw",
+                  }}
+                >
+                  {num}위
+                </div>
+              ))}
+          </div>
+          <div>
+            {LowRanker &&
+              LowRanker.map((user) => (
+                <UserItem rank={rank} tab={tab} user={user}></UserItem>
+              ))}
+          </div>
+        </div>
       </div>
     </>
   );

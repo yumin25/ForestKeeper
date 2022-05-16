@@ -91,24 +91,31 @@ function Signup() {
       console.log(email, password, name, nickname);
       let formData = new FormData();
       formData.append("image", image);
-      let signupData = {
+
+      let dto = {
         email: email,
-        name: name,
-        nickname: nickname,
         password: password,
+        nickname: nickname,
+        name: name,
       };
+
       formData.append(
-        "signupData",
-        new Blob([JSON.stringify(signupData)], {
+        "dto",
+        new Blob([JSON.stringify(dto)], {
           type: "application/json",
         })
       );
 
       axios
-        .post(url + `/api/user`, formData)
+        .post(url + `/api/user`, formData, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": `multipart/form-data`,
+          },
+        })
         .then(function (response) {
           console.log(response);
-          if (response.status === 201) {
+          if (response.data.statusCode === 201) {
             setEmail("");
             setPassword("");
             setPasswordConfirm("");
@@ -140,17 +147,19 @@ function Signup() {
               fileInput.current.click();
             }}
           />
-
-          <input
-            ref={fileInput}
-            type="file"
-            style={{ display: "none" }}
-            className="imgInput"
-            id="profile_img"
-            accept="image/*"
-            name="file"
-            onChange={onImageHandler}
-          />
+          <form enctype="multipart/form-data">
+            <input
+              ref={fileInput}
+              type="file"
+              style={{ display: "none" }}
+              className="imgInput"
+              id="profile_img"
+              accept="image/*"
+              name="file"
+              onChange={onImageHandler}
+              multiple
+            />
+          </form>
           <div
             style={{
               textAlign: "center",

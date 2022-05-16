@@ -35,4 +35,5 @@ public class MatchingUser extends BaseEntity {
     public void changeDelete() {
         this.delete = true;
     }
+
 }

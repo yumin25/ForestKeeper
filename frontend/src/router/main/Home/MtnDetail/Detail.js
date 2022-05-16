@@ -23,7 +23,6 @@ function Detail({ userSlice }) {
 
   useEffect(() => {
     getMtnInfo();
-    getTotal();
   }, []);
 
   function getMtnInfo() {
@@ -33,6 +32,7 @@ function Detail({ userSlice }) {
           console.log(res);
           setInfo(res.data.mountainInfo);
           window.localStorage.setItem("mountainId", res.data.mountainInfo.id);
+          getTotal();
         }
       })
       .catch((e) => {
@@ -41,12 +41,11 @@ function Detail({ userSlice }) {
   }
 
   function getTotal() {
-    axios
-      .get(url + `/plogging`, {
-        params: {
-          mountainCode: useParam.mountainCode,
-        },
-      })
+    Send.get(url + `/plogging`, {
+      params: {
+        mountainCode: useParam.mountainCode,
+      },
+    })
       .then(function (response) {
         console.log(response.data);
         setVisiter(response.data.visiter);
@@ -77,15 +76,17 @@ function Detail({ userSlice }) {
         </div>
 
         <div
-          id="mountainName"
           style={{
             marginLeft: "6vw",
             marginRight: "6vw",
-            height: "5vh",
+            height: "4.5vh",
             display: "flex",
+
+            marginBottom: "1vh",
           }}
         >
           <div
+            id="mountainName"
             style={{
               marginLeft: "3vw",
               fontSize: "3.5vh",
@@ -100,25 +101,27 @@ function Detail({ userSlice }) {
               <img
                 style={{
                   marginLeft: "2vw",
-                  marginTop: "1.5vh",
-                  width: "6vw",
-                  height: "6vw",
+                  marginTop: "1.2vh",
+                  width: "3vh",
+                  height: "3vh",
                 }}
                 src={check}
               />
             ) : (
-              <div style={{ color: "#69696C" }}>
+              <div style={{ color: "#69696C", display: "flex" }}>
                 <img
                   style={{
                     marginLeft: "2vw",
-                    marginTop: "1.5vh",
-                    width: "6vw",
-                    height: "6vw",
-                    marginRight: "1vw",
+                    marginTop: "1.2vh",
+                    width: "3vh",
+                    height: "3vh",
+                    marginRight: "1.5vw",
                   }}
                   src={checked}
                 />
-                <div>{count}회 방문</div>
+                <div style={{ marginTop: "1.5vh", fontSize: "1.8vh" }}>
+                  {count}회 방문
+                </div>
               </div>
             )}
           </div>
@@ -129,7 +132,7 @@ function Detail({ userSlice }) {
           style={{
             marginLeft: "9vw",
             marginRight: "6vw",
-            marginBottom: "2.2vh",
+            marginBottom: "3.8vh",
             fontSize: "1.8vh",
             color: "#69696C",
           }}

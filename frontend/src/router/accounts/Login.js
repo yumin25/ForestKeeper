@@ -27,7 +27,10 @@ function Login({ saveUser, userSlice }) {
     Send.post(`/user/login`, JSON.stringify(data))
       .then((res) => {
         if (res.status === 200) {
-          window.localStorage.setItem("idToken", JSON.stringify(res.data.accessToken));
+          window.localStorage.setItem(
+            "idToken",
+            JSON.stringify(res.data.accessToken)
+          );
           axios
             .get(`https://k6a306.p.ssafy.io/api/user/userinfo`, {
               headers: {
@@ -59,15 +62,36 @@ function Login({ saveUser, userSlice }) {
   });
   return (
     <div style={{ margin: "10vh" }}>
-      <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-        <img style={{ width: "70vw", maxWidth: "400px" }} src={logo} alt="logo" />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <img
+          style={{ width: "70vw", maxWidth: "400px" }}
+          src={logo}
+          alt="logo"
+        />
         <div style={{ marginBottom: "0.5rem" }}>
           <p style={{ color: "#69696C", marginBottom: "0.5rem" }}>이메일</p>
-          <input type="email" className="input" placeholder="forest@keeper.com" onChange={onEmailHandler} />
+          <input
+            type="email"
+            className="input"
+            placeholder="forest@keeper.com"
+            onChange={onEmailHandler}
+          />
         </div>
         <div style={{ marginBottom: "2rem" }}>
           <p style={{ color: "#69696C", marginBottom: "0.5rem" }}>비밀번호</p>
-          <input type="password" className="input" placeholder="********" onChange={onPasswordHandler} onKeyPress={handleEnter} />
+          <input
+            type="password"
+            className="input"
+            placeholder="********"
+            onChange={onPasswordHandler}
+            onKeyPress={handleEnter}
+          />
         </div>
         <button
           style={{
@@ -84,6 +108,7 @@ function Login({ saveUser, userSlice }) {
           로그인
         </button>
         <button
+          onClick={() => (document.location.href = `/accounts/signup`)}
           style={{
             borderColor: "#37CD8D",
             backgroundColor: "#FFFFFF",

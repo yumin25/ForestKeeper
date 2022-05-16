@@ -1,6 +1,6 @@
 package com.ssafy.forestkeeper.security.config;
 
-import com.ssafy.forestkeeper.security.service.CustomUserDetailsServiceImpl;
+import com.ssafy.forestkeeper.security.service.UserDetailsServiceImpl;
 import com.ssafy.forestkeeper.security.util.JwtAccessDeniedHandler;
 import com.ssafy.forestkeeper.security.util.JwtAuthenticationEntryPoint;
 import com.ssafy.forestkeeper.security.util.JwtAuthenticationFilter;
@@ -25,10 +25,10 @@ import org.springframework.web.cors.CorsUtils;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private JwtAuthenticationProvider jwtTokenProvider;
+    private JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -80,9 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/user/userinfo").permitAll()
                 .antMatchers("/api/user/modify/**").hasRole("USER")
+                .antMatchers("/ws-fk/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider), UsernamePasswordAuthenticationFilter.class);
     }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.forestkeeper.application.dto.request.plogging.Coordinates;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
@@ -44,34 +45,59 @@ public class PloggingServiceImpl implements PloggingService{
 	
     @Value("${cloud.aws.s3.hosting}")
     public String hosting;
-    
+
 
 	@Override
 	public Plogging register(PloggingRegisterDTO ploggingRegisterDTO) {
-		Mountain mountain = mountainRepository.findByName(ploggingRegisterDTO.getMountainName())
+		Mountain mountain = mountainRepository.findByCode(ploggingRegisterDTO.getMountainCode())
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
-		StringBuilder sb = new StringBuilder();
-		String HM = duration.toString().split("T")[1];
-		if(duration.toString().contains("H")) {
-			sb.append(HM.split("H")[0]);
-			sb.append(" : ");
-			sb.append(HM.split("H")[1].split("M")[0]);
-		}else {
-			sb.append("0 : ");
-			sb.append(HM.split("M")[0]);
-		}
+			
 		Plogging plogging = Plogging.builder()
 								.distance(ploggingRegisterDTO.getDistance())
 								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))
 								.endTime(LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter))
 								.exp(0L)
-								.durationTime(sb.toString())
+								.durationTime(getDuration(duration))
 								.user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
 								.mountain(mountain)
+								.coords(getCoords(ploggingRegisterDTO.getCoords()))
 								.build();
 		return ploggingRepository.save(plogging);
+	}
+	
+	public String getCoords(List<Coordinates> list) {
+    	StringBuilder sb = new StringBuilder();
+    	for(Coordinates c : list) {
+    		sb.append(c.getX()).append(",").append(c.getY()).append("/");
+    	}
+    	
+    	return sb.toString();
+	}
+	
+	public String getDuration(Duration duration) {
+		StringBuilder sb = new StringBuilder();
+		String HM = duration.toString().split("T")[1];
+		int M;
+		if(duration.toString().contains("H")) {
+			sb.append(HM.split("H")[0]);
+			sb.append(" : ");
+			M = Integer.parseInt(HM.split("H")[1].split("M")[0]);
+			if(M < 10) sb.append(0).append(M);
+			else sb.append(M);
+		}else if(duration.toString().contains("M")) {
+			sb.append("0 : ");
+			M = Integer.parseInt(HM.split("M")[0]);
+			if(M < 10) sb.append(0).append(M);
+			else sb.append(M);
+		}
+		else {
+			sb.append("0 : 00");
+		}
+		
+		
+		return sb.toString();
 	}
 
 	@Override
@@ -81,7 +107,15 @@ public class PloggingServiceImpl implements PloggingService{
 		Image image = imageRepository.findByPloggingId(ploggingId).orElse(null);
 		String imagePath;
 		if(image == null) imagePath = "";
-		else imagePath = hosting + image.getSavedFileName();
+		else imagePath = hosting + "plogging/" +image.getSavedFileName();
+		
+		List<Coordinates> list = new ArrayList<>();
+		String[] coords = plogging.getCoords().split("/");
+		String[] xy;
+		for(String s : coords) {
+			xy = s.split(",");
+			list.add(new Coordinates(xy[0],xy[1],xy[0],xy[1]));
+		}
 		return PloggingDetailResponseDTO.builder()
 				.date(plogging.getStartTime().toLocalDate().toString())
 				.mountainName(plogging.getMountain().getName())
@@ -89,6 +123,7 @@ public class PloggingServiceImpl implements PloggingService{
 				.time(plogging.getDurationTime())
 				.exp(plogging.getExp())
 				.imagePath(imagePath)
+				.coords(list)
 				.build();
 	}
 
@@ -96,7 +131,7 @@ public class PloggingServiceImpl implements PloggingService{
 	public void registerExp(ExpRegisterDTO expRegisterDTO) {
 		Plogging plogging = ploggingRepository.findById(expRegisterDTO.getPloggingId())
 				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
-		plogging.setExp(expRegisterDTO.getExp());
+		plogging.changeExp(expRegisterDTO.getExp());
 		ploggingRepository.save(plogging);
 	}
 
@@ -130,7 +165,9 @@ public class PloggingServiceImpl implements PloggingService{
 //	}
 
 	@Override
-	public void registerPloggingImg(String originalFileName, String savedFileName, Plogging plogging) {
+	public void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId) {
+		Plogging plogging = ploggingRepository.findById(ploggingId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 플로깅 기록을 찾을 수 없습니다."));
     	imageRepository.save(Image.builder()
 				.originalFileName(originalFileName)
 				.savedFileName(savedFileName)
@@ -138,6 +175,7 @@ public class PloggingServiceImpl implements PloggingService{
 				.build());
 	}
 
+	//산상세페이지 플로깅 관련 정보
 	@Override
 	public MountainPloggingInfoResponseDTO getMountainPlogging(String mountainCode) {
 		Mountain mountain = mountainRepository.findByCode(mountainCode)
@@ -147,7 +185,7 @@ public class PloggingServiceImpl implements PloggingService{
 		List<Plogging> ploggingList = ploggingRepository.findByMountainId(mountain.getId()).orElse(null);
 		long distance = 0L;
 		int visiter = 0;
-		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainId(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
+		List<Plogging> visitList = ploggingRepository.findByUserIdAndMountainIdOrderByStartTimeDesc(user.getId(), mountain.getId()).orElse(new ArrayList<Plogging>());
 		
 		if(ploggingList == null) {
 			return MountainPloggingInfoResponseDTO.builder()

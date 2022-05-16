@@ -1,8 +1,5 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
@@ -14,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainNameListResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfoWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.service.plogging.PloggingService;
+import com.ssafy.forestkeeper.application.dto.response.user.UserPloggingInfoDTO;
 import com.ssafy.forestkeeper.application.service.userinfo.UserInfoService;
 
 import io.swagger.annotations.Api;
@@ -55,26 +52,26 @@ public class UserInfoController {
     @GetMapping("/mountain")
     public ResponseEntity<? extends BaseResponseDTO> getMountainList(@ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page) {
 
-    	 Optional<List<String>> mountainList = null;
+    	 MountainUserInfoWrapperResponseDTO mountainUserInfoWrapperResponseDTO;
 
         try {
-        	mountainList = userInfoService.getMountainList(page);
+        	mountainUserInfoWrapperResponseDTO = userInfoService.getMountainList(page);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("산 목록 조회에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(200).body(MountainNameListResponseDTO.of("산 목록 조회에 성공했습니다.", 200, MountainNameListResponseDTO.builder().list(mountainList.get()).build()));
+        return ResponseEntity.status(200).body(MountainUserInfoWrapperResponseDTO.of("산 목록 조회에 성공했습니다.", 200, mountainUserInfoWrapperResponseDTO));
     }
     
-    @ApiOperation(value = "방문한 산 목록 조회")
-    @GetMapping("/{mountainName}")
-    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 이름", required = true) @PathVariable @NotBlank String mountainName) {
+    @ApiOperation(value = "산별 플로깅 목록 조회")
+    @GetMapping("/{mountainCode}")
+    public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 코드", required = true) @PathVariable @NotBlank String mountainCode) {
 
     	PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;
     	
         try {
-        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainName);
+        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
@@ -83,4 +80,19 @@ public class UserInfoController {
         return ResponseEntity.status(200).body(PloggingListWrapperResponseDTO.of("플로깅 목록 조회에 성공했습니다.", 200,ploggingListWrapperResponseDTO));
     }
     
+    @ApiOperation(value = "유저 누적 플로깅 정보")
+    @GetMapping
+    public ResponseEntity<? extends BaseResponseDTO> getUserAccumulative() {
+
+    	UserPloggingInfoDTO userPloggingInfoDTO = null;
+    	
+        try {
+        	userPloggingInfoDTO = userInfoService.getUserAccumulative();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
+        } catch (Exception e) {
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
+        }
+        return ResponseEntity.status(200).body(UserPloggingInfoDTO.of("유저 누적 플로깅 정보 조회에 성공했습니다.", 200,userPloggingInfoDTO));
+    }
 }

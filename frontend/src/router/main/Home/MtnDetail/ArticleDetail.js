@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Bar from "../Bar";
 import "../Home.css";
 import Send from "../../../../config/Send";
-import axios from "axios";
 import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
 function ArticleDetail({ userSlice }) {
@@ -27,20 +26,18 @@ function ArticleDetail({ userSlice }) {
         setDescription(res.data.description);
         setCreateTime(res.data.createTime);
         setComments(res.data.comments);
-        axios
-          .get(
-            `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + res.data.accessToken,
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-            setComments(response.data.commentGetListResponseDTOList);
-          });
+        Send.get(
+          `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + res.data.accessToken,
+            },
+          }
+        ).then((response) => {
+          console.log(response);
+          setComments(response.data.commentGetListResponseDTOList);
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -55,8 +52,9 @@ function ArticleDetail({ userSlice }) {
     Send.post(`/comment`, JSON.stringify(data))
       .then((res) => {
         console.log(res);
-        if (res.code === 201) {
+        if (res.status === 201) {
           getArticle();
+          setCommentContent("");
         }
       })
       .catch((e) => {
@@ -218,6 +216,7 @@ function ArticleDetail({ userSlice }) {
           <div>
             <input
               className="input"
+              value={commentContent}
               onChange={onCommentHandler}
               style={{
                 position: "relative",

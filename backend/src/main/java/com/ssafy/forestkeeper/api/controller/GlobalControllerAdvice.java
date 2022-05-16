@@ -1,9 +1,9 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.exception.*;
-import com.ssafy.forestkeeper.util.mattermost.NotificationManager;
-import lombok.RequiredArgsConstructor;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,9 +13,17 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
+import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.exception.CommentNotFoundException;
+import com.ssafy.forestkeeper.exception.CommunityNotFoundException;
+import com.ssafy.forestkeeper.exception.MountainNotFoundException;
+import com.ssafy.forestkeeper.exception.PloggingNotFoundException;
+import com.ssafy.forestkeeper.exception.UserNotFoundException;
+import com.ssafy.forestkeeper.util.mattermost.NotificationManager;
+
+import lombok.RequiredArgsConstructor;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -31,6 +39,8 @@ public class GlobalControllerAdvice {
             CommentNotFoundException.class
     })
     public ResponseEntity<?> handleNotFoundException(RuntimeException e, HttpServletRequest req) {
+
+        System.out.println("404 : " + e.getMessage());
 
         notify(e, e.getMessage(), req);
 
@@ -54,14 +64,18 @@ public class GlobalControllerAdvice {
                     .append(". ");
         }
 
+        System.out.println("409 : " + e.getMessage());
+
         notify(e, stringBuilder.toString(), req);
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(stringBuilder.toString(), 409));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponseDTO.of(stringBuilder.toString(), 400));
 
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException e, HttpServletRequest req) {
+
+        System.out.println("401 : " + e.getMessage());
 
         String message = "회원 정보가 없습니다.";
 
@@ -74,6 +88,8 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e, HttpServletRequest req) {
 
+        System.out.println("403 : " + e.getMessage());
+
         String message = "권한이 없습니다.";
 
         notify(e, message, req);
@@ -84,6 +100,8 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e, HttpServletRequest req) {
+
+        System.out.println("409 : " + e.getMessage());
 
         notify(e, e.getMessage(), req);
 
@@ -111,6 +129,15 @@ public class GlobalControllerAdvice {
 
         return params.toString();
 
+    }
+    
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<?> handleMaxUploadSizeExceededException(
+        MaxUploadSizeExceededException e, HttpServletRequest req) {
+    	
+    	notify(e, e.getMessage(), req);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(e.getMessage(), 409));
     }
 
 }

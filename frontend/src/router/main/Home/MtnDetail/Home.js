@@ -34,14 +34,14 @@ function Home({ visiter, distance, lat, lng }) {
           borderRadius: 15,
           marginLeft: "6vw",
           marginRight: "6vw",
-          marginBottom: "4vh",
+          marginBottom: "2vh",
           paddingTop: "2vh",
           paddingLeft: "5vw",
           paddingRight: "5vw",
         }}
       >
         <div id="text" style={{ color: "#8ABC9A" }}>
-          <div style={{ fontSize: "1.5vh" }}>누적 방문자/거리</div>
+          <div style={{ fontSize: "1.5vh" }}>누적 방문 횟수/거리</div>
           <div
             style={{ display: "flex", fontSize: "3.5vh", fontWeight: "bold" }}
           >

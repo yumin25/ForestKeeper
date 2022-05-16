@@ -36,6 +36,7 @@ dependencies {
 
     //S3 Bucket
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.14'
     //implementation 'com.amazonaws:aws-java-sdk:1.12.201'
 
     // jasypt
@@ -77,6 +78,21 @@ dependencies {
 
     // Mattermost
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.7'
+
+    implementation 'org.webjars:stomp-websocket:2.3.4'
+    implementation 'org.webjars:sockjs-client:1.5.1'
+
+    implementation 'org.webjars:webjars-locator-core:0.50'
+    implementation 'org.webjars.bower:bootstrap:4.3.1'
+    implementation 'org.webjars.bower:vue:2.5.16'
+    implementation 'org.webjars.bower:axios:0.17.1'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.6.7'
 
 }
 
