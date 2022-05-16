@@ -60,8 +60,7 @@ function WriteItem() {
   );
 }
 
-function TeamList({ mountainCode, mountainId }) {
-  console.log(mountainId);
+function TeamList({ mountainId }) {
   const [tab, setTab] = useState("REVIEW");
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
@@ -76,9 +75,8 @@ function TeamList({ mountainCode, mountainId }) {
     getItems(page);
   }, [page]);
 
-  function goDetail(communityId) {
-    window.localStorage.setItem("communityId", communityId);
-    document.location.href = "/articleDetail";
+  function goDetail(matchingId) {
+    document.location.href = `/teamDetail/` + matchingId;
   }
 
   function getList() {
@@ -146,7 +144,7 @@ function TeamList({ mountainCode, mountainId }) {
             <div>
               {list &&
                 list.map((result) => (
-                  <div onClick={() => goDetail(result.communityId)}>
+                  <div onClick={() => goDetail(result.id)}>
                     <LIST result={result} />
                   </div>
                 ))}
