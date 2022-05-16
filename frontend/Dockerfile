@@ -3,7 +3,7 @@ FROM node:lts-alpine AS builder
 WORKDIR /app
 COPY package.json .
 
-RUN apk update && apk upgrade && apk add --no-cache bash git openssh
+RUN apk update && apk upgrade && apk add --no-cache git
 RUN npm install --save --legacy-peer-deps
 COPY . .
 RUN npm run build
