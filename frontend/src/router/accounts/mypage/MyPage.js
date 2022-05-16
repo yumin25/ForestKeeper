@@ -64,6 +64,9 @@ function MyPage({ userSlice }) {
     e.preventDefault();
     let newArr = [...isOpen];
     if (newArr[index] === 0) {
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i] = 0;
+      }
       newArr[index] = 1;
     } else if (newArr[index] === 1) {
       newArr[index] = 0;
