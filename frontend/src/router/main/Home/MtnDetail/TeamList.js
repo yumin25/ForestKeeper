@@ -60,7 +60,7 @@ function WriteItem() {
   );
 }
 
-function TeamList({ mountainId }) {
+function TeamList({ mountainCode }) {
   const [tab, setTab] = useState("REVIEW");
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
@@ -82,7 +82,7 @@ function TeamList({ mountainId }) {
   function getList() {
     Send.get("/match", {
       params: {
-        mountainId: mountainId,
+        mountainCode: mountainCode,
         page: page,
       },
     })
