@@ -23,7 +23,6 @@
     "react-stopwatch-timer": "github:sangjinCHOI/react-stopwatch-timer",
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
-    "stopwatch.js": "^1.1.1",
     "styled-components": "^5.3.5",
     "swiper": "^6.8.4",
     "web-vitals": "^2.1.4"
