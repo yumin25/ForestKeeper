@@ -85,6 +85,7 @@ function TeamList({ mountainCode, mountainId }) {
     Send.get("/match", {
       params: {
         mountainId: mountainId,
+        page: page,
       },
     })
       .then(function (response) {
