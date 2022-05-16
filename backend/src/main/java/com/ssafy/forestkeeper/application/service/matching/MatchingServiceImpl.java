@@ -141,7 +141,7 @@ public class MatchingServiceImpl implements MatchingService {
         }
 
         List<Matching> matchingList = matchingRepository.findByDeleteOrderByCreateTimeDesc(false,
-                        PageRequest.of(page - 1, 6))
+                        PageRequest.of(page - 1, 7))
                 .get();
 
         List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
