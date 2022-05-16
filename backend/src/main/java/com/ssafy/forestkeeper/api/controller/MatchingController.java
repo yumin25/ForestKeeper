@@ -168,14 +168,14 @@ public class MatchingController {
         @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
     })
     @GetMapping
-    public ResponseEntity<? extends BaseResponseDTO> getMatchingList(
+    public ResponseEntity<? extends BaseResponseDTO> getMatchingList(@RequestParam("mountainCode") String mountainCode,
         @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
         MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
 
         try {
-            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(page);
+            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(mountainCode,page);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

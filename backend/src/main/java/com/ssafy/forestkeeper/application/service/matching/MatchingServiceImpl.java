@@ -134,31 +134,34 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
-    public MatchingGetListWrapperResponseDTO getMatchingList(int page) {
+    public MatchingGetListWrapperResponseDTO getMatchingList(String mountainCode, int page) {
 
         if (page < 1) {
             page = 1;
         }
 
         List<Matching> matchingList = matchingRepository.findByDeleteOrderByCreateTimeDesc(false,
-                        PageRequest.of(page - 1, 6))
+                        PageRequest.of(page - 1, 7))
                 .get();
 
         List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
 
-        matchingList.forEach(matching ->
-                matchingGetListResponseDTOList.add(
-                        MatchingGetListResponseDTO.builder()
-                                .id(matching.getId())
-                                .nickname(matching.getUser().getNickname())
-                                .title(matching.getTitle())
-                                .createTime(matching.getCreateTime())
-                                .ploggingDate(matching.getPloggingDate())
-                                .total(matching.getTotal())
-                                .participant(matchingUserService.getParticipant(matching.getId()))
-                                .mountainName(matching.getMountain().getName())
-                                .build()
-                )
+        matchingList.forEach(matching -> {
+                    if (mountainCode.equals(matching.getMountain().getCode())) {
+                        matchingGetListResponseDTOList.add(
+                                MatchingGetListResponseDTO.builder()
+                                        .id(matching.getId())
+                                        .nickname(matching.getUser().getNickname())
+                                        .title(matching.getTitle())
+                                        .createTime(matching.getCreateTime())
+                                        .ploggingDate(matching.getPloggingDate())
+                                        .total(matching.getTotal())
+                                        .participant(matchingUserService.getParticipant(matching.getId()))
+                                        .mountainName(matching.getMountain().getName())
+                                        .build()
+                        );
+                    }
+                }
         );
 
         return MatchingGetListWrapperResponseDTO.builder()
