@@ -20,7 +20,7 @@
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "react-stopwatch-timer": "^1.0.0",
+    "react-stopwatch-timer": "github:sangjinCHOI/react-stopwatch-timer",
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.5",
