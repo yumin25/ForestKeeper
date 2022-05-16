@@ -160,7 +160,11 @@ function MyPage({ userSlice }) {
         <div style={{ display: "flex", justifyContent: "space-evenly", color: "#8E8E92" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p style={{ marginBottom: 0, fontSize: "4vw" }}>거리</p>
-            {userinfo ? <p style={{ marginTop: 0, fontSize: "4vw" }}>{userinfo.distance}km</p> : <p style={{ marginTop: 0, fontSize: "4vw" }}>-</p>}
+            {userinfo ? (
+              <p style={{ marginTop: 0, fontSize: "4vw" }}>{userinfo.distance.toString().slice(0, 5)}km</p>
+            ) : (
+              <p style={{ marginTop: 0, fontSize: "4vw" }}>-</p>
+            )}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p style={{ marginBottom: 0, fontSize: "4vw" }}>시간</p>
