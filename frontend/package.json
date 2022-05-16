@@ -14,6 +14,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "react": "^18.0.0",
+    "react-calendar": "^3.7.0",
+    "react-datepicker": "^4.7.0",
     "react-dom": "^18.0.0",
     "react-intersection-observer": "^9.1.0",
     "react-naver-maps": "0.0.13",

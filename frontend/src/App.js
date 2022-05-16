@@ -13,6 +13,7 @@ import Write from "./router/main/Home/MtnDetail/Write";
 import Trash from "./router/main/Home/Trash";
 import Temp from "./router/main/Home/Temp";
 import MyPage from "./router/accounts/mypage/MyPage";
+import TeamWrite from "./router/main/Home/MtnDetail/TeamWrite";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/detail/:mountainCode" element={<Detail />} />
           <Route path="/articleDetail" element={<ArticleDetail />} />
           <Route path="/articleWrite/:mountainCode" element={<Write />} />
+          <Route path="/teamWrite/:mountainCode" element={<TeamWrite />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />
             <Route path="plogging" element={<Plogging />} />
