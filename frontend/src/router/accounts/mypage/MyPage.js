@@ -89,13 +89,22 @@ function MyPage({ userSlice }) {
         console.log(e);
       });
   };
-  console.log(isOpenPlogging);
+
+  // 개인정보
+  const [userinfo, setUserInfo] = useState();
+  const getUserInfo = () => {
+    Send.get("/userinfo").then((res) => {
+      setUserInfo(res.data);
+    });
+  };
+
   useEffect(() => {
     if (!localStorage.getItem("idToken")) {
       navigate("/accounts/login");
     }
     getPloggingList();
     getMountainList();
+    getUserInfo();
   }, []);
   return (
     <>
@@ -151,15 +160,15 @@ function MyPage({ userSlice }) {
         <div style={{ display: "flex", justifyContent: "space-evenly", color: "#8E8E92" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p style={{ marginBottom: 0, fontSize: "4vw" }}>거리</p>
-            <p style={{ marginTop: 0, fontSize: "4vw" }}>87.95km</p>
+            {userinfo ? <p style={{ marginTop: 0, fontSize: "4vw" }}>{userinfo.distance}km</p> : <p style={{ marginTop: 0, fontSize: "4vw" }}>-</p>}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p style={{ marginBottom: 0, fontSize: "4vw" }}>시간</p>
-            <p style={{ marginTop: 0, fontSize: "4vw" }}>87:10</p>
+            {userinfo ? <p style={{ marginTop: 0, fontSize: "4vw" }}>{userinfo.time}</p> : <p style={{ marginTop: 0, fontSize: "4vw" }}>-</p>}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p style={{ marginBottom: 0, fontSize: "4vw" }}>경험치</p>
-            <p style={{ marginTop: 0, fontSize: "4vw" }}>5000exp</p>
+            {userinfo ? <p style={{ marginTop: 0, fontSize: "4vw" }}>{userinfo.exp}exp</p> : <p style={{ marginTop: 0, fontSize: "4vw" }}>-</p>}
           </div>
         </div>
         {/* 활동메뉴 */}
