@@ -1,10 +1,39 @@
 import React, { useEffect, useState } from "react";
 import Recommend from "./Recommend";
 import Send from "../../../config/Send";
+import HomeResult from "./HomeResult";
 
 const HomeDetail = () => {
   const [nearMountain, setNearMountain] = useState([]); // 근처 산 리스트
   const [avgMountain, setAvgMountain] = useState([]); // 방문한 평균높이 산 리스트
+  const [mountain, setMountain] = useState([
+    {
+      name: "아차산",
+      address: "서울특별시 서초구",
+      count: 2464,
+    },
+    {
+      name: "아차산",
+      address: "서울특별시 서초구",
+      count: 2464,
+    },
+    {
+      name: "아차산",
+      address: "서울특별시 서초구",
+      count: 2464,
+    },
+    {
+      name: "아차산",
+      address: "서울특별시 서초구",
+      count: 2464,
+    },
+    {
+      name: "아차산",
+      address: "서울특별시 서초구",
+      count: 2464,
+    },
+  ]);
+
   useEffect(() => {
     // 근처 산 리스트 요청
     if (navigator.geolocation) {
@@ -36,14 +65,48 @@ const HomeDetail = () => {
       })
       .catch((err) => {});
   }, []);
+
   return (
     <div>
-      <Recommend title="근처 산" recommendList={nearMountain} near={true} />
-      <Recommend
-        title="방문했던 평균 높이 산"
-        recommendList={avgMountain}
-        near={false}
-      />
+      <div
+        style={{
+          height: "40vh",
+          marginTop: "3vh",
+          marginLeft: "6vw",
+          marginRight: "6vw",
+        }}
+      >
+        <div style={{ marginBottom: "4vh" }}>
+          <Recommend
+            title="숲지기 근처 산"
+            recommendList={nearMountain}
+            near={true}
+          />
+        </div>
+        <div>
+          <Recommend
+            title="방문했던 평균 높이 산"
+            recommendList={avgMountain}
+            near={false}
+          />
+        </div>
+
+        {/* <Recommend
+          title="숲지기가 방문한 산과 유사한 산"
+          recommendList={avgMountain}
+          near={false}
+        /> */}
+      </div>
+      <div
+        style={{
+          height: "34vh",
+          marginTop: "5vh",
+          marginLeft: "6vw",
+          marginRight: "6vw",
+        }}
+      >
+        <HomeResult mountain={mountain}></HomeResult>
+      </div>
     </div>
   );
 };

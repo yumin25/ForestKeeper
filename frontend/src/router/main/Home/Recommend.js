@@ -6,22 +6,34 @@ import RecommendCard from "./RecommendCard";
 const Recommend = ({ title, recommendList, near }) => {
   return (
     <div>
-      <div style={{ margin: "5%" }}>{title}</div>
-      <Swiper
-        slidesPerView={1.6}
-        spaceBetween={10}
-        centeredSlides={true}
-        loop={true}
-        className="mySwiper"
+      <div
+        style={{
+          fontSize: "2.2vh",
+          marginBottom: "2vh",
+          color: "#8E8E92",
+          fontWeight: "400",
+          marginLeft: "3vw",
+        }}
       >
-        {recommendList.length > 0
-          ? recommendList.map((mountain) => (
-              <SwiperSlide>
-                <RecommendCard mountain={mountain} near={near} />
-              </SwiperSlide>
-            ))
-          : "방문한 산이 없습니다."}
-      </Swiper>
+        {title}
+      </div>
+      <div>
+        <Swiper
+          slidesPerView={1.6}
+          spaceBetween={10}
+          centeredSlides={false}
+          loop={true}
+          className="mySwiper"
+        >
+          {recommendList.length > 0
+            ? recommendList.map((mountain) => (
+                <SwiperSlide>
+                  <RecommendCard mountain={mountain} near={near} />
+                </SwiperSlide>
+              ))
+            : "방문한 산이 없습니다."}
+        </Swiper>
+      </div>
     </div>
   );
 };
