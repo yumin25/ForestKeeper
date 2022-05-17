@@ -3,10 +3,11 @@ package com.ssafy.forestkeeper.application.dto.response.matching;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @ApiModel("CommunityGetListWrapperResponseDTO")
 @Builder
@@ -25,4 +26,5 @@ public class MatchingGetListWrapperResponseDTO extends BaseResponseDTO {
         return matchingGetListWrapperResponseDTO;
 
     }
+
 }
