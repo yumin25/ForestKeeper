@@ -24,7 +24,7 @@ const HomeDetail = () => {
         });
       });
     } else {
-      window.alert("현재위치를 알수 없습니다.");
+      window.alert("현재 위치를 알 수 없습니다.");
     }
 
     // 비슷한 높이 산 요청
