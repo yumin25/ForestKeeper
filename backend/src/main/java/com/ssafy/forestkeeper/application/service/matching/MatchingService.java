@@ -26,7 +26,7 @@ public interface MatchingService {
     MatchingResponseDTO getMatching(String matchingId);
 
     // 글 목록 조회
-    MatchingGetListWrapperResponseDTO getMatchingList(int page);
+    MatchingGetListWrapperResponseDTO getMatchingList(String mountainCode, int page);
 
     MatchingGetListWrapperResponseDTO getMyMatching(int page);
 

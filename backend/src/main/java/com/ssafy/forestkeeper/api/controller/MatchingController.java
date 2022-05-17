@@ -159,13 +159,14 @@ public class MatchingController {
     })
     @GetMapping
     public ResponseEntity<? extends BaseResponseDTO> getMatchingList(
+            @RequestParam("mountainCode") String mountainCode,
             @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
         MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
 
         try {
-            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(page);
+            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(mountainCode, page);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

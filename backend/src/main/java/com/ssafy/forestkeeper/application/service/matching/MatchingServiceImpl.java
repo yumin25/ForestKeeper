@@ -158,15 +158,38 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
-    public MatchingGetListWrapperResponseDTO getMatchingList(int page) {
+    public MatchingGetListWrapperResponseDTO getMatchingList(String mountainCode, int page) {
 
         page = Math.max(page, 1);
 
         List<Matching> matchingList = matchingRepository.findByPloggingDateGreaterThanEqualAndDeleteOrderByCreateTimeDesc(LocalDate.now(), false,
-                        PageRequest.of(page - 1, 6))
+                        PageRequest.of(page - 1, 7))
                 .orElse(null);
 
-        return convertMatchingListToDTO(matchingList);
+        List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
+
+        matchingList.forEach(matching -> {
+                    if (mountainCode.equals(matching.getMountain().getCode())) {
+                        matchingGetListResponseDTOList.add(
+                                MatchingGetListResponseDTO.builder()
+                                        .id(matching.getId())
+                                        .nickname(matching.getUser().getNickname())
+                                        .title(matching.getTitle())
+                                        .createTime(matching.getCreateTime())
+                                        .ploggingDate(matching.getPloggingDate())
+                                        .total(matching.getTotal())
+                                        .participants(matchingUserService.getParticipants(matching.getId()))
+                                        .mountainName(matching.getMountain().getName())
+                                        .close(isClose(matching.getId()))
+                                        .build()
+                        );
+                    }
+                }
+        );
+
+        return MatchingGetListWrapperResponseDTO.builder()
+                .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
+                .build();
 
     }
 
@@ -179,37 +202,11 @@ public class MatchingServiceImpl implements MatchingService {
                 userRepository.findByEmailAndDelete(
                                 SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")).getId(),
-                false, PageRequest.of(page - 1, 6)).orElse(null);
+                false, PageRequest.of(page - 1, 7)).orElse(null);
 
         List<Matching> matchingList = new ArrayList<>();
 
         myMatching.forEach(matchingUser -> matchingList.add(matchingUser.getMatching()));
-
-        return convertMatchingListToDTO(matchingList);
-
-    }
-
-    @Override
-    public void deleteMatching(String matchingId) {
-
-        Matching matching = matchingRepository.findById(matchingId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매칭 글을 찾을 수 없습니다."));
-
-        matching.changeDelete();
-        matchingRepository.save(matching);
-
-        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatchingAndDelete(matching, false)
-                .orElse(null);
-
-        matchingUserList.forEach(matchingUser -> {
-            matchingUser.changeDelete();
-
-            matchingUserRepository.save(matchingUser);
-        });
-
-    }
-
-    private MatchingGetListWrapperResponseDTO convertMatchingListToDTO(List<Matching> matchingList) {
 
         List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
 
@@ -232,6 +229,26 @@ public class MatchingServiceImpl implements MatchingService {
         return MatchingGetListWrapperResponseDTO.builder()
                 .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
                 .build();
+
+    }
+
+    @Override
+    public void deleteMatching(String matchingId) {
+
+        Matching matching = matchingRepository.findById(matchingId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매칭 글을 찾을 수 없습니다."));
+
+        matching.changeDelete();
+        matchingRepository.save(matching);
+
+        List<MatchingUser> matchingUserList = matchingUserRepository.findByMatchingAndDelete(matching, false)
+                .orElse(null);
+
+        matchingUserList.forEach(matchingUser -> {
+            matchingUser.changeDelete();
+
+            matchingUserRepository.save(matchingUser);
+        });
 
     }
 
