@@ -35,15 +35,19 @@ function TeamWrite() {
     var month = date.getMonth() + 1;
     return month < 10 ? "0" + month : "" + month;
   }
+  function GetDate(date) {
+    var date = date.getDate();
+    return date < 10 ? "0" + date : "" + date;
+  }
   useEffect(() => {
     setResultDate(
-      date.getFullYear() + "-" + GetMonth(date) + "-" + date.getDate()
+      date.getFullYear() + "-" + GetMonth(date) + "-" + GetDate(date)
     );
   }, [date]);
 
   useEffect(() => {
     setResultDate(
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+      date.getFullYear() + "-" + GetMonth(date) + "-" + GetDate(date)
     );
   }, []);
 
