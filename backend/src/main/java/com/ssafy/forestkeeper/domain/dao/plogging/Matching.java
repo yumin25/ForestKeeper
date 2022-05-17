@@ -55,12 +55,6 @@ public class Matching extends BaseEntity {
     @OneToMany(mappedBy = "matching", fetch = FetchType.LAZY)
     private List<MatchingUser> matchingUsers = new ArrayList<>();
 
-    // 글 수정
-    public void changeMatch(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
     // 조회수 증가
     public void increaseViews() {
         this.views += 1;

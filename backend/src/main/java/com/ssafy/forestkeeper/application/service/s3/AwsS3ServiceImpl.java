@@ -29,16 +29,22 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
     @Override
     public String uploadFileToS3(String category, MultipartFile multipartFile) {
+
         String fileName = FileUtil.buildFileName(multipartFile.getOriginalFilename());
+
         ObjectMetadata objectMetadata = new ObjectMetadata();
+
         objectMetadata.setContentType(multipartFile.getContentType());
 
         try {
             byte[] bytes = IOUtils.toByteArray(multipartFile.getInputStream());
+
             objectMetadata.setContentLength(bytes.length);
+
             ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, category + "/" + fileName, byteArrayIs, objectMetadata));
+
             if (category.equals("user")) {
                 uploadThumbFile(multipartFile, fileName, 100);
             } else {
@@ -49,13 +55,14 @@ public class AwsS3ServiceImpl implements AwsS3Service {
             e.printStackTrace();
         }
 
-        System.out.println(amazonS3Client.getUrl(bucket, fileName).toString());
         return fileName;
+
     }
 
     // upload thumbnail image file
     @Override
     public void uploadThumbFile(MultipartFile image, String fileName, int size) {
+
         try {
             // make thumbnail image for s3
             BufferedImage bufferImage = ImageIO.read(image.getInputStream());
@@ -63,16 +70,19 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
             ByteArrayOutputStream thumbOutput = new ByteArrayOutputStream();
             String imageType = image.getContentType();
+
             ImageIO.write(thumbnailImage, imageType.substring(imageType.indexOf("/") + 1), thumbOutput);
 
             // set metadata
             ObjectMetadata thumbObjectMetadata = new ObjectMetadata();
             byte[] thumbBytes = thumbOutput.toByteArray();
+
             thumbObjectMetadata.setContentLength(thumbBytes.length);
             thumbObjectMetadata.setContentType(image.getContentType());
 
             // save in s3
             InputStream thumbInput = new ByteArrayInputStream(thumbBytes);
+
             amazonS3Client.putObject(new PutObjectRequest(bucket, "thumb/" + fileName, thumbInput, thumbObjectMetadata));
 
             thumbInput.close();
@@ -80,6 +90,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }

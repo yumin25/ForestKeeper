@@ -1,9 +1,9 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.exception.*;
+import com.ssafy.forestkeeper.util.mattermost.NotificationManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,15 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.exception.CommentNotFoundException;
-import com.ssafy.forestkeeper.exception.CommunityNotFoundException;
-import com.ssafy.forestkeeper.exception.MountainNotFoundException;
-import com.ssafy.forestkeeper.exception.PloggingNotFoundException;
-import com.ssafy.forestkeeper.exception.UserNotFoundException;
-import com.ssafy.forestkeeper.util.mattermost.NotificationManager;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -35,8 +28,12 @@ public class GlobalControllerAdvice {
             UserNotFoundException.class,
             MountainNotFoundException.class,
             PloggingNotFoundException.class,
+            MatchingNotFoundException.class,
             CommunityNotFoundException.class,
-            CommentNotFoundException.class
+            CommentNotFoundException.class,
+            ChatRoomNotFoundException.class,
+            ChatRoomUserNotFoundException.class,
+            ChatMessageNotFoundException.class
     })
     public ResponseEntity<?> handleNotFoundException(RuntimeException e, HttpServletRequest req) {
 
@@ -130,12 +127,12 @@ public class GlobalControllerAdvice {
         return params.toString();
 
     }
-    
+
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     protected ResponseEntity<?> handleMaxUploadSizeExceededException(
-        MaxUploadSizeExceededException e, HttpServletRequest req) {
-    	
-    	notify(e, e.getMessage(), req);
+            MaxUploadSizeExceededException e, HttpServletRequest req) {
+
+        notify(e, e.getMessage(), req);
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(e.getMessage(), 409));
     }
