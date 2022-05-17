@@ -11,7 +11,7 @@ function TeamWrite() {
   let useParam = useParams();
   const [resultDate, setResultDate] = useState();
   const [date, setDate] = useState(new Date());
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(2);
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button
       className="example-custom-input"
@@ -31,9 +31,13 @@ function TeamWrite() {
     </button>
   ));
 
+  function GetMonth(date) {
+    var month = date.getMonth() + 1;
+    return month < 10 ? "0" + month : "" + month;
+  }
   useEffect(() => {
     setResultDate(
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+      date.getFullYear() + "-" + GetMonth(date) + "-" + date.getDate()
     );
   }, [date]);
 
@@ -55,13 +59,15 @@ function TeamWrite() {
 
   function register() {
     const mountainCode = useParam.mountainCode;
-    Send.post(`/match`, {
+    const data = {
       mountainCode: mountainCode,
       title: title,
       content: content,
       ploggingDate: resultDate,
       total: total,
-    })
+    };
+    console.log(data);
+    Send.post(`/match`, data)
       .then((res) => {
         console.log(res);
         if (res.data.statusCode === 201) {
