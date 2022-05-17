@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import Send from "../../../config/Send";
 import File from "../../../config/File";
-import logo from "../../../res/img/logo.png";
+import Slider from "react-slick";
+import "../../../../node_modules/slick-carousel/slick/slick.css";
+import "../../../../node_modules/slick-carousel/slick/slick-theme.css";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 
 function RecordDetail() {
@@ -48,6 +50,14 @@ function RecordDetail() {
       });
     }
   };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   useEffect(() => {
     getDetail(localStorage.getItem("ploggingId"));
   }, []);
@@ -55,7 +65,7 @@ function RecordDetail() {
   useEffect(() => {
     certify();
   }, [image]);
-
+  console.log(detail);
   return (
     <>
       <div
@@ -154,28 +164,60 @@ function RecordDetail() {
                 </div>
               </div>
             </div>
-            {/* <img src={logo} alt="img" style={{ margin: "auto", height: "65vw", width: "65vw" }} /> */}
-            <RenderAfterNavermapsLoaded
-              ncpClientId={"cechhl2v8i"} // 자신의 네이버 계정에서 발급받은 Client ID
-              error={<p>Maps Load Error</p>}
-              loading={<p>Maps Loading...</p>}
-            >
-              <NaverMap
-                mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
-                style={{
-                  width: "65vw", // 네이버지도 가로 길이
-                  height: "45vh", // 네이버지도 세로 길이
-                  position: "relative",
-                  zIndex: 1,
-                }}
-                center={{ lat: centerY, lng: centerX }} // 지도 초기 위치
-                defaultZoom={13} // 지도 초기 확대 배율
-                draggable={false}
-                scrollWheel={false}
+            {detail.imagePath ? (
+              <div style={{ width: "65vw", height: "45vh" }}>
+                <Slider {...settings}>
+                  <div>
+                    <RenderAfterNavermapsLoaded
+                      ncpClientId={"cechhl2v8i"} // 자신의 네이버 계정에서 발급받은 Client ID
+                      error={<p>Maps Load Error</p>}
+                      loading={<p>Maps Loading...</p>}
+                    >
+                      <NaverMap
+                        mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
+                        style={{
+                          width: "65vw", // 네이버지도 가로 길이
+                          height: "45vh", // 네이버지도 세로 길이
+                          position: "relative",
+                          zIndex: 1,
+                        }}
+                        center={{ lat: centerY, lng: centerX }} // 지도 초기 위치
+                        defaultZoom={13} // 지도 초기 확대 배율
+                        draggable={false}
+                        scrollWheel={false}
+                      >
+                        <Polyline path={detail.coords} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
+                      </NaverMap>
+                    </RenderAfterNavermapsLoaded>
+                  </div>
+                  <div>
+                    <img src={detail.imagePath} alt="인증사진" style={{ width: "65vw", height: "45vh", objectFit: "cover" }} />
+                  </div>
+                </Slider>
+              </div>
+            ) : (
+              <RenderAfterNavermapsLoaded
+                ncpClientId={"cechhl2v8i"} // 자신의 네이버 계정에서 발급받은 Client ID
+                error={<p>Maps Load Error</p>}
+                loading={<p>Maps Loading...</p>}
               >
-                <Polyline path={detail.coords} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
-              </NaverMap>
-            </RenderAfterNavermapsLoaded>
+                <NaverMap
+                  mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
+                  style={{
+                    width: "65vw", // 네이버지도 가로 길이
+                    height: "45vh", // 네이버지도 세로 길이
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                  center={{ lat: centerY, lng: centerX }} // 지도 초기 위치
+                  defaultZoom={13} // 지도 초기 확대 배율
+                  draggable={false}
+                  scrollWheel={false}
+                >
+                  <Polyline path={detail.coords} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
+                </NaverMap>
+              </RenderAfterNavermapsLoaded>
+            )}
           </div>
         </>
       </div>
