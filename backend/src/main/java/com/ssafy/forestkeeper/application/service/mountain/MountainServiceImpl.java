@@ -209,21 +209,20 @@ public class MountainServiceImpl implements MountainService {
     }
 
     public MountainVisitorRankWrapperResponseDTO getVisitorRank() {
-        System.out.println(1);
+
         List<MountainVisitorRankResponseDTO> list = new ArrayList<>();
-        System.out.println(2);
+
         List<MountainVisit> visitList = mountainVisitRepository.findTop5ByOrderByVisitorCountDesc();
-        System.out.println(3 + " " + visitList);
+
         for (MountainVisit visit : visitList) {
             Mountain mountain = visit.getMountain();
-            System.out.println("moun: " + mountain);
+
             list.add(
                     MountainVisitorRankResponseDTO.builder()
                             .mountainCode(mountain.getCode())
                             .address(mountain.getAddress()).mountainName(mountain.getName())
                             .visitorCount(visit.getVisitorCount())
                             .build());
-            System.out.println("li: " + list);
         }
 
         return MountainVisitorRankWrapperResponseDTO.builder()
