@@ -1,8 +1,5 @@
 package com.ssafy.forestkeeper.application.service.mountain;
 
-import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.mountain.QMountain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +12,19 @@ import org.springframework.stereotype.Service;
 import com.querydsl.core.Tuple;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisiterRankResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisiterRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
+import com.ssafy.forestkeeper.domain.dao.mountain.MountainVisit;
+import com.ssafy.forestkeeper.domain.dao.mountain.QMountain;
 import com.ssafy.forestkeeper.domain.dao.plogging.QPlogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepositorySupport;
+import com.ssafy.forestkeeper.domain.repository.mountain.MountainVisitRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepositorySupport;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 
@@ -31,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class MountainServiceImpl implements MountainService {
 
     private final MountainRepository mountainRepository;
+    private final MountainVisitRepository mountainVisitRepository;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final MountainRepositorySupport mountainRepositorySupport;
@@ -160,5 +165,22 @@ public class MountainServiceImpl implements MountainService {
 
         return RecommendWrapperResponseDTO.builder()
             .recommendResponseDTOList(nearRecommendResponseDTOList).build();
+    }
+    
+    public MountainVisiterRankWrapperResponseDTO getVisiterRank() {
+        List<MountainVisiterRankResponseDTO> list = new ArrayList<>();
+        List<MountainVisit> visitList = mountainVisitRepository.findTop5ByOrderByVisiterCountDesc();
+        for(MountainVisit visit : visitList) {
+        	Mountain mountain = visit.getMountain();
+        	list.add(MountainVisiterRankResponseDTO.builder()
+        										.mountainCode(mountain.getCode())
+        										.address(mountain.getAddress()).mountainName(mountain.getName())
+        										.visiterCount(visit.getVisiterCount())
+        										.build());
+        }
+    	
+    	return MountainVisiterRankWrapperResponseDTO.builder()
+    											.list(list)
+    											.build();
     }
 }

@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.application.service.community;
 
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -37,16 +37,16 @@ public class CommunityServiceImpl implements CommunityService {
     private final UserRepository userRepository;
 
     @Override
-    public void registerCommunity(CommunityRegisterPostDTO communityRegisterPostDTO) {
+    public void registerCommunity(CommunityRegisterRequestDTO communityRegisterRequestDTO) {
 
         Community community = Community.builder()
-                .communityCode(communityRegisterPostDTO.getCommunityCode())
-                .title(communityRegisterPostDTO.getTitle())
-                .description(communityRegisterPostDTO.getDescription())
+                .communityCode(communityRegisterRequestDTO.getCommunityCode())
+                .title(communityRegisterRequestDTO.getTitle())
+                .description(communityRegisterRequestDTO.getDescription())
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
+                .mountain(mountainRepository.findById(communityRegisterRequestDTO.getMountainId())
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")))
                 .build();
 
@@ -55,9 +55,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
+    public CommunityGetListWrapperResponseDTO getCommunityList(String mountainId, CommunityCode communityCode, int page) {
 
-        List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 6))
+        List<Community> communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteOrderByCreateTimeDesc(mountainId, communityCode, false, PageRequest.of(page - 1, 7))
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         return convertCommunityListToDTO(communityList);
@@ -65,38 +65,40 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page) {
+    public CommunityGetListWrapperResponseDTO searchCommunity(String mountainId, CommunityCode communityCode, String type, String keyword, int page) {
 
         List<Community> communityList = new ArrayList<>();
 
         switch (type) {
             case "td":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 6)
+                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
+                                mountainRepository.findById(mountainId)
+                                        .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")),
+                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "t":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
+                                mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "d":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
+                                mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "n":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
-                                communityCode, false,
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
+                                mountainId, communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
                                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")),
-                                PageRequest.of(page - 1, 6)
+                                PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
@@ -128,12 +130,12 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO) {
+    public void modifyCommunity(CommunityModifyRequestDTO communityModifyRequestDTO) {
 
-        Community community = communityRepository.findByIdAndDelete(communityModifyPatchDTO.getCommunityId(), false)
+        Community community = communityRepository.findByIdAndDelete(communityModifyRequestDTO.getCommunityId(), false)
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
-        community.changeCommunity(communityModifyPatchDTO.getTitle(), communityModifyPatchDTO.getDescription());
+        community.changeCommunity(communityModifyRequestDTO.getTitle(), communityModifyRequestDTO.getDescription());
 
         communityRepository.save(community);
 

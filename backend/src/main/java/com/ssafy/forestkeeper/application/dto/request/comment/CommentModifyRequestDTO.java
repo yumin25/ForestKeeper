@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("CommentModifyPatchDTO")
 @Getter
 @ToString
-public class CommentModifyPatchDTO {
+public class CommentModifyRequestDTO {
 
     @ApiModelProperty(name = "댓글 ID")
     @NotBlank

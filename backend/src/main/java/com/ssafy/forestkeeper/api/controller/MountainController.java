@@ -1,21 +1,11 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainInfoResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.service.mountain.MountainService;
-import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.JSONParser;
+
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
@@ -25,6 +15,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainInfoResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainTrailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisiterRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.service.mountain.MountainService;
+import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @Api(value = "Mountain API", tags = {"Mountain"})
 @CrossOrigin("*")
@@ -99,7 +103,7 @@ public class MountainController {
         }
     }
 
-    @ApiOperation(value = "산 랭킹 검색")
+    @ApiOperation(value = "산 랭킹")
     @GetMapping("/rank/{mountainCode}")
     public ResponseEntity<?> getRank(@PathVariable("mountainCode") String mountainCode,
         @RequestParam("by") String by) {
@@ -123,8 +127,26 @@ public class MountainController {
             return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
         }
     }
+    
+    @ApiOperation(value = "산 방문자수 랭킹")
+    @GetMapping("/rank")
+    public ResponseEntity<?> getVisiterRank() {
 
-    @ApiOperation(value = "산 랭킹 검색")
+    	MountainVisiterRankWrapperResponseDTO mountainVisiterRankWrapperResponseDTO = null;
+
+    	try {
+
+        	mountainVisiterRankWrapperResponseDTO = mountainService.getVisiterRank();
+
+            return ResponseEntity.status(200).body(
+            		MountainVisiterRankWrapperResponseDTO.of("산 랭킹 조회에 성공했습니다.", 200,mountainVisiterRankWrapperResponseDTO));
+        } catch (Exception e) {
+            System.err.println(e);
+            return ResponseEntity.status(400).body(BaseResponseDTO.of("올바르지 않은 요청입니다.", 400));
+        }
+    }
+
+    @ApiOperation(value = "산 추천")
     @GetMapping("/recommend")
     public ResponseEntity<?> getRank(@RequestParam("by") String by,
         @RequestParam(name = "lat", required = false) Double lat,

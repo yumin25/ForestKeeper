@@ -1,4 +1,4 @@
-package com.ssafy.forestkeeper.application.dto.request.community;
+package com.ssafy.forestkeeper.application.dto.request.comment;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,18 +7,14 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
-@ApiModel("CommunityModifyPatchDTO")
+@ApiModel("CommentRegisterPostDTO")
 @Getter
 @ToString
-public class CommunityModifyPatchDTO {
+public class CommentRegisterRequestDTO {
 
     @ApiModelProperty(name = "글 ID")
     @NotBlank
     private String communityId;
-
-    @ApiModelProperty(name = "제목")
-    @NotBlank
-    private String title;
 
     @ApiModelProperty(name = "내용")
     @NotBlank
