@@ -61,7 +61,7 @@ public class GlobalControllerAdvice {
                     .append(". ");
         }
 
-        System.out.println("409 : " + e.getMessage());
+        System.out.println("400 : " + e.getMessage());
 
         notify(e, stringBuilder.toString(), req);
 
@@ -92,6 +92,18 @@ public class GlobalControllerAdvice {
         notify(e, message, req);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseResponseDTO.of(message, 403));
+
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<?> handleMaxUploadSizeExceededException(
+            MaxUploadSizeExceededException e, HttpServletRequest req) {
+
+        System.out.println("413 : " + e.getMessage());
+
+        notify(e, e.getMessage(), req);
+
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(BaseResponseDTO.of(e.getMessage(), 413));
 
     }
 
@@ -126,15 +138,6 @@ public class GlobalControllerAdvice {
 
         return params.toString();
 
-    }
-
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    protected ResponseEntity<?> handleMaxUploadSizeExceededException(
-            MaxUploadSizeExceededException e, HttpServletRequest req) {
-
-        notify(e, e.getMessage(), req);
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of(e.getMessage(), 409));
     }
 
 }
