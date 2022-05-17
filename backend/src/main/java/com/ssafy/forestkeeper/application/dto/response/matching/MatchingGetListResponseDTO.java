@@ -1,19 +1,21 @@
 package com.ssafy.forestkeeper.application.dto.response.matching;
 
-import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ApiModel("CommunityGetListResponseDTO")
 @Builder
 @Getter
 @ToString
-public class MatchingGetListResponseDTO extends BaseResponseDTO {
+public class MatchingGetListResponseDTO {
 
     @ApiModelProperty(name = "매칭 글 ID")
     private String id;
@@ -34,7 +36,7 @@ public class MatchingGetListResponseDTO extends BaseResponseDTO {
     private int total;
 
     @ApiModelProperty(name = "참가 인원")
-    private int participant;
+    private List<UserResponseDTO> participants;
 
     @ApiModelProperty(name = "산 이름")
     private String mountainName;

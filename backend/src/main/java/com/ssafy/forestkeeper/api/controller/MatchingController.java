@@ -8,25 +8,13 @@ import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListW
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
 import com.ssafy.forestkeeper.application.service.matching.MatchingService;
 import com.ssafy.forestkeeper.application.service.matching.MatchingUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Api(value = "Matching API", tags = {"Mathcing"})
 @CrossOrigin
@@ -40,14 +28,14 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 글 등록")
     @ApiResponses({
-        @ApiResponse(code = 201, message = "글 작성에 성공했습니다."),
-        @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
-        @ApiResponse(code = 404, message = "글 작성에 필요한 정보를 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "글 작성에 실패했습니다."),
+            @ApiResponse(code = 201, message = "글 작성에 성공했습니다."),
+            @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
+            @ApiResponse(code = 404, message = "글 작성에 필요한 정보를 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "글 작성에 실패했습니다."),
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-        @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterPostDTO matchingRegisterPostDTO
+            @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterPostDTO matchingRegisterPostDTO
     ) {
 
         if (matchingRegisterPostDTO.getTotal() == 0) {
@@ -68,17 +56,17 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 글 수정")
     @ApiResponses({
-        @ApiResponse(code = 201, message = "글 수정에 성공했습니다."),
-        @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
-        @ApiResponse(code = 404, message = "글 수정에 필요한 정보를 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "글 수정에 실패했습니다."),
+            @ApiResponse(code = 201, message = "글 수정에 성공했습니다."),
+            @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
+            @ApiResponse(code = 404, message = "글 수정에 필요한 정보를 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "글 수정에 실패했습니다."),
     })
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-        @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyPatchDTO matchingModifyPatchDTO
+            @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyPatchDTO matchingModifyPatchDTO
     ) {
 
-        if (matchingModifyPatchDTO.getTotal() < matchingUserService.getParticipant(matchingModifyPatchDTO.getMatchingId())) {
+        if (matchingModifyPatchDTO.getTotal() < matchingUserService.getParticipants(matchingModifyPatchDTO.getMatchingId()).size()) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원이 참여 인원보다 적습니다.", 409));
         }
 
@@ -96,15 +84,16 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 합류")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 합류에 성공했습니다."),
-        @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
-        @ApiResponse(code = 404, message = "필요한 정보를 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 합류에 실패했습니다."),
+            @ApiResponse(code = 200, message = "매칭 합류에 성공했습니다."),
+            @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
+            @ApiResponse(code = 404, message = "필요한 정보를 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 합류에 실패했습니다."),
     })
     @PostMapping("/join")
     public ResponseEntity<? extends BaseResponseDTO> joinMatching(
-        @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
     ) {
+
         String matchingId = matchingJoinPostDTO.getMatchingId();
 
         if (matchingService.isFull(matchingId)) {
@@ -138,15 +127,16 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 마감")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 마감에 성공했습니다."),
-        @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
-        @ApiResponse(code = 404, message = "필요한 정보를 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 마감에 실패했습니다."),
+            @ApiResponse(code = 200, message = "매칭 마감에 성공했습니다."),
+            @ApiResponse(code = 400, message = "입력된 정보가 유효하지 않습니다."),
+            @ApiResponse(code = 404, message = "필요한 정보를 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 마감에 실패했습니다."),
     })
     @PatchMapping("/close")
     public ResponseEntity<? extends BaseResponseDTO> closeMatching(
-        @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
     ) {
+
         try {
             matchingService.closeMatching(matchingJoinPostDTO.getMatchingId());
         } catch (IllegalArgumentException e) {
@@ -163,13 +153,13 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 목록 조회")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
-        @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
+            @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
     })
     @GetMapping
     public ResponseEntity<? extends BaseResponseDTO> getMatchingList(
-        @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+            @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
         MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
@@ -183,19 +173,19 @@ public class MatchingController {
         }
 
         return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
-            matchingGetListWrapperResponseDTO));
+                matchingGetListWrapperResponseDTO));
 
     }
 
     @ApiOperation(value = "내 매칭 목록 조회")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
-        @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
+            @ApiResponse(code = 200, message = "매칭 목록 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "매칭 목록을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 목록 조회에 실패했습니다.")
     })
     @GetMapping("/my")
     public ResponseEntity<? extends BaseResponseDTO> getMyMatchingList(
-        @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
+            @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
         MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
@@ -209,19 +199,19 @@ public class MatchingController {
         }
 
         return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
-            matchingGetListWrapperResponseDTO));
+                matchingGetListWrapperResponseDTO));
 
     }
 
     @ApiOperation(value = "매칭 글 조회")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
-        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+            @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
     })
     @GetMapping("/{matchingId}")
     public ResponseEntity<? extends BaseResponseDTO> getMatching(
-        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+            @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
         MatchingResponseDTO matchingResponseDTO = null;
@@ -235,20 +225,20 @@ public class MatchingController {
         }
 
         return ResponseEntity.ok(MatchingResponseDTO.of("매칭 글조회에 성공했습니다.", 200,
-            matchingResponseDTO));
+                matchingResponseDTO));
 
     }
 
 
     @ApiOperation(value = "매칭 글 삭제")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
-        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+            @ApiResponse(code = 200, message = "매칭 글 조회에 성공했습니다."),
+            @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
     })
     @DeleteMapping("/{matchingId}")
     public ResponseEntity<? extends BaseResponseDTO> deleteMatching(
-        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+            @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
         try {
@@ -265,13 +255,13 @@ public class MatchingController {
 
     @ApiOperation(value = "매칭 참여 취소")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "매칭 참여 취소에 성공했습니다."),
-        @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
-        @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
+            @ApiResponse(code = 200, message = "매칭 참여 취소에 성공했습니다."),
+            @ApiResponse(code = 404, message = "매칭 글을 찾을 수 없습니다."),
+            @ApiResponse(code = 409, message = "매칭 글 조회에 실패했습니다.")
     })
     @DeleteMapping("/cancel/{matchingId}")
     public ResponseEntity<? extends BaseResponseDTO> cancelMatching(
-        @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
+            @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
         try {
@@ -285,4 +275,5 @@ public class MatchingController {
         return ResponseEntity.ok(BaseResponseDTO.of("매칭 참여 취소에 성공했습니다.", 200));
 
     }
+
 }

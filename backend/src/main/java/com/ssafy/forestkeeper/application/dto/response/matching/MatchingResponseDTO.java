@@ -1,13 +1,16 @@
 package com.ssafy.forestkeeper.application.dto.response.matching;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ApiModel("MatchingResponseDTO")
 @Builder
@@ -34,7 +37,7 @@ public class MatchingResponseDTO extends BaseResponseDTO {
     private int total;
 
     @ApiModelProperty(name = "참가 인원")
-    private int participant;
+    private List<UserResponseDTO> participants;
 
     @ApiModelProperty(name = "산 이름")
     private String mountainName;
@@ -48,8 +51,11 @@ public class MatchingResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "조회수")
     private long views;
 
+    @ApiModelProperty(name = "참여 여부")
+    private boolean participate;
+
     @ApiModelProperty(name = "마감 여부")
-    private boolean isClosed;
+    private boolean close;
 
     public static MatchingResponseDTO of(String message, Integer statusCode, MatchingResponseDTO matchingResponseDTO) {
 
@@ -57,5 +63,7 @@ public class MatchingResponseDTO extends BaseResponseDTO {
         matchingResponseDTO.setStatusCode(statusCode);
 
         return matchingResponseDTO;
+
     }
+
 }
