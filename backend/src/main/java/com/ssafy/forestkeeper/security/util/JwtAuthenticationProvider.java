@@ -27,9 +27,9 @@ public class JwtAuthenticationProvider {
     private long tokenValidTime;
 
     private static final String AUTHORITIES_KEY = "auth";
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String TOKEN_ISSUER = "Forest Keeper";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String TOKEN_ISSUER = "Forest Keeper";
 
     private final UserDetailsService userDetailsService;
 
@@ -75,11 +75,8 @@ public class JwtAuthenticationProvider {
 
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        } else {
-            return "No JWT found in request headers";
-        }
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) return bearerToken.substring(7);
+        else return "No JWT found in request headers";
 
     }
 

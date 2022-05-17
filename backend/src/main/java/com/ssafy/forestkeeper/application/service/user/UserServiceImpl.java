@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
                 .build());
 
         return 201;
+
     }
 
     // 로그인
@@ -77,16 +78,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserEmail(String token) {
-        token = token.substring(7);
-        return jwtAuthenticationProvider.getUserAccount(token);
+
+        return jwtAuthenticationProvider.getUserAccount(token.substring(7));
+
     }
 
     @Override
     public UserInfoResponseDTO getUserDetail() {
-        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+
+        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
         Image image = imageRepository.findByUser(user).orElse(null);
+
         String imagePath;
         String thumbnailPath;
+
         if (image == null) {
             imagePath = "";
             thumbnailPath = "";
@@ -94,6 +101,7 @@ public class UserServiceImpl implements UserService {
             imagePath = hosting + "user/" + image.getSavedFileName();
             thumbnailPath = hosting + "thumb/" + image.getSavedFileName();
         }
+
         return UserInfoResponseDTO.builder()
                 .name(user.getName())
                 .nickname(user.getNickname())
@@ -101,75 +109,116 @@ public class UserServiceImpl implements UserService {
                 .imagePath(imagePath)
                 .thumbnailPath(thumbnailPath)
                 .build();
+
     }
 
     @Override
     public Integer modifyNickname(String nickname) {
+
         if (checkNickname(nickname)) return 4091;
+
         if (!isValidNickname(nickname)) return 4092;
-        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
+
+        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
         user.changeNickname(nickname);
+
         userRepository.save(user);
-        return 201;
+
+        return 200;
+
     }
 
     @Override
-    public Integer modifyPassword(String past_password, String new_password) {
-        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
-        if (!passwordEncoder.matches(past_password, user.getPassword())) return 4091;
-        if (!isValidPassword(new_password)) return 4092;
-        user.changePassword(passwordEncoder.encode(new_password));
+    public Integer modifyPassword(String currentPassword, String newPassword) {
+
+        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) return 4091;
+
+        if (!isValidPassword(newPassword)) return 4092;
+
+        user.changePassword(passwordEncoder.encode(newPassword));
+
         userRepository.save(user);
-        return 201;
+
+        return 200;
+
     }
 
     @Override
     public void withdraw() {
-        User user = userRepository.findUserByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false);
+
+        User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
         user.changeDelete();
+
         userRepository.save(user);
+
     }
 
 
     @Override
     public boolean checkNickname(String nickname) {
-        User user = userRepository.findUserByNicknameAndDelete(nickname, false);
+
+        User user = userRepository.findByNicknameAndDelete(nickname, false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
         return user != null;
+
     }
 
     @Override
     public boolean checkEmail(String email) {
-        User user = userRepository.findUserByEmailAndDelete(email, false);
+
+        User user = userRepository.findByEmailAndDelete(email, false)
+                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
+
         return user != null;
+
     }
 
     @Override
     public boolean isValidPassword(String password) {
+
         Matcher m = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$").matcher(password); // 영문자, 숫자, 특수문자 포함 8자 이상
+
         return m.matches();
+
     }
 
     @Override
     public boolean isValidName(String name) {
+
         if (name.length() < 2 || name.length() > 10) return false;  // 2자 이상 10자 이하
+
         return Pattern.matches("^[ㄱ-ㅎ가-힣]*$", name); // 한글만 입력 허용
+
     }
 
     @Override
     public boolean isValidNickname(String nickname) {
+
         if (nickname.length() < 2 || nickname.length() > 10) return false;  // 2자 이상 10자 이하
+
         return Pattern.matches("^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$", nickname); // 영어, 한글, 숫자만 입력 허용
+
     }
 
     @Override
     public void updateUserImgPath(String originalFileName, String savedFileName) {
+
         Image image = imageRepository.findByUser(
                 userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."))
-                        ).orElse(null);
+        ).orElse(null);
 
         if (image != null) {
             image.changeFileName(originalFileName, savedFileName);
+
             imageRepository.save(image);
         } else {
             imageRepository.save(Image.builder()
@@ -179,16 +228,19 @@ public class UserServiceImpl implements UserService {
                             .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                     .build());
         }
+
     }
 
     @Override
     public void registerUserImgPath(String originalFileName, String savedFileName, String email) {
+
         imageRepository.save(Image.builder()
                 .originalFileName(originalFileName)
                 .savedFileName(savedFileName)
                 .user(userRepository.findByEmailAndDelete(email, false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .build());
+
     }
 
 }

@@ -13,15 +13,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class MountainVisit extends BaseEntity {
 
-    @Column(name = "visiter_count")
-    private long visiterCount;
+    @Column(name = "visitor_count")
+    private long visitorCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_code")
     private Mountain mountain;
 
     public void increaseCount() {
-        this.visiterCount += 1;
+        this.visitorCount += 1;
     }
 
 }

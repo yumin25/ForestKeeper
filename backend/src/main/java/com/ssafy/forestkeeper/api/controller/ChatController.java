@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Api(value = "Chat API", tags = {"Chat"})
-@CrossOrigin
+@CrossOrigin("*")
 @Controller
 @RequiredArgsConstructor
 public class ChatController {

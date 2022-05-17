@@ -55,7 +55,7 @@ public class Community extends BaseEntity {
         this.views += 1;
     }
 
-    // 댓글 삭제
+    // 글 삭제
     public void changeDelete() {
         this.delete = true;
     }

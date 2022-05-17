@@ -5,10 +5,10 @@ import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterReques
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.MountainVisit;
-import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +66,7 @@ public class PloggingServiceImpl implements PloggingService {
         MountainVisit mountainVisit = mountainVisitRepository.findByMountainCode(mountain.getCode())
                 .orElse(MountainVisit.builder()
                         .mountain(mountain)
-                        .visiterCount(0)
+                        .visitorCount(0)
                         .build()
                 );
 
@@ -182,16 +181,20 @@ public class PloggingServiceImpl implements PloggingService {
     }
 
     @Override
-    public List<TrashCan> getTrashCanList() {
+    public TrashCanListWrapperResponseDTO getTrashCanList() {
 
-        return trashCanRepository.findAll();
+        return TrashCanListWrapperResponseDTO.builder()
+                .list(trashCanRepository.findAll())
+                .build();
 
     }
 
     @Override
-    public Optional<List<TrashCan>> getTrashCanList(String region) {
+    public TrashCanListWrapperResponseDTO getTrashCanList(String region) {
 
-        return trashCanRepository.findByRegion(region);
+        return TrashCanListWrapperResponseDTO.builder()
+                .list(trashCanRepository.findByRegion(region).orElse(null))
+                .build();
 
     }
 
