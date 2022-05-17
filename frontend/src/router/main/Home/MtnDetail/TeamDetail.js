@@ -98,13 +98,16 @@ function TeamDetail({ userSlice }) {
   }
 
   function cancel() {
-    const jwtToken = localStorage.getItem("idToken");
+    const token = localStorage.getItem("idToken");
     axios
       .delete(
         "https://k6a306.p.ssafy.io/api/" + `/match/cancel/${matchingId}`,
         {
           headers: {
-            Authorization: `Bearer ` + jwtToken,
+            "Content-Type": "application/json",
+            Authorization: token
+              ? "Bearer" + token.replace(`"`, " ").replace(`"`, " ")
+              : null,
           },
         }
       )
