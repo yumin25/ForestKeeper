@@ -4,7 +4,7 @@ import "../Home.css";
 import Send from "../../../../config/Send";
 import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
-import { useSlider } from "@mui/base";
+import axios from "axios";
 function TeamDetail({ userSlice }) {
   const [isParticipated, setIsParticipated] = useState(false);
   const [detail, setDetail] = useState({
@@ -79,7 +79,6 @@ function TeamDetail({ userSlice }) {
     for (let i = 0; i < detail.participants.length; i++) {
       if (detail.participants[i].nickname == userSlice.userNickname) {
         setIsParticipated(true);
-        console.log("!!");
       }
     }
   }
@@ -99,15 +98,23 @@ function TeamDetail({ userSlice }) {
   }
 
   function cancel() {
-    console.log(matchingId);
-    console.log(typeof matchingId);
-    Send.delete(`/match/cancel/${matchingId}`)
-      .then((res) => {
-        console.log(res);
+    const jwtToken = localStorage.getItem("idToken");
+    axios
+      .delete(
+        "https://k6a306.p.ssafy.io/api/" + `/match/cancel/${matchingId}`,
+        {
+          headers: {
+            Authorization: `Bearer ` + jwtToken,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
         getArticle();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(function (error) {
+        console.log(error);
+        alert("삭제 중 문제가 발생하였습니다.");
       });
   }
 
