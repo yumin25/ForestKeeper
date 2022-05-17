@@ -270,7 +270,7 @@ public class MatchingController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 취소에 실패했습니다.", 409));
+            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
         }
 
         return ResponseEntity.ok(BaseResponseDTO.of("매칭 참여 취소에 성공했습니다.", 200));

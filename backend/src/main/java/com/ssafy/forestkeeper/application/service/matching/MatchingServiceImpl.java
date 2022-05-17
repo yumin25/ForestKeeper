@@ -245,7 +245,7 @@ public class MatchingServiceImpl implements MatchingService {
                 .orElse(null);
 
         matchingUserList.forEach(matchingUser -> {
-            matchingUser.changeDelete();
+            matchingUser.changeDeleteTrue();
 
             matchingUserRepository.save(matchingUser);
         });
