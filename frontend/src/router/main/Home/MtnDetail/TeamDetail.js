@@ -98,7 +98,7 @@ function TeamDetail({ userSlice }) {
   }
 
   function cancel() {
-    Send.delete(`/match/join/${matchingId}`)
+    Send.delete(`/match/cancel/${matchingId}`)
       .then((res) => {
         console.log(res);
         getArticle();

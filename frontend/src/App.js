@@ -17,6 +17,7 @@ import TeamWrite from "./router/main/Home/MtnDetail/TeamWrite";
 import TeamDetail from "./router/main/Home/MtnDetail/TeamDetail";
 
 function App() {
+  const cors = require("cors");
   return (
     <>
       <Router>
