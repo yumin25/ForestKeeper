@@ -2,8 +2,6 @@ import axios from "axios";
 
 const token = localStorage.getItem("idToken");
 
-console.log(token);
-
 const instance = axios.create({
   baseURL: "https://k6a306.p.ssafy.io/api/",
   headers: {
