@@ -23,7 +23,7 @@ function TeamDetail({ userSlice }) {
     views: 0,
     closed: false,
   });
-  console.log(isParticipated);
+
   const matchingId = window.localStorage.getItem("matchingId");
   useEffect(() => {
     getArticle();
@@ -74,11 +74,11 @@ function TeamDetail({ userSlice }) {
   }
 
   function confirmParticipation() {
-    console.log(detail.participants);
-    console.log(userSlice);
     for (let i = 0; i < detail.participants.length; i++) {
       if (detail.participants[i].nickname == userSlice.userNickname) {
         setIsParticipated(true);
+      } else {
+        setIsParticipated(false);
       }
     }
   }
@@ -119,7 +119,7 @@ function TeamDetail({ userSlice }) {
         console.log(e);
       });
   }
-  console.log(isParticipated);
+
   return (
     <>
       {/* 92.5vh */}
@@ -210,7 +210,9 @@ function TeamDetail({ userSlice }) {
           <>
             <button style={clickdeBtnStyle}>마감완료</button>
             <div style={{ height: "1vh" }}></div>
-            <button onClick={() => deleteMatching()}>삭제</button>
+            <button style={clickdeBtnStyle} onClick={() => deleteMatching()}>
+              삭제하기
+            </button>
           </>
         ) : userSlice.userNickname == detail.nickname ? (
           <>
