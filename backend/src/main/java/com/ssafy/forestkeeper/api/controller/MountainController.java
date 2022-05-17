@@ -57,7 +57,7 @@ public class MountainController {
     }
 
     @ApiOperation(value = "산 검색")
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> searchMountain(@RequestParam String keyword,
                                             @RequestParam(defaultValue = "1") int page) {
 
