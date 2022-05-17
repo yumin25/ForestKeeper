@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import Send from "../../../config/Send";
+import File from "../../../config/File";
 import logo from "../../../res/img/logo.png";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 
 function RecordDetail() {
+  const fileInput = useRef(null);
+  const [image, setImage] = useState();
   const navigate = useNavigate();
   const [detail, setDetail] = useState({});
   const [centerX, setCenterX] = useState();
@@ -29,9 +32,30 @@ function RecordDetail() {
     e.preventDefault();
     localStorage.removeItem("ploggingId");
   };
+  const onImageHandler = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+  const certify = () => {
+    const formData = new FormData();
+    const id = localStorage.getItem("ploggingId");
+    formData.append("image", image);
+    if (image) {
+      File.post(`/plogging/ai?ploggingId=${id}`, formData).then((res) => {
+        // console.log(res.data);
+        getDetail(localStorage.getItem("ploggingId"));
+      });
+    }
+  };
   useEffect(() => {
     getDetail(localStorage.getItem("ploggingId"));
   }, []);
+
+  useEffect(() => {
+    certify();
+  }, [image]);
+
   return (
     <>
       <div
@@ -65,18 +89,66 @@ function RecordDetail() {
             <div style={{ margin: 0, width: "80vw", display: "flex" }}>
               <div style={{ margin: "0 auto", width: "70vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
                 <div style={{ margin: "1vh 0", fontSize: "10vw", color: "#8ABC9A", fontWeight: "700" }}>{detail.date}</div>
-                <div style={{ margin: "1vh 0", fontSize: "8vw", color: "#8ABC9A", fontWeight: "700" }}>{detail.mountainName}</div>
+                <div style={{ display: "flex" }}>
+                  <div style={{ margin: "1vh 0", fontSize: "8vw", color: "#8ABC9A", fontWeight: "700" }}>{detail.mountainName}</div>
+                  {detail.exp >= 1000 ? (
+                    <button
+                      type="input"
+                      style={{
+                        margin: "1.5vh 2vw",
+                        color: "#8E8E92",
+                        backgroundColor: "#B8DEB3",
+                        border: "none",
+                        borderRadius: "10%",
+                        width: "20vw",
+                        height: "4vh",
+                      }}
+                    >
+                      인증완료
+                    </button>
+                  ) : (
+                    <button
+                      style={{
+                        margin: "1.5vh 2vw",
+                        color: "#8E8E92",
+                        backgroundColor: "#CACACA",
+                        border: "none",
+                        borderRadius: "10%",
+                        width: "20vw",
+                        height: "4vh",
+                      }}
+                      onClick={() => {
+                        fileInput.current.click();
+                      }}
+                    >
+                      <form encType="multipart/form-data">
+                        <input
+                          ref={fileInput}
+                          type="file"
+                          style={{ display: "none" }}
+                          className="imgInput"
+                          id="profile_img"
+                          accept="image/*"
+                          name="file"
+                          onChange={onImageHandler}
+                          multiple
+                        />
+                      </form>
+                      인증하기
+                    </button>
+                  )}
+                </div>
                 <div style={{ display: "flex", justifyContent: "space-around", color: "#8E8E92" }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <p style={{ marginBottom: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>거리</p>
+                  <div style={{ marginTop: "1vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <p style={{ margin: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>거리</p>
                     <p style={{ marginTop: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>{detail.distance}km</p>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <p style={{ marginBottom: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>시간</p>
+                  <div style={{ marginTop: "1vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <p style={{ margin: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>시간</p>
                     <p style={{ marginTop: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>{detail.time}</p>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <p style={{ marginBottom: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>경험치</p>
+                  <div style={{ marginTop: "1vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <p style={{ margin: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>경험치</p>
                     <p style={{ marginTop: 0, fontSize: "5vw", fontWeight: "700", color: "#8E8E92" }}>{detail.exp}exp</p>
                   </div>
                 </div>
