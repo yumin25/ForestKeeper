@@ -1,8 +1,8 @@
 package com.ssafy.forestkeeper.api.controller;
 
 
-import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterDTO;
-import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterDTO;
+import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.*;
 import com.ssafy.forestkeeper.application.service.plogging.PloggingAiService;
@@ -37,11 +37,11 @@ public class PloggingController {
 
     @ApiOperation(value = "플로깅 등록")
     @PostMapping
-    public ResponseEntity<?> registerPlogging(@RequestPart(value = "dto", required = true) PloggingRegisterDTO ploggingRegisterDTO,
+    public ResponseEntity<?> registerPlogging(@RequestPart(value = "dto", required = true) PloggingRegisterRequestDTO ploggingRegisterRequestDTO,
                                               @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         PloggingRegisterResponseDTO ploggingRegisterResponseDTO;
         try {
-            Plogging plogging = ploggingService.register(ploggingRegisterDTO);
+            Plogging plogging = ploggingService.register(ploggingRegisterRequestDTO);
             ploggingRegisterResponseDTO = PloggingRegisterResponseDTO.builder().ploggingId(plogging.getId()).build();
 
         } catch (IllegalArgumentException e) {
@@ -70,9 +70,9 @@ public class PloggingController {
 
     @ApiOperation(value = "경험치 부여")
     @PatchMapping
-    public ResponseEntity<?> registerExp(@RequestBody ExpRegisterDTO expRegisterDTO) {
+    public ResponseEntity<?> registerExp(@RequestBody ExpRegisterRequestDTO expRegisterRequestDTO) {
         try {
-            ploggingService.registerExp(expRegisterDTO);
+            ploggingService.registerExp(expRegisterRequestDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

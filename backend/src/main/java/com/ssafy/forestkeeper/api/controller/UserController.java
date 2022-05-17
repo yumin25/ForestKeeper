@@ -1,9 +1,9 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
-import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserLoginRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
 import com.ssafy.forestkeeper.application.service.s3.AwsS3Service;
 import com.ssafy.forestkeeper.application.service.user.UserService;
@@ -30,11 +30,11 @@ public class UserController {
 
     @ApiOperation(value = "회원가입")
     @PostMapping
-    public ResponseEntity<?> signup(@RequestPart(value = "dto") UserSignUpDTO userSignUpDTO,
+    public ResponseEntity<?> signup(@RequestPart(value = "dto") UserSignUpRequestDTO userSignUpRequestDTO,
                                     @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
 
         try {
-            Integer result = userService.signUp(userSignUpDTO);
+            Integer result = userService.signUp(userSignUpRequestDTO);
 
             if (result == 4091) return ResponseEntity.status(409).body(BaseResponseDTO.of("이름 형식이 잘못되었습니다.", 409));
             else if (result == 4092) return ResponseEntity.status(409).body(BaseResponseDTO.of("닉네임 형식이 잘못되었습니다.", 409));
@@ -44,7 +44,7 @@ public class UserController {
 
             if (multipartFile != null) {
                 String savedFileName = awsS3Service.uploadFileToS3("user", multipartFile);
-                userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpDTO.getEmail());
+                userService.registerUserImgPath(multipartFile.getOriginalFilename(), savedFileName, userSignUpRequestDTO.getEmail());
             }
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("회원가입에 실패했습니다.", 409));
@@ -54,24 +54,24 @@ public class UserController {
 
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
 
-        return ResponseEntity.status(200).body(UserLoginResponseDTO.of("로그인에 성공했습니다.", 200, userService.login(userLoginDTO)));
+        return ResponseEntity.status(200).body(UserLoginResponseDTO.of("로그인에 성공했습니다.", 200, userService.login(userLoginRequestDTO)));
 
     }
 
     @ApiOperation(value = "유저 정보 조회")
     @GetMapping("/userinfo")
     public ResponseEntity<?> getUserInfo() {
-        UserInfoDTO userInfoDTO;
+        UserInfoResponseDTO userInfoResponseDTO;
         try {
-            userInfoDTO = userService.getUserDetail();
+            userInfoResponseDTO = userService.getUserDetail();
         } catch (IllegalStateException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("사용자 정보 조회에 실패하였습니다.", 409));
         }
-        return ResponseEntity.status(200).body(UserInfoDTO.of("사용자 정보 조회에 성공하였습니다.", 200, userInfoDTO));
+        return ResponseEntity.status(200).body(UserInfoResponseDTO.of("사용자 정보 조회에 성공하였습니다.", 200, userInfoResponseDTO));
     }
 
     @ApiOperation(value = "닉네임 중복 확인")

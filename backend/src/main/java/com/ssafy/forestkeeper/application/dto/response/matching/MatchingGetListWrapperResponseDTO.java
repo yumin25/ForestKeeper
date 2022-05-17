@@ -9,7 +9,7 @@ import lombok.ToString;
 
 import java.util.List;
 
-@ApiModel("CommunityGetListWrapperResponseDTO")
+@ApiModel("MatchingGetListWrapperResponseDTO")
 @Builder
 @Getter
 @ToString

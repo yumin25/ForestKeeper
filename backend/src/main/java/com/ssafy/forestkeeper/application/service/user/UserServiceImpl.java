@@ -1,8 +1,8 @@
 package com.ssafy.forestkeeper.application.service.user;
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
-import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
-import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserLoginRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpRequestDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.user.User;
@@ -42,20 +42,20 @@ public class UserServiceImpl implements UserService {
 
     // 회원가입
     @Override
-    public Integer signUp(UserSignUpDTO userDTO) {
+    public Integer signUp(UserSignUpRequestDTO userDTO) {
+
         if (!isValidName(userDTO.getName())) return 4091;
         else if (!isValidNickname(userDTO.getNickname())) return 4092;
         else if (!isValidPassword(userDTO.getPassword())) return 4093;
         else if (checkEmail(userDTO.getEmail())) return 4094;
         else if (checkNickname(userDTO.getNickname())) return 4095;
 
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(User.builder()
                 .userCode(UserCode.USER)
                 .name(userDTO.getName())
                 .nickname(userDTO.getNickname())
                 .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
                 .build());
 
         return 201;
@@ -63,10 +63,10 @@ public class UserServiceImpl implements UserService {
 
     // 로그인
     @Override
-    public UserLoginResponseDTO login(UserLoginDTO userLoginDTO) {
+    public UserLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword())
+                new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword())
         );
 
         return UserLoginResponseDTO.builder()
@@ -82,9 +82,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserDetail() {
+    public UserInfoResponseDTO getUserDetail() {
         User user = userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
-        Image image = imageRepository.findByUserId(user.getId()).orElse(null);
+        Image image = imageRepository.findByUser(user).orElse(null);
         String imagePath;
         String thumbnailPath;
         if (image == null) {
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
             imagePath = hosting + "user/" + image.getSavedFileName();
             thumbnailPath = hosting + "thumb/" + image.getSavedFileName();
         }
-        return UserInfoDTO.builder()
+        return UserInfoResponseDTO.builder()
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
@@ -163,10 +163,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserImgPath(String originalFileName, String savedFileName) {
-        Image image = imageRepository.findByUserId(
+        Image image = imageRepository.findByUser(
                 userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."))
-                        .getId()).orElse(null);
+                        ).orElse(null);
 
         if (image != null) {
             image.changeFileName(originalFileName, savedFileName);

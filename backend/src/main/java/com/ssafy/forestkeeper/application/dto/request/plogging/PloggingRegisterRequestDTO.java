@@ -1,22 +1,18 @@
 package com.ssafy.forestkeeper.application.dto.request.plogging;
 
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel("PloggingRegisterDTO")
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
+@ApiModel("PloggingRegisterRequestDTO")
 @Getter
-@Setter
 @ToString
-@NoArgsConstructor
-public class PloggingRegisterDTO {
+public class PloggingRegisterRequestDTO {
 
     @ApiModelProperty(name = "플로깅 시작 시간")
     @NotBlank
@@ -29,13 +25,13 @@ public class PloggingRegisterDTO {
     @ApiModelProperty(name = "플로깅 거리")
     @NotBlank
     private double distance;
-    
+
     @ApiModelProperty(name = "산 코드")
     @NotBlank
     private String mountainCode;
-    
+
     @ApiModelProperty(name = "이동 좌표")
     @NotBlank
-    private List<Coordinates> coords;
-    
+    private List<CoordinatesDTO> coords;
+
 }

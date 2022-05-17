@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
-import com.ssafy.forestkeeper.util.image.FileUtil;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +17,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class AwsS3ServiceImpl implements AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
@@ -30,7 +29,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
     @Override
     public String uploadFileToS3(String category, MultipartFile multipartFile) {
 
-        String fileName = FileUtil.buildFileName(multipartFile.getOriginalFilename());
+        String fileName = createFileName(multipartFile.getOriginalFilename());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
 
@@ -45,12 +44,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, category + "/" + fileName, byteArrayIs, objectMetadata));
 
-            if (category.equals("user")) {
-                uploadThumbFile(multipartFile, fileName, 100);
-            } else {
-                uploadThumbFile(multipartFile, fileName, 100);
-            }
-
+            uploadThumbFile(multipartFile, fileName, 100);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,6 +84,20 @@ public class AwsS3ServiceImpl implements AwsS3Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public String createFileName(String originalFileName) {
+
+        int fileExtensionIndex = originalFileName.lastIndexOf(".");
+
+        String fileName = originalFileName.substring(0, fileExtensionIndex);
+        String fileExtension = originalFileName.substring(fileExtensionIndex);
+
+        String now = String.valueOf(System.currentTimeMillis());
+
+        return fileName + "_" + now + fileExtension;
 
     }
 

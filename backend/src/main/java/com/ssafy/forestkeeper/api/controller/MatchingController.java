@@ -1,8 +1,8 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingJoinPostDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
@@ -35,15 +35,15 @@ public class MatchingController {
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-            @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterPostDTO matchingRegisterPostDTO
+            @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterRequestDTO matchingRegisterRequestDTO
     ) {
 
-        if (matchingRegisterPostDTO.getTotal() == 0) {
+        if (matchingRegisterRequestDTO.getTotal() == 0) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원은 1명 이상이어야 합니다.", 409));
         }
 
         try {
-            matchingService.registerMatching(matchingRegisterPostDTO);
+            matchingService.registerMatching(matchingRegisterRequestDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
@@ -63,15 +63,15 @@ public class MatchingController {
     })
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-            @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyPatchDTO matchingModifyPatchDTO
+            @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyRequestDTO matchingModifyRequestDTO
     ) {
 
-        if (matchingModifyPatchDTO.getTotal() < matchingUserService.getParticipants(matchingModifyPatchDTO.getMatchingId()).size()) {
+        if (matchingModifyRequestDTO.getTotal() < matchingUserService.getParticipants(matchingModifyRequestDTO.getMatchingId()).size()) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원이 참여 인원보다 적습니다.", 409));
         }
 
         try {
-            matchingService.modifyMatching(matchingModifyPatchDTO);
+            matchingService.modifyMatching(matchingModifyRequestDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
@@ -91,10 +91,10 @@ public class MatchingController {
     })
     @PostMapping("/join")
     public ResponseEntity<? extends BaseResponseDTO> joinMatching(
-            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingRequestDTO matchingRequestDTO
     ) {
 
-        String matchingId = matchingJoinPostDTO.getMatchingId();
+        String matchingId = matchingRequestDTO.getMatchingId();
 
         if (matchingService.isFull(matchingId)) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 가득 찬 매칭입니다.", 409));
@@ -113,7 +113,7 @@ public class MatchingController {
         }
 
         try {
-            matchingUserService.joinMatching(matchingJoinPostDTO.getMatchingId());
+            matchingUserService.joinMatching(matchingRequestDTO.getMatchingId());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
@@ -134,11 +134,11 @@ public class MatchingController {
     })
     @PatchMapping("/close")
     public ResponseEntity<? extends BaseResponseDTO> closeMatching(
-            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingRequestDTO matchingRequestDTO
     ) {
 
         try {
-            matchingService.closeMatching(matchingJoinPostDTO.getMatchingId());
+            matchingService.closeMatching(matchingRequestDTO.getMatchingId());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {

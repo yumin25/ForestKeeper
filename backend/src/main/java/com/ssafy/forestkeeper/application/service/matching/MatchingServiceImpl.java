@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.application.service.matching;
 
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
@@ -39,18 +39,18 @@ public class MatchingServiceImpl implements MatchingService {
     private final MatchingUserService matchingUserService;
 
     @Override
-    public void registerMatching(MatchingRegisterPostDTO matchingRegisterPostDTO) {
+    public void registerMatching(MatchingRegisterRequestDTO matchingRegisterRequestDTO) {
 
         Matching matching = Matching.builder()
-                .title(matchingRegisterPostDTO.getTitle())
-                .content(matchingRegisterPostDTO.getContent())
+                .title(matchingRegisterRequestDTO.getTitle())
+                .content(matchingRegisterRequestDTO.getContent())
                 .createTime(LocalDateTime.now())
-                .ploggingDate(LocalDate.parse(matchingRegisterPostDTO.getPloggingDate()))
-                .total(matchingRegisterPostDTO.getTotal())
+                .ploggingDate(LocalDate.parse(matchingRegisterRequestDTO.getPloggingDate()))
+                .total(matchingRegisterRequestDTO.getTotal())
                 .user(userRepository.findByEmailAndDelete(
                                 SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .mountain(mountainRepository.findByCode(matchingRegisterPostDTO.getMountainCode())
+                .mountain(mountainRepository.findByCode(matchingRegisterRequestDTO.getMountainCode())
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")))
                 .build();
 
@@ -64,16 +64,16 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
-    public void modifyMatching(MatchingModifyPatchDTO matchingModifyPatchDTO) {
+    public void modifyMatching(MatchingModifyRequestDTO matchingModifyRequestDTO) {
 
         Matching matching = matchingRepository.findByIdAndDelete(
-                        matchingModifyPatchDTO.getMatchingId(), false)
+                        matchingModifyRequestDTO.getMatchingId(), false)
                 .orElseThrow(() -> new MatchingNotFoundException("매칭 정보가 존재하지 않습니다."));
 
-        matching.changeMatching(matchingModifyPatchDTO.getTitle(),
-                matchingModifyPatchDTO.getContent(), LocalDate.parse(matchingModifyPatchDTO.getPloggingDate()),
-                matchingModifyPatchDTO.getTotal(),
-                mountainRepository.findByCode(matchingModifyPatchDTO.getMountainCode())
+        matching.changeMatching(matchingModifyRequestDTO.getTitle(),
+                matchingModifyRequestDTO.getContent(), LocalDate.parse(matchingModifyRequestDTO.getPloggingDate()),
+                matchingModifyRequestDTO.getTotal(),
+                mountainRepository.findByCode(matchingModifyRequestDTO.getMountainCode())
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다."))
         );
 

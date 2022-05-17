@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainUserInfoWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingListWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserPloggingInfoDTO;
 import com.ssafy.forestkeeper.application.service.userinfo.UserInfoService;
 
@@ -34,17 +34,17 @@ public class UserInfoController {
     @GetMapping("/plogging")
     public ResponseEntity<? extends BaseResponseDTO> getPloggingList(@ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page) {
 
-        PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;
+        PloggingGetListWrapperResponseDTO ploggingGetListWrapperResponseDTO = null;
 
         try {
-        	ploggingListWrapperResponseDTO = userInfoService.getPloggingList(page);
+        	ploggingGetListWrapperResponseDTO = userInfoService.getPloggingList(page);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("글 목록 조회에 실패했습니다.", 409));
         }
 
-        return ResponseEntity.ok(PloggingListWrapperResponseDTO.of("글 목록 조회에 성공했습니다.", 200, ploggingListWrapperResponseDTO));
+        return ResponseEntity.ok(PloggingGetListWrapperResponseDTO.of("글 목록 조회에 성공했습니다.", 200, ploggingGetListWrapperResponseDTO));
 
     }
     
@@ -68,16 +68,16 @@ public class UserInfoController {
     @GetMapping("/{mountainCode}")
     public ResponseEntity<? extends BaseResponseDTO> getPloggingInMountain(@ApiParam(value = "산 코드", required = true) @PathVariable @NotBlank String mountainCode) {
 
-    	PloggingListWrapperResponseDTO ploggingListWrapperResponseDTO = null;
+    	PloggingGetListWrapperResponseDTO ploggingGetListWrapperResponseDTO = null;
     	
         try {
-        	ploggingListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainCode);
+        	ploggingGetListWrapperResponseDTO = userInfoService.getPloggingInMountain(mountainCode);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
         } catch (Exception e) {
             return ResponseEntity.status(409).body(BaseResponseDTO.of("플로깅 목록 조회에 실패했습니다.", 409));
         }
-        return ResponseEntity.status(200).body(PloggingListWrapperResponseDTO.of("플로깅 목록 조회에 성공했습니다.", 200,ploggingListWrapperResponseDTO));
+        return ResponseEntity.status(200).body(PloggingGetListWrapperResponseDTO.of("플로깅 목록 조회에 성공했습니다.", 200, ploggingGetListWrapperResponseDTO));
     }
     
     @ApiOperation(value = "유저 누적 플로깅 정보")
