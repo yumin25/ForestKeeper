@@ -246,7 +246,7 @@ function Detail({ userSlice }) {
             )}
           </div>
         ) : (
-          <TeamList mountainCode={Info.id}></TeamList>
+          <TeamList mountainCode={useParam.mountainCode}></TeamList>
         )}
       </div>
       <Bar></Bar>

@@ -6,19 +6,19 @@ import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
 function TeamDetail({ userSlice }) {
   const [detail, setDetail] = useState({
-    message: "매칭 글조회에 성공했습니다.",
-    statusCode: 200,
-    id: "b9a6e9ce-2ea5-45f0-a769-1adb8146e7da",
-    nickname: "숲지기산지기문지기",
-    title: "조회 테스트e3221",
-    createTime: "2022-05-03T01:55:28.07625",
-    ploggingDate: "2022-05-02",
-    total: 6,
-    participant: 1,
-    mountainName: "국지산",
-    mountainCode: "427500701",
-    content: "ㅍㅍㅁㅇ",
-    views: 1,
+    message: "",
+    statusCode: "",
+    id: "",
+    nickname: "",
+    title: "",
+    createTime: "",
+    ploggingDate: "",
+    total: 0,
+    participant: 0,
+    mountainName: "",
+    mountainCode: "",
+    content: "",
+    views: 0,
     closed: false,
   });
   const matchingId = window.localStorage.getItem("matchingId");
@@ -30,6 +30,15 @@ function TeamDetail({ userSlice }) {
     width: "25vw",
     height: "5vh",
     background: "#37CD76",
+    color: "white",
+    borderRadius: 15,
+    border: "none",
+    marginLeft: "29vw",
+  };
+  const clickdeBtnStyle = {
+    width: "25vw",
+    height: "5vh",
+    background: "#FF7760",
     color: "white",
     borderRadius: 15,
     border: "none",
@@ -56,7 +65,7 @@ function TeamDetail({ userSlice }) {
         console.log(e);
       });
   }
-  console.log(userSlice);
+
   return (
     <>
       {/* 92.5vh */}
@@ -130,7 +139,7 @@ function TeamDetail({ userSlice }) {
               마감하기
             </button>
           ) : (
-            <button style={btnStyle}>마감완료</button>
+            <button style={clickdeBtnStyle}>마감완료</button>
           )
         ) : (
           <button style={btnStyle}></button>

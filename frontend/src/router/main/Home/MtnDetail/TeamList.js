@@ -70,7 +70,7 @@ function TeamList({ mountainCode }) {
   const getItems = async (page) => {
     getList();
   };
-
+  console.log(mountainCode);
   useEffect(() => {
     getItems(page);
   }, [page]);
