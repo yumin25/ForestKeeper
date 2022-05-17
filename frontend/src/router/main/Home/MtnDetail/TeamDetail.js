@@ -108,6 +108,18 @@ function TeamDetail({ userSlice }) {
       });
   }
 
+  function deleteMatching() {
+    Send.delete(`/match/${matchingId}`)
+      .then((res) => {
+        console.log(res);
+        alert("삭제되었습니다.");
+        document.location.href = `/detail/${detail.mountainCode}`;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  console.log(isParticipated);
   return (
     <>
       {/* 92.5vh */}
@@ -195,11 +207,21 @@ function TeamDetail({ userSlice }) {
         </div>
 
         {detail.close == true ? (
-          <button style={clickdeBtnStyle}>마감완료</button>
+          <>
+            <button style={clickdeBtnStyle}>마감완료</button>
+            <div style={{ height: "1vh" }}></div>
+            <button onClick={() => deleteMatching()}>삭제</button>
+          </>
         ) : userSlice.userNickname == detail.nickname ? (
-          <button style={btnStyle} onClick={() => closeMatching()}>
-            마감하기
-          </button>
+          <>
+            <button style={btnStyle} onClick={() => closeMatching()}>
+              마감하기
+            </button>
+            <div style={{ height: "1vh" }}></div>
+            <button style={clickdeBtnStyle} onClick={() => deleteMatching()}>
+              삭제하기
+            </button>
+          </>
         ) : isParticipated == false ? (
           <button style={btnStyle} onClick={() => apply()}>
             신청하기

@@ -77,7 +77,7 @@ function WriteItem() {
   );
 }
 
-function About({ url }) {
+function About({ url, mountainId }) {
   const [tab, setTab] = useState("REVIEW");
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
@@ -134,6 +134,7 @@ function About({ url }) {
   function getList() {
     Send.get(url + `/community`, {
       params: {
+        mountainId: mountainId,
         communityCode: tab,
         page: page,
       },
