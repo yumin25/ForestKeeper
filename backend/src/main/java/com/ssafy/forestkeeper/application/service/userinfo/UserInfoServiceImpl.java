@@ -79,7 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         return PloggingGetListWrapperResponseDTO.builder()
-                .ploggingList(ploggingListResponseDTOGetList)
+                .ploggingGetListResponseDTOList(ploggingListResponseDTOGetList)
                 .build();
 
     }
