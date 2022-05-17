@@ -60,14 +60,14 @@ function Signup() {
       );
       return;
     }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    // //화면에 프로필 사진 표시
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   if (reader.readyState === 2) {
+    //     setImage(reader.result);
+    //   }
+    // };
+    // reader.readAsDataURL(e.target.files[0]);
   };
 
   const onCreate = () => {
@@ -106,28 +106,28 @@ function Signup() {
         })
       );
 
-      axios
-        .post(url + `/api/user`, formData, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": `multipart/form-data`,
-          },
-        })
-        .then(function (response) {
-          console.log(response);
-          if (response.data.statusCode === 201) {
-            setEmail("");
-            setPassword("");
-            setPasswordConfirm("");
-            setName("");
-            setNickname("");
-            alert("회원가입이 완료되었습니다!");
-            document.location.href = "/accounts/login";
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      // axios
+      //   .post(url + `/api/user`, formData, {
+      //     headers: {
+      //       Accept: "application/json",
+      //       "Content-Type": `multipart/form-data`,
+      //     },
+      //   })
+      //   .then(function (response) {
+      //     console.log(response);
+      //     if (response.data.statusCode === 201) {
+      //       setEmail("");
+      //       setPassword("");
+      //       setPasswordConfirm("");
+      //       setName("");
+      //       setNickname("");
+      //       alert("회원가입이 완료되었습니다!");
+      //       document.location.href = "/accounts/login";
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     }
   };
 
