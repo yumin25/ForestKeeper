@@ -12,10 +12,10 @@ public interface CommunityService {
     void registerCommunity(CommunityRegisterRequestDTO communityRegisterRequestDTO);
 
     // 글 목록 조회
-    CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page);
+    CommunityGetListWrapperResponseDTO getCommunityList(String mountainId, CommunityCode communityCode, int page);
 
     // 글 검색
-    CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page);
+    CommunityGetListWrapperResponseDTO searchCommunity(String mountainId, CommunityCode communityCode, String type, String keyword, int page);
 
     // 글 조회
     CommunityResponseDTO getCommunity(String communityId);

@@ -55,9 +55,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityGetListWrapperResponseDTO getCommunityList(CommunityCode communityCode, int page) {
+    public CommunityGetListWrapperResponseDTO getCommunityList(String mountainId, CommunityCode communityCode, int page) {
 
-        List<Community> communityList = communityRepository.findByCommunityCodeAndDeleteOrderByCreateTimeDesc(communityCode, false, PageRequest.of(page - 1, 6))
+        List<Community> communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteOrderByCreateTimeDesc(mountainId, communityCode, false, PageRequest.of(page - 1, 7))
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         return convertCommunityListToDTO(communityList);
@@ -65,28 +65,28 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityGetListWrapperResponseDTO searchCommunity(CommunityCode communityCode, String type, String keyword, int page) {
+    public CommunityGetListWrapperResponseDTO searchCommunity(String mountainId, CommunityCode communityCode, String type, String keyword, int page) {
 
         List<Community> communityList = new ArrayList<>();
 
         switch (type) {
             case "td":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 6)
+                                communityCode, false, keyword, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "t":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
+                                communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "d":
                 communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 6)
+                                communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
@@ -96,7 +96,7 @@ public class CommunityServiceImpl implements CommunityService {
                                 communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
                                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")),
-                                PageRequest.of(page - 1, 6)
+                                PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
