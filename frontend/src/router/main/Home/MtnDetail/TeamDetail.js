@@ -98,26 +98,13 @@ function TeamDetail({ userSlice }) {
   }
 
   function cancel() {
-    const token = localStorage.getItem("idToken");
-    axios
-      .delete(
-        "https://k6a306.p.ssafy.io/api/" + `/match/cancel/${matchingId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-              ? "Bearer" + token.replace(`"`, " ").replace(`"`, " ")
-              : null,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
+    Send.delete(`/match/join/${matchingId}`)
+      .then((res) => {
+        console.log(res);
         getArticle();
       })
-      .catch(function (error) {
-        console.log(error);
-        alert("삭제 중 문제가 발생하였습니다.");
+      .catch((e) => {
+        console.log(e);
       });
   }
 
