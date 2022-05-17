@@ -1,4 +1,4 @@
-import logo from "../../res/img/logo.png";
+import logo from "../../res/img/logo_temp_full.png";
 import "./Login.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
