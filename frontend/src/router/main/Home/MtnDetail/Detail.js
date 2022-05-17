@@ -16,7 +16,7 @@ function Detail({ userSlice }) {
   const [isVisited, setIsVisited] = useState(false);
   const [tab, setTab] = useState("home");
   const [Info, setInfo] = useState([]);
-  const [visiter, setVisiter] = useState(0);
+  const [visitor, setVisitor] = useState(0);
   const [distance, setDistance] = useState(0);
   const [count, setCount] = useState(0);
   const [menu, setMenu] = useState("default");
@@ -52,7 +52,7 @@ function Detail({ userSlice }) {
     })
       .then(function (response) {
         console.log(response.data);
-        setVisiter(response.data.visiter);
+        setVisitor(response.data.visitor);
         setDistance(response.data.distance);
         setCount(response.data.count);
       })
@@ -236,7 +236,7 @@ function Detail({ userSlice }) {
                 </div>
 
                 <Home
-                  visiter={visiter}
+                  visitor={visitor}
                   distance={distance}
                   lat={Info.lat}
                   lng={Info.lng}
