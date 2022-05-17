@@ -76,9 +76,9 @@ function TeamList({ mountainCode }) {
   }, [page]);
 
   function goDetail(matchingId) {
-    document.location.href = `/teamDetail/` + matchingId;
+    window.localStorage.setItem("matchingId", matchingId);
+    document.location.href = "/teamDetail";
   }
-
   function getList() {
     Send.get("/match", {
       params: {
