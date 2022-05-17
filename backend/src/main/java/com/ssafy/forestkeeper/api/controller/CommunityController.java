@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -34,10 +34,10 @@ public class CommunityController {
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityRegisterPostDTO communityRegisterPostDTO
+            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityRegisterRequestDTO communityRegisterRequestDTO
     ) {
 
-        communityService.registerCommunity(communityRegisterPostDTO);
+        communityService.registerCommunity(communityRegisterRequestDTO);
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성 성공", 201));
 
@@ -51,24 +51,29 @@ public class CommunityController {
     })
     @GetMapping
     public ResponseEntity<? extends BaseResponseDTO> getList(
+            @ApiParam(value = "산 ID", required = true) @RequestParam @NotBlank String mountainId,
             @ApiParam(value = "커뮤니티 코드", required = true) @RequestParam @NotNull CommunityCode communityCode,
             @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
-        return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 목록 조회 성공", 200, communityService.getCommunityList(communityCode, page)));
+        return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 목록 조회 성공", 200, communityService.getCommunityList(mountainId, communityCode, page)));
 
     }
 
     @ApiOperation(value = "글 검색")
     @GetMapping("/search")
     public ResponseEntity<? extends BaseResponseDTO> search(
+            @ApiParam(value = "산 ID", required = true) @RequestParam @NotBlank String mountainId,
             @ApiParam(value = "커뮤니티 코드", required = true) @RequestParam @NotNull CommunityCode communityCode,
             @ApiParam(value = "검색 유형", required = true) @RequestParam @NotBlank String type,
             @ApiParam(value = "검색어", required = true) @RequestParam @NotBlank String keyword,
             @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
-        return ResponseEntity.ok(CommunityGetListWrapperResponseDTO.of("글 검색 성공", 200, communityService.searchCommunity(communityCode, type, keyword, page)));
+        return ResponseEntity.ok(
+                CommunityGetListWrapperResponseDTO.of("글 검색 성공", 200,
+                        communityService.searchCommunity(mountainId, communityCode, type, keyword, page))
+        );
 
     }
 
@@ -78,19 +83,19 @@ public class CommunityController {
             @ApiParam(value = "글 ID", required = true) @PathVariable @NotBlank String communityId
     ) {
 
-        return ResponseEntity.ok(CommunityResponseDTO.of("글 조회에 성공했습니다.", 200, communityService.getCommunity(communityId)));
+        return ResponseEntity.ok(CommunityResponseDTO.of("글 조회 성공", 200, communityService.getCommunity(communityId)));
 
     }
 
     @ApiOperation(value = "글 수정")
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityModifyPatchDTO communityModifyPatchDTO
+            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityModifyRequestDTO communityModifyRequestDTO
     ) {
 
-        communityService.modifyCommunity(communityModifyPatchDTO);
+        communityService.modifyCommunity(communityModifyRequestDTO);
 
-        return ResponseEntity.ok(BaseResponseDTO.of("글 수정에 성공했습니다.", 200));
+        return ResponseEntity.ok(BaseResponseDTO.of("글 수정 성공", 200));
 
     }
 
@@ -102,7 +107,7 @@ public class CommunityController {
 
         communityService.deleteCommunity(communityId);
 
-        return ResponseEntity.ok(BaseResponseDTO.of("글 삭제에 성공했습니다.", 200));
+        return ResponseEntity.ok(BaseResponseDTO.of("글 삭제 성공", 200));
 
     }
 

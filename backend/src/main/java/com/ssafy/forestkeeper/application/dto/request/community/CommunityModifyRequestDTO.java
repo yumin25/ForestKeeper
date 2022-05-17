@@ -1,26 +1,20 @@
 package com.ssafy.forestkeeper.application.dto.request.community;
 
-import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-@ApiModel("CommunityRegisterPostDTO")
+@ApiModel("CommunityModifyRequestDTO")
 @Getter
 @ToString
-public class CommunityRegisterPostDTO {
+public class CommunityModifyRequestDTO {
 
-    @ApiModelProperty(name = "산 ID")
+    @ApiModelProperty(name = "글 ID")
     @NotBlank
-    private String mountainId;
-
-    @ApiModelProperty(name = "커뮤니티 코드", example = "REVIEW or QNA")
-    @NotNull
-    private CommunityCode communityCode;
+    private String communityId;
 
     @ApiModelProperty(name = "제목")
     @NotBlank

@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.application.service.comment;
 
-import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.community.Comment;
@@ -31,14 +31,14 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
 
     @Override
-    public void registerComment(CommentRegisterPostDTO commentRegisterPostDTO) {
+    public void registerComment(CommentRegisterRequestDTO commentRegisterRequestDTO) {
 
         Comment comment = Comment.builder()
-                .description(commentRegisterPostDTO.getDescription())
+                .description(commentRegisterRequestDTO.getDescription())
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .community(communityRepository.findById(commentRegisterPostDTO.getCommunityId())
+                .community(communityRepository.findById(commentRegisterRequestDTO.getCommunityId())
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다.")))
                 .build();
 
@@ -73,12 +73,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void modifyComment(CommentModifyPatchDTO commentModifyPatchDTO) {
+    public void modifyComment(CommentModifyRequestDTO commentModifyRequestDTO) {
 
-        Comment comment = commentRepository.findByIdAndDelete(commentModifyPatchDTO.getCommentId(), false)
+        Comment comment = commentRepository.findByIdAndDelete(commentModifyRequestDTO.getCommentId(), false)
                 .orElseThrow(() -> new CommentNotFoundException("댓글 정보가 존재하지 않습니다."));
 
-        comment.changeComment(commentModifyPatchDTO.getDescription());
+        comment.changeComment(commentModifyRequestDTO.getDescription());
 
         commentRepository.save(comment);
 
