@@ -121,19 +121,37 @@ function MyPage({ userSlice }) {
         {/* 개인정보 */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ display: "flex", width: "80vw" }}>
-            <img
-              style={{
-                width: "22vw",
-                maxWidth: "22vw",
-                objectFit: "cover",
-                borderRadius: "50%",
-                border: "solid",
-                borderWidth: "1px",
-                borderColor: "#8E8E92",
-              }}
-              src={logo}
-              alt="logo"
-            />
+            {userSlice.userImage ? (
+              <img
+                style={{
+                  width: "22vw",
+                  maxWidth: "22vw",
+                  height: "22vw",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  border: "solid",
+                  borderWidth: "1px",
+                  borderColor: "#8E8E92",
+                }}
+                src={userSlice.userImage}
+                alt="logo"
+              />
+            ) : (
+              <img
+                style={{
+                  width: "22vw",
+                  maxWidth: "22vw",
+                  height: "22vw",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                  border: "solid",
+                  borderWidth: "1px",
+                  borderColor: "#8E8E92",
+                }}
+                src={logo}
+                alt="logo"
+              />
+            )}
             <div style={{ margin: "auto 0", marginLeft: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "3vw" }}>
                 <p style={{ fontSize: "4.5vw", margin: "0 2vw 0 0", color: "#8E8E92" }}>{userSlice.userNickname}</p>
@@ -219,7 +237,7 @@ function MyPage({ userSlice }) {
             flexDirection: "column",
             alignItems: "center",
             margin: "2vh 1vw 0 1vw",
-            height: "56vh",
+            height: "57vh",
           }}
         >
           {menu === "1" ? (
