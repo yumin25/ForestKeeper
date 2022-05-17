@@ -64,7 +64,7 @@ public class MountainServiceImpl implements MountainService {
 
         page = Math.max(page, 1);
 
-        List<Mountain> result = mountainRepositorySupport.findByNameContains(keyword, PageRequest.of(page * batch, batch));
+        List<Mountain> result = mountainRepositorySupport.findByNameContains(keyword, PageRequest.of((page - 1) * batch, batch));
 
         List<MountainSearchDTO> list = new ArrayList<>();
 
