@@ -27,6 +27,9 @@ function TeamDetail({ userSlice }) {
   useEffect(() => {
     getArticle();
   }, []);
+  useEffect(() => {
+    confirmParticipation();
+  }, [detail]);
 
   const btnStyle = {
     width: "25vw",
@@ -78,7 +81,11 @@ function TeamDetail({ userSlice }) {
   }
 
   function apply() {
-    Send.post(`/match/join`, { matchingId: matchingId })
+    console.log(detail.id);
+    const data = {
+      matchingId: matchingId,
+    };
+    Send.post(`/match/join`, data)
       .then((res) => {
         console.log(res);
         getArticle();
@@ -88,6 +95,7 @@ function TeamDetail({ userSlice }) {
       });
   }
 
+  console.log(matchingId);
   function cancel() {
     Send.delete(`/match/cancel/${matchingId}`)
       .then((res) => {
@@ -170,7 +178,7 @@ function TeamDetail({ userSlice }) {
           {detail.content}
         </div>
 
-        {detail.closed == true ? (
+        {detail.close == true ? (
           <button style={clickdeBtnStyle}>마감완료</button>
         ) : userSlice.userNickname == detail.nickname ? (
           <button style={btnStyle} onClick={() => closeMatching()}>
