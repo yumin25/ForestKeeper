@@ -42,7 +42,7 @@ function NaverMapAPI({ lat, lng, handleMenu }) {
   );
 }
 
-function Home({ visiter, distance, lat, lng, handleMenu }) {
+function Home({ visitor, distance, lat, lng, handleMenu }) {
   return (
     <>
       {/* 15vh */}
@@ -65,7 +65,7 @@ function Home({ visiter, distance, lat, lng, handleMenu }) {
           <div
             style={{ display: "flex", fontSize: "3.5vh", fontWeight: "bold" }}
           >
-            <div style={{ marginRight: "5vw" }}>{visiter}명</div>
+            <div style={{ marginRight: "5vw" }}>{visitor}명</div>
             <div> {distance}km</div>
           </div>
         </div>

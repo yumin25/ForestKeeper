@@ -66,7 +66,7 @@ function ArticleDetail({ userSlice }) {
     Send.delete(`/comment/community/${commentId}`)
       .then((res) => {
         console.log(res);
-        if (res.code === 201) {
+        if (res.code === 200) {
           getArticle();
         }
       })
