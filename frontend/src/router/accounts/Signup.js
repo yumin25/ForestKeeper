@@ -23,6 +23,7 @@ function Signup() {
   const [image, setImage] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
+  const [profile, setProfile] = useState();
   const fileInput = useRef(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +54,7 @@ function Signup() {
   const onImageHandler = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
+      setProfile(e.target.files[0]);
     } else {
       //업로드 취소할 시
       setImage(
@@ -60,14 +62,14 @@ function Signup() {
       );
       return;
     }
-    // //화면에 프로필 사진 표시
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   if (reader.readyState === 2) {
-    //     setImage(reader.result);
-    //   }
-    // };
-    // reader.readAsDataURL(e.target.files[0]);
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   const onCreate = () => {
@@ -90,7 +92,7 @@ function Signup() {
     } else {
       console.log(email, password, name, nickname);
       let formData = new FormData();
-      formData.append("image", image);
+      formData.append("image", profile);
 
       let dto = {
         email: email,
@@ -106,28 +108,28 @@ function Signup() {
         })
       );
 
-      // axios
-      //   .post(url + `/api/user`, formData, {
-      //     headers: {
-      //       Accept: "application/json",
-      //       "Content-Type": `multipart/form-data`,
-      //     },
-      //   })
-      //   .then(function (response) {
-      //     console.log(response);
-      //     if (response.data.statusCode === 201) {
-      //       setEmail("");
-      //       setPassword("");
-      //       setPasswordConfirm("");
-      //       setName("");
-      //       setNickname("");
-      //       alert("회원가입이 완료되었습니다!");
-      //       document.location.href = "/accounts/login";
-      //     }
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+      axios
+        .post(url + `/api/user`, formData, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .then(function (response) {
+          console.log(response);
+          if (response.data.statusCode === 201) {
+            setEmail("");
+            setPassword("");
+            setPasswordConfirm("");
+            setName("");
+            setNickname("");
+            alert("회원가입이 완료되었습니다!");
+            document.location.href = "/accounts/login";
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
 
