@@ -55,15 +55,13 @@ function TeamWrite() {
 
   function register() {
     const mountainCode = useParam.mountainCode;
-    const data = {
+    Send.post(`/match`, {
       mountainCode: mountainCode,
       title: title,
       content: content,
       ploggingDate: resultDate,
       total: total,
-    };
-    console.log(data);
-    Send.post(`/match`, JSON.stringify(data))
+    })
       .then((res) => {
         console.log(res);
         if (res.data.statusCode === 201) {

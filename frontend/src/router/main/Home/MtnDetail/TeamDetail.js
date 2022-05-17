@@ -5,80 +5,58 @@ import Send from "../../../../config/Send";
 import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
 function TeamDetail({ userSlice }) {
-  const [nickname, setNickname] = useState();
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
-  const [createTime, setCreateTime] = useState("2022-05-06T13:20:33.548201");
-  const [comments, setComments] = useState([]);
-  const [commentContent, setCommentContent] = useState();
-  const [commentId, setCommentId] = useState();
-  const communityId = window.localStorage.getItem("communityId");
+  const [detail, setDetail] = useState({
+    message: "매칭 글조회에 성공했습니다.",
+    statusCode: 200,
+    id: "b9a6e9ce-2ea5-45f0-a769-1adb8146e7da",
+    nickname: "숲지기산지기문지기",
+    title: "조회 테스트e3221",
+    createTime: "2022-05-03T01:55:28.07625",
+    ploggingDate: "2022-05-02",
+    total: 6,
+    participant: 1,
+    mountainName: "국지산",
+    mountainCode: "427500701",
+    content: "ㅍㅍㅁㅇ",
+    views: 1,
+    closed: false,
+  });
+  const matchingId = window.localStorage.getItem("matchingId");
   useEffect(() => {
     getArticle();
   }, []);
 
-  function getArticle() {
-    Send.get(`/community/${communityId}`)
-      .then((res) => {
-        console.log(res);
-        setNickname(res.data.nickname);
-        setTitle(res.data.title);
-        setDescription(res.data.description);
-        setCreateTime(res.data.createTime);
-        setComments(res.data.comments);
-        Send.get(
-          `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + res.data.accessToken,
-            },
-          }
-        ).then((response) => {
-          console.log(response);
-          setComments(response.data.commentGetListResponseDTOList);
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  function createComment() {
-    const data = {
-      communityId: communityId,
-      description: commentContent,
-    };
-    Send.post(`/comment`, JSON.stringify(data))
-      .then((res) => {
-        console.log(res);
-        if (res.status === 201) {
-          getArticle();
-          setCommentContent("");
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  function deleteComment(commentId) {
-    Send.delete(`/comment/community/${commentId}`)
-      .then((res) => {
-        console.log(res);
-        if (res.code === 201) {
-          getArticle();
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  const onCommentHandler = (event) => {
-    setCommentContent(event.currentTarget.value);
+  const btnStyle = {
+    width: "25vw",
+    height: "5vh",
+    background: "#37CD76",
+    color: "white",
+    borderRadius: 15,
+    border: "none",
+    marginLeft: "29vw",
   };
 
+  function closeMatching() {
+    Send.patch(`/match/close`, { matchingId: matchingId })
+      .then((res) => {
+        console.log(res);
+        getArticle();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function getArticle() {
+    Send.get(`/match/${matchingId}`)
+      .then((res) => {
+        console.log(res);
+        setDetail(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  console.log(userSlice);
   return (
     <>
       {/* 92.5vh */}
@@ -89,166 +67,74 @@ function TeamDetail({ userSlice }) {
           marginRight: "8.3vw",
           height: "84vh",
           marginTop: "8.5vh",
+          //   background: "red",
         }}
       >
-        <div
-          id="header"
-          style={{
-            position: "relative",
-            height: "3.5vh",
-            fontSize: "1.8vh",
-            marginBottom: "3.5vh",
-          }}
-        >
-          <div style={{ fontWeight: "bolder" }}>{nickname}</div>
-          <div style={{ color: "#ACACAC", display: "flex" }}>
-            <div>
-              {createTime.substr(0, 10) + " " + createTime.substr(11, 8)}
-            </div>
-          </div>
+        <div style={{ fontSize: "2.2vh", marginLeft: "2vw" }}>
+          <b>{detail.nickname}</b>
         </div>
         <div
-          id="contents"
           style={{
-            position: "relative",
-            height: "30vh",
-            marginBottom: "2vh",
+            color: "#ACACAC",
+            fontSize: "2vh",
+            marginLeft: "2vw",
+            marginBottom: "3vh",
+          }}
+        >
+          {detail.createTime.substr(0, 10) +
+            " " +
+            detail.createTime.substr(11, 8)}
+        </div>
+        <div
+          id="banner"
+          style={{
+            width: "83.3vw",
+            height: "9vh",
+            background: "#EAF9E6",
+            borderRadius: 10,
+            marginBottom: "4.8vh",
           }}
         >
           <div
-            id="title"
             style={{
-              fontSize: "2.2vh",
+              display: "flex",
+              fontSize: "2.8vh",
+              color: "#8ABC9A",
               fontWeight: "bold",
-              marginBottom: "1.5vh",
+              paddingTop: "2.2vh",
+              paddingLeft: "5vw",
             }}
           >
-            {title}
-          </div>
-          <div id="content" style={{ fontSize: "1.8vh" }}>
-            {description}
+            <div style={{ width: "55vw" }}>{detail.ploggingDate}</div>
+            <div>
+              {detail.participant}/{detail.total} 명
+            </div>
           </div>
         </div>
-        <div id="comments">
-          {comments == undefined ? (
-            <div
-              style={{
-                position: "relative",
-                fontWeight: "regular",
-                fontSize: "2vh",
-                marginBottom: "1.5vh",
-              }}
-            >
-              댓글 0개
-            </div>
-          ) : (
-            <div
-              style={{
-                position: "relative",
-                fontWeight: "regular",
-                fontSize: "2vh",
-                marginBottom: "1.5vh",
-              }}
-            >
-              댓글 {comments.length}개
-            </div>
-          )}
-
-          <div
-            id="comment"
-            className="box"
-            style={{ height: "30vh", overflow: "auto" }}
-          >
-            {comments &&
-              comments.map((comment) => (
-                //   10.5vh
-                <div
-                  style={{
-                    fontSize: "1.7vh",
-                    borderBottom: "1px solid #8E8E92",
-                  }}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div style={{ fontWeight: "bold", marginTop: "1.5vh" }}>
-                      {comment.nickname}
-                    </div>
-                    {userSlice.userNickname == comment.nickname ? (
-                      <>
-                        <div
-                          style={{
-                            color: "#FF7760",
-                            fontWeight: "bold",
-                            marginTop: "1.5vh",
-                            marginLeft: "1vw",
-                          }}
-                        >
-                          me
-                        </div>
-                        <img
-                          onClick={() => deleteComment(comment.commentId)}
-                          style={{
-                            position: "absolute",
-                            right: "8.3vw",
-                            marginTop: "2vh",
-                            width: "1.5vh",
-                            height: "1.5vh",
-                            marginLeft: "2vw",
-                            float: "right",
-                          }}
-                          src={x}
-                        />
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-
-                  <div style={{ fontSize: "1.7vh" }}>{comment.description}</div>
-                  <div style={{ color: "#ACACAC", marginBottom: "1.5vh" }}>
-                    {comment.createTime.substr(0, 10) +
-                      comment.createTime.substr(11, 8)}
-                  </div>
-                </div>
-              ))}
-          </div>
+        <div
+          style={{
+            fontSize: "2.2vh",
+            color: "#515153",
+            marginBottom: "1.2vh",
+            marginLeft: "2vw",
+          }}
+        >
+          <b>{detail.title}</b>
         </div>
-        <div>
-          <div>
-            <input
-              className="input"
-              value={commentContent}
-              onChange={onCommentHandler}
-              style={{
-                position: "relative",
-                background: "#EFEFEF",
-                border: "none",
-                width: "70.3vw",
-                height: "4vh",
-                marginTop: "2.7vh",
-                paddingLeft: "3vw",
-                fontSize: "1.8vh",
-                paddingRight: "10vw",
-              }}
-              placeholder="댓글을 작성해보세요"
-            ></input>
-          </div>
-          <div>
-            <button
-              onClick={() => createComment()}
-              style={{
-                position: "absolute",
-                top: "85vh",
-                right: "10vw",
-                border: "none",
-                background: "none",
-                color: "#69696C",
-                fontSize: "1.8vh",
-              }}
-            >
-              작성
+        <div style={{ marginLeft: "2vw", marginBottom: "7vh" }}>
+          {detail.content}
+        </div>
+        {userSlice.userNickname == detail.nickname ? (
+          detail.closed == false ? (
+            <button style={btnStyle} onClick={() => closeMatching()}>
+              마감하기
             </button>
-          </div>
-        </div>
+          ) : (
+            <button style={btnStyle}>마감완료</button>
+          )
+        ) : (
+          <button style={btnStyle}></button>
+        )}
       </div>
       <Bar></Bar>
     </>
