@@ -7,7 +7,7 @@ import play from "../../../res/img/play.png";
 import stop from "../../../res/img/stop.png";
 import File from "../../../config/File";
 import "./PloggingMap.css";
-
+let stopwatchtimer;
 function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   const TrashStyle = {
     position: "absolute",
@@ -25,14 +25,14 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
   };
 
   const navermaps = window.naver.maps;
-  const [lat, setLat] = useState(myLocation.latitude);
-  const [long, setLong] = useState(myLocation.longitude);
+  const [lat, setLat] = useState(37.579722);
+  const [long, setLong] = useState(126.976033);
   const [isClicked, setIsClicked] = useState(false);
   let dddd = 11;
   let count = 0;
   var map = new navermaps.Map("map", {
     center: new navermaps.LatLng(lat, long),
-    zoom: 13,
+    zoom: 15,
     mapTypeId: navermaps.MapTypeId.NORMAL,
   });
 
@@ -71,12 +71,12 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
     if (count != 0 && count % 2 == 0) {
       var map1 = new navermaps.Map("map", {
         center: new navermaps.LatLng(lat, long),
-        zoom: 13,
+        zoom: 15,
         mapTypeId: navermaps.MapTypeId.NORMAL,
       });
       map = new navermaps.Map("map", {
         center: new navermaps.LatLng(lat, long),
-        zoom: 13,
+        zoom: 15,
         mapTypeId: navermaps.MapTypeId.NORMAL,
       });
     } else {
@@ -115,7 +115,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
             zIndex: 1,
           }}
           center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
-          defaultZoom={13} // 지도 초기 확대 배율
+          defaultZoom={15} // 지도 초기 확대 배율
         >
           {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
             <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
@@ -139,8 +139,41 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
 function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking, mtCode, trashList }) {
   const navigate = useNavigate();
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
-  const fromTime = new Date(0, 0, 0, 0, 0, 0, 0);
   const [isOn, setIsOn] = useState(false);
+  const [currentTime, setCurrentTime] = useState("00:00:00");
+  const stopwatch = () => {
+    let time = 0;
+    stopwatchtimer = setInterval(function () {
+      time++;
+      var hour = 0;
+      var min = 0;
+      var sec = 0;
+
+      min = Math.floor(time / 60);
+      hour = Math.floor(min / 60);
+      sec = time % 60;
+      min = min % 60;
+
+      var th = hour;
+      var tm = min;
+      var ts = sec;
+      if (th < 10) {
+        th = "0" + hour;
+      }
+      if (tm < 10) {
+        tm = "0" + min;
+      }
+      if (ts < 10) {
+        ts = "0" + sec;
+      }
+      setCurrentTime(th + ":" + tm + ":" + ts);
+    }, 1000);
+  };
+  const quitStopwatch = () => {
+    clearInterval(stopwatchtimer);
+  };
+
+  // 애니메이션적용
   const startRecording = () => {
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "stretch 1s both";
@@ -149,9 +182,36 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     let stopButton = document.getElementById("stop");
     stopButton.style.animation = "reverse-stretch 1s both";
   };
+
+  // 시작시간
+  const watch = () => {
+    var date = new Date();
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var h = date.getHours();
+    var min = date.getMinutes();
+    // var s = date.getSeconds();
+
+    var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
+    // + ":" + makeZeroNum(s, 2);
+    return result;
+  };
+  const makeZeroNum = (num, n) => {
+    var numStr = "" + num;
+    while (true) {
+      if (numStr.length >= n) {
+        break;
+      }
+      numStr = "0" + numStr;
+    }
+    return numStr;
+  };
+
+  // 끝시간
   const timeRecord = () => {
-    let timeHour = Number(watch().slice(11, 13)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(0, 2));
-    let timeMin = Number(watch().slice(14, 16)) + Number(document.getElementsByClassName("react-stopwatch-timer__table")[0].innerText.slice(3, 5));
+    let timeHour = Number(watch().slice(11, 13)) + Number(currentTime.slice(0, 2));
+    let timeMin = Number(watch().slice(14, 16)) + Number(currentTime.slice(3, 5));
 
     if (timeMin >= 60) {
       timeHour += 1;
@@ -169,55 +229,21 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     return endTime;
   };
 
-  const makeZeroNum = (num, n) => {
-    var numStr = "" + num;
-    while (true) {
-      if (numStr.length >= n) {
-        break;
-      }
-      numStr = "0" + numStr;
-    }
-    return numStr;
-  };
-
-  const watch = () => {
-    var date = new Date();
-    var y = date.getFullYear();
-    var m = date.getMonth() + 1;
-    var d = date.getDate();
-    var h = date.getHours();
-    var min = date.getMinutes();
-    // var s = date.getSeconds();
-
-    var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
-    // + ":" + makeZeroNum(s, 2);
-    return result;
-  };
   // 요청보내기
   const recordPlogging = (e) => {
+    clearInterval(stopwatchtimer);
     const formData = new FormData();
     const data = {
       mountainCode: mtCode,
       startTime: watch(),
       endTime: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
-      // <<<<<<< HEAD
-      //       coords: trackingPath ? trackingPath[0].slice(0, 10) : [],
-      //     };
-      //     console.log(data);
-      //     formData.append(
-      //       "dto",
-      //       new Blob([JSON.stringify(data)], { type: "application/json" })
-      //     );
-      // =======
       coords: trackingPath ? trackingPath : [],
     };
-    console.log(data);
     formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
     File.post("/plogging", formData)
       .then((res) => {
-        console.log(res.data);
         e.preventDefault();
         navigate("/accounts/mypage/recorddetail");
         localStorage.setItem("ploggingId", res.data.ploggingId);
@@ -275,6 +301,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             watch();
             tracking();
             distTracking();
+            stopwatch();
           }}
         />
       </button>
@@ -286,16 +313,17 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
             alignItems: "center",
           }}
         >
-          <div>
-            <ReactTimerStopwatch
-              id="timer"
-              isOn={isOn}
-              className="react-stopwatch-timer__table"
-              watchType="stopwatch"
-              fromTime={fromTime}
-              style={{ width: "16.5vw !important", height: "12vw !important" }}
-            />
-          </div>
+          <p
+            style={{
+              color: "white",
+              fontSize: "5vw",
+              fontWeight: "700",
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+          >
+            {currentTime}
+          </p>
           {allDistance.length === 0 ? (
             <p
               style={{
@@ -306,7 +334,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
                 marginBottom: 0,
               }}
             >
-              0 km
+              0.00 km
             </p>
           ) : (
             <p
@@ -330,6 +358,7 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
               setIsOn(false);
               stopTracking();
               recordPlogging(e);
+              quitStopwatch();
             }}
           />
         </div>
