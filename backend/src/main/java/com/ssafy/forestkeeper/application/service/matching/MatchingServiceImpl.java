@@ -160,11 +160,9 @@ public class MatchingServiceImpl implements MatchingService {
     @Override
     public MatchingGetListWrapperResponseDTO getMatchingList(int page) {
 
-        if (page < 1) {
-            page = 1;
-        }
+        page = Math.max(page, 1);
 
-        List<Matching> matchingList = matchingRepository.findByDeleteOrderByCreateTimeDesc(false,
+        List<Matching> matchingList = matchingRepository.findByPloggingDateGreaterThanEqualAndDeleteOrderByCreateTimeDesc(LocalDate.now(), false,
                         PageRequest.of(page - 1, 6))
                 .orElse(null);
 

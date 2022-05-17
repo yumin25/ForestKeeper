@@ -1,7 +1,6 @@
 package com.ssafy.forestkeeper.application.service.matching;
 
 import com.ssafy.forestkeeper.application.dto.response.user.UserResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.user.User;
 
 import java.util.List;
 

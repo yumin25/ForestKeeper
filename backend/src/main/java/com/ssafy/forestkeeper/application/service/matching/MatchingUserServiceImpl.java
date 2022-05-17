@@ -2,7 +2,6 @@ package com.ssafy.forestkeeper.application.service.matching;
 
 import com.ssafy.forestkeeper.application.dto.response.user.UserResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.MatchingUser;
-import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingRepository;
 import com.ssafy.forestkeeper.domain.repository.matching.MatchingUserRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

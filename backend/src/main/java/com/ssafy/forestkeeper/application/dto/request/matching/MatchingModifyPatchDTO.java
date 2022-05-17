@@ -2,9 +2,10 @@ package com.ssafy.forestkeeper.application.dto.request.matching;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.ToString;
+
+import javax.validation.constraints.NotBlank;
 
 @ApiModel("MatchingModifyPatchDTO")
 @Getter
