@@ -122,6 +122,7 @@ function About({ url }) {
   // }, [page]);
 
   useEffect(() => {
+    setPage(1);
     getItems(page);
   }, [tab]);
 

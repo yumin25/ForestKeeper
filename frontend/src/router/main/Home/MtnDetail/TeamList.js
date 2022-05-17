@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import edit from "../../../../res/img/edit.png";
 import Send from "../../../../config/Send";
 import { useParams } from "react-router-dom";
-function LIST({ result }) {
+import { connect } from "react-redux";
+function LIST({ result, userSlice }) {
   return (
     <div
       style={{
@@ -15,14 +16,34 @@ function LIST({ result }) {
       }}
     >
       <div id="left" style={{ width: "67vw" }}>
-        <div style={{ fontWeight: "bold", marginBottom: "0.5vh" }}>
-          {result.ploggingDate}
+        <div style={{ display: "flex" }}>
+          <div style={{ fontWeight: "bold", marginBottom: "0.5vh" }}>
+            {result.ploggingDate}
+          </div>
+          {userSlice.userNickname == result.nickname ? (
+            <div
+              style={{
+                marginLeft: "2vw",
+                width: "8vw",
+                background: "#37CD76",
+                color: "white",
+                borderRadius: 15,
+                textAlign: "center",
+                height: "3vh",
+              }}
+            >
+              my
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
+
         <div style={{ color: "#69696C" }}>{result.title}</div>
       </div>
       <div id="right" style={{ display: "flex", marginTop: "2vh" }}>
         <div style={{ fontSize: "2.5vh", left: "70vw" }}>
-          {result.participant}/{result.total}
+          {result.participants.length}/{result.total}
         </div>
         <div style={{ fontSize: "2vh", marginTop: "0.5vh", marginLeft: "1vw" }}>
           명
@@ -60,7 +81,7 @@ function WriteItem() {
   );
 }
 
-function TeamList({ mountainCode }) {
+function TeamList({ mountainCode, userSlice }) {
   const [tab, setTab] = useState("REVIEW");
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
@@ -145,7 +166,7 @@ function TeamList({ mountainCode }) {
               {list &&
                 list.map((result) => (
                   <div onClick={() => goDetail(result.id)}>
-                    <LIST result={result} />
+                    <LIST result={result} userSlice={userSlice} />
                   </div>
                 ))}
 
@@ -157,4 +178,8 @@ function TeamList({ mountainCode }) {
     </>
   );
 }
-export default TeamList;
+function mapStateToProps(state) {
+  return { userSlice: state.user };
+}
+
+export default connect(mapStateToProps)(TeamList);
