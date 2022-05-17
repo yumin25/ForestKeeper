@@ -55,36 +55,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
+                .httpBasic()
+                .and()
+                .cors()
+                .and()
                 .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // 토큰을 활용하면 세션이 필요 없으므로 STATELESS 로 설정
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
+                // authorizeRequests() : HttpServletRequests 를 사용하는 요청들에 대한 접근 제한을 설정
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/user/userinfo").permitAll()
                 .antMatchers("/api/user/modify/**").hasRole("USER")
+                .antMatchers("/api/v3/**", "/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/v3/api-docs").permitAll()
                 .antMatchers("/ws-fk/**").permitAll()
-                .anyRequest().permitAll()
+                // 나머지 요청들은 모두 인증되어야 한다.
+                .anyRequest().authenticated()
                 .and()
-                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+                // JWT 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider), UsernamePasswordAuthenticationFilter.class);
+
     }
 
 }
