@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../res/img/logo_temp.png";
+import certed from "../../../res/img/cert.png";
+import uncerted from "../../../res/img/uncert.png";
 import Send from "../../../config/Send";
 
 function MyPage({ userSlice }) {
@@ -239,7 +241,11 @@ function MyPage({ userSlice }) {
                       }}
                     >
                       <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                        <img src={logo} alt="img" style={{ height: "80px", width: "80px" }} />
+                        {content.exp >= 1000 ? (
+                          <img src={certed} alt="img" style={{ height: "80px", width: "80px" }} />
+                        ) : (
+                          <img src={uncerted} alt="img" style={{ height: "80px", width: "80px" }} />
+                        )}
                         <div style={{ margin: "0 auto", width: "45vw", display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
                           <p style={{ margin: 0, fontSize: "3vh", color: "#8ABC9A", fontWeight: "700" }}>{content.date}</p>
                           <div style={{ display: "flex", justifyContent: "space-between" }}>
