@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -34,10 +34,10 @@ public class CommunityController {
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityRegisterPostDTO communityRegisterPostDTO
+            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityRegisterRequestDTO communityRegisterRequestDTO
     ) {
 
-        communityService.registerCommunity(communityRegisterPostDTO);
+        communityService.registerCommunity(communityRegisterRequestDTO);
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성 성공", 201));
 
@@ -85,10 +85,10 @@ public class CommunityController {
     @ApiOperation(value = "글 수정")
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityModifyPatchDTO communityModifyPatchDTO
+            @ApiParam(value = "글 정보", required = true) @RequestBody @Valid CommunityModifyRequestDTO communityModifyRequestDTO
     ) {
 
-        communityService.modifyCommunity(communityModifyPatchDTO);
+        communityService.modifyCommunity(communityModifyRequestDTO);
 
         return ResponseEntity.ok(BaseResponseDTO.of("글 수정에 성공했습니다.", 200));
 

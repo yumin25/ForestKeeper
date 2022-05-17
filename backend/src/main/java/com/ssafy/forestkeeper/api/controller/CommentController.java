@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.comment.CommentRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.service.comment.CommentService;
@@ -31,10 +31,10 @@ public class CommentController {
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-            @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentRegisterPostDTO commentRegisterPostDTO
+            @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentRegisterRequestDTO commentRegisterRequestDTO
     ) {
 
-        commentService.registerComment(commentRegisterPostDTO);
+        commentService.registerComment(commentRegisterRequestDTO);
 
         return ResponseEntity.status(201).body(BaseResponseDTO.of("댓글 작성에 성공했습니다.", 201));
 
@@ -63,10 +63,10 @@ public class CommentController {
     })
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-            @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentModifyPatchDTO commentModifyPatchDTO
+            @ApiParam(value = "댓글 정보", required = true) @RequestBody @Valid CommentModifyRequestDTO commentModifyRequestDTO
     ) {
 
-        commentService.modifyComment(commentModifyPatchDTO);
+        commentService.modifyComment(commentModifyRequestDTO);
 
         return ResponseEntity.ok(BaseResponseDTO.of("댓글 수정에 성공했습니다.", 200));
 

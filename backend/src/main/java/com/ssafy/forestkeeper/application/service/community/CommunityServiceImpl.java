@@ -1,7 +1,7 @@
 package com.ssafy.forestkeeper.application.service.community;
 
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.community.CommunityRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
@@ -37,16 +37,16 @@ public class CommunityServiceImpl implements CommunityService {
     private final UserRepository userRepository;
 
     @Override
-    public void registerCommunity(CommunityRegisterPostDTO communityRegisterPostDTO) {
+    public void registerCommunity(CommunityRegisterRequestDTO communityRegisterRequestDTO) {
 
         Community community = Community.builder()
-                .communityCode(communityRegisterPostDTO.getCommunityCode())
-                .title(communityRegisterPostDTO.getTitle())
-                .description(communityRegisterPostDTO.getDescription())
+                .communityCode(communityRegisterRequestDTO.getCommunityCode())
+                .title(communityRegisterRequestDTO.getTitle())
+                .description(communityRegisterRequestDTO.getDescription())
                 .createTime(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .mountain(mountainRepository.findById(communityRegisterPostDTO.getMountainId())
+                .mountain(mountainRepository.findById(communityRegisterRequestDTO.getMountainId())
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")))
                 .build();
 
@@ -128,12 +128,12 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public void modifyCommunity(CommunityModifyPatchDTO communityModifyPatchDTO) {
+    public void modifyCommunity(CommunityModifyRequestDTO communityModifyRequestDTO) {
 
-        Community community = communityRepository.findByIdAndDelete(communityModifyPatchDTO.getCommunityId(), false)
+        Community community = communityRepository.findByIdAndDelete(communityModifyRequestDTO.getCommunityId(), false)
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
-        community.changeCommunity(communityModifyPatchDTO.getTitle(), communityModifyPatchDTO.getDescription());
+        community.changeCommunity(communityModifyRequestDTO.getTitle(), communityModifyRequestDTO.getDescription());
 
         communityRepository.save(community);
 
