@@ -20,7 +20,7 @@ const HomeResult = ({ mountain }) => {
         누적 방문 횟수 랭킹
       </div>
 
-      <div style={{ marginLeft: "5  vw" }}>
+      <div style={{ marginLeft: "5vw" }}>
         {mountain &&
           mountain.map((mtn) => (
             <div

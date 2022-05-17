@@ -203,7 +203,7 @@ function Detail({ userSlice }) {
                     About {Info.name}
                   </div>
                 </div>
-                <About url={url}></About>
+                <About url={url} mountainId={mountainId}></About>
               </>
             ) : (
               <>
