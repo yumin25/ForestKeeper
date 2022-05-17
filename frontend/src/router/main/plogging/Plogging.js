@@ -80,7 +80,7 @@ function Plogging() {
         var startLonCord = trackingPath.length > 0 ? trackingPath[trackingPath.length - 2].x : 2;
         let dist = computeDistance(startLatCord, startLonCord, endLatCord, endLonCord);
 
-        if (dist < 1) {
+        if (dist < 0.5) {
           setAllDistance((currentArray) => [...currentArray, dist]);
         }
         // console.log(startLatCord, startLonCord, endLatCord, endLonCord);
@@ -94,7 +94,7 @@ function Plogging() {
     tracker = setInterval(function () {
       getLocation();
       handleTrackingPath();
-    }, 2000);
+    }, 5000);
   };
   const distTracking = () => {
     handleAllDistance();
