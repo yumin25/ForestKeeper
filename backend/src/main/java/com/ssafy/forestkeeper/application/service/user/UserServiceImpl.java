@@ -164,20 +164,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkNickname(String nickname) {
 
-        User user = userRepository.findByNicknameAndDelete(nickname, false)
-                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
-
-        return user != null;
+        return userRepository.findByNicknameAndDelete(nickname, false)
+                .isPresent();
 
     }
 
     @Override
     public boolean checkEmail(String email) {
 
-        User user = userRepository.findByEmailAndDelete(email, false)
-                .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."));
-
-        return user != null;
+        return userRepository.findByEmailAndDelete(email, false)
+                .isPresent();
 
     }
 
