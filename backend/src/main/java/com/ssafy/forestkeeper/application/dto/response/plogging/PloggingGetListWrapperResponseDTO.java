@@ -17,7 +17,7 @@ import lombok.ToString;
 public class PloggingGetListWrapperResponseDTO extends BaseResponseDTO{
 
     @ApiModelProperty(name = "플로깅 목록")
-    private List<PloggingGetListResponseDTO> list;
+    private List<PloggingGetListResponseDTO> ploggingList;
 
     public static PloggingGetListWrapperResponseDTO of(String message, Integer statusCode, PloggingGetListWrapperResponseDTO ploggingGetListWrapperResponseDTO) {
 

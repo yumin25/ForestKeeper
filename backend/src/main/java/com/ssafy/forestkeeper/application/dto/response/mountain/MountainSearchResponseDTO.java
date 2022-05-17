@@ -16,7 +16,7 @@ import java.util.List;
 public class MountainSearchResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "산 검색 리스트")
-    private List<MountainSearchDTO> searchList;
+    private List<MountainSearchDTO> mountainSearchDTOList;
 
     @ApiModelProperty(name = "전체 결과")
     private int total;

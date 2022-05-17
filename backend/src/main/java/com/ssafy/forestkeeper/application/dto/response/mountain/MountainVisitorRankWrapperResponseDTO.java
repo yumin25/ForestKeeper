@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class MountainVisitorRankWrapperResponseDTO extends BaseResponseDTO {
 
-    List<MountainVisitorRankResponseDTO> list;
+    List<MountainVisitorRankResponseDTO> mountainVisitorRankResponseDTOList;
 
     public static MountainVisitorRankWrapperResponseDTO of(String message, Integer statusCode, MountainVisitorRankWrapperResponseDTO mountainVisitorRankWrapperResponseDTO) {
 
