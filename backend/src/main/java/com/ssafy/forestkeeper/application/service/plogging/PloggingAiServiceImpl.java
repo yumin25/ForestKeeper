@@ -5,7 +5,6 @@ import com.google.protobuf.ByteString;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingExperienceResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +25,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
     public void detectObject(MultipartFile multipartFile, String ploggingId) throws IOException {
         int score = 0;
         List<AnnotateImageRequest> requests = new ArrayList<>();
-        byte []byteArr = multipartFile.getBytes();
+        byte[] byteArr = multipartFile.getBytes();
         InputStream inputStream = new ByteArrayInputStream(byteArr);
         ByteString imgBytes = ByteString.readFrom(inputStream);
         Image img = Image.newBuilder().setContent(imgBytes).build();
@@ -45,8 +44,8 @@ public class PloggingAiServiceImpl implements PloggingAiService {
             for (AnnotateImageResponse res : responses) {
                 for (LocalizedObjectAnnotation entity : res.getLocalizedObjectAnnotationsList()) {
                     int tmpScore = 0;
-                    if(entity.getName().equals("Bottle")) tmpScore = 1000;
-                    else if(entity.getName().equals("Packaged goods")) tmpScore = 800;
+                    if (entity.getName().equals("Bottle")) tmpScore = 1000;
+                    else if (entity.getName().equals("Packaged goods")) tmpScore = 800;
                     else tmpScore = 400;
                     tmpScore *= entity.getScore();
                     System.out.println(tmpScore);
@@ -103,7 +102,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
         translate.put("Plastic wrap", "비닐랩");
 
         List<AnnotateImageRequest> requests = new ArrayList<>();
-        byte []byteArr = multipartFile.getBytes();
+        byte[] byteArr = multipartFile.getBytes();
         InputStream inputStream = new ByteArrayInputStream(byteArr);
         ByteString imgBytes = ByteString.readFrom(inputStream);
         Image img = Image.newBuilder().setContent(imgBytes).build();
@@ -124,7 +123,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
                 }
 
                 for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-                    if(!experience.containsKey(annotation.getDescription())) continue;
+                    if (!experience.containsKey(annotation.getDescription())) continue;
                     type.add(translate.get(annotation.getDescription()));
                     int tmpScore = experience.get(annotation.getDescription());
                     tmpScore *= annotation.getScore();
@@ -135,7 +134,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
             }
         }
 
-        if(exp<1000) exp = 1000;
+        if (exp < 1000) exp = 1000;
         System.out.format("Score : %d%n", exp);
 
         Plogging plogging = ploggingRepository.findById(ploggingId)
@@ -183,7 +182,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
         translate.put("Plastic wrap", "비닐랩");
 
         List<AnnotateImageRequest> requests = new ArrayList<>();
-        byte []byteArr = multipartFile.getBytes();
+        byte[] byteArr = multipartFile.getBytes();
         InputStream inputStream = new ByteArrayInputStream(byteArr);
         ByteString imgBytes = ByteString.readFrom(inputStream);
         Image img = Image.newBuilder().setContent(imgBytes).build();
@@ -204,7 +203,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
                 }
 
                 for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-                    if(!experience.containsKey(annotation.getDescription())) continue;
+                    if (!experience.containsKey(annotation.getDescription())) continue;
                     type.add(translate.get(annotation.getDescription()));
                     int tmpScore = experience.get(annotation.getDescription());
                     tmpScore *= annotation.getScore();
@@ -215,7 +214,7 @@ public class PloggingAiServiceImpl implements PloggingAiService {
             }
         }
 
-        if(exp<1000) exp = 1000;
+        if (exp < 1000) exp = 1000;
         System.out.format("Score : %d%n", exp);
 
         return PloggingExperienceResponseDTO.builder().exp(exp).type(type).build();

@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisiterRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisitorRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRecommendWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 
 public interface MountainService {
 
-    Optional<Mountain> getMountainInfo(String mountainCode);
+    MountainResponseDTO getMountainInfo(String mountainCode);
 
     Optional<List<Mountain>> searchMountain(String keyword, int page);
 
@@ -21,9 +22,9 @@ public interface MountainService {
 
     int totalSearch(String keyword);
 
-    RecommendWrapperResponseDTO getRecommendByDistance(double lat, double lng);
+    MountainRecommendWrapperResponseDTO getRecommendByDistance(double lat, double lng);
 
-    RecommendWrapperResponseDTO getRecommendByHeight();
+    MountainRecommendWrapperResponseDTO getRecommendByHeight();
 
-    MountainVisiterRankWrapperResponseDTO getVisiterRank();
+    MountainVisitorRankWrapperResponseDTO getVisiterRank();
 }

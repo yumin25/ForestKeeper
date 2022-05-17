@@ -1,20 +1,20 @@
 package com.ssafy.forestkeeper.application.service.user;
 
 
-import com.ssafy.forestkeeper.application.dto.request.user.UserLoginDTO;
-import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpDTO;
-import com.ssafy.forestkeeper.application.dto.response.user.UserInfoDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserLoginRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.user.UserSignUpRequestDTO;
+import com.ssafy.forestkeeper.application.dto.response.user.UserInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.user.UserLoginResponseDTO;
 
 public interface UserService {
 
-    Integer signUp(UserSignUpDTO userSignUpDTO);
+    Integer signUp(UserSignUpRequestDTO userSignUpRequestDTO);
 
-    UserLoginResponseDTO login(UserLoginDTO userLoginDTO);
+    UserLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO);
 
     String getUserEmail(String token);
 
-    UserInfoDTO getUserDetail();
+    UserInfoResponseDTO getUserDetail();
 
     Integer modifyNickname(String nickname);
 

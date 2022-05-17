@@ -1,6 +1,5 @@
 package com.ssafy.forestkeeper.application.dto.response.user;
 
-import com.ssafy.forestkeeper.application.dto.response.community.CommunityResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;

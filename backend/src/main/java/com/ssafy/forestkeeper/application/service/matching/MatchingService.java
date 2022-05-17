@@ -1,16 +1,16 @@
 package com.ssafy.forestkeeper.application.service.matching;
 
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
 
 public interface MatchingService {
 
     // 글 작성
-    void registerMatching(MatchingRegisterPostDTO matchingRegisterPostDTO);
+    void registerMatching(MatchingRegisterRequestDTO matchingRegisterRequestDTO);
 
-    void modifyMatching(MatchingModifyPatchDTO matchingModifyPatchDTO);
+    void modifyMatching(MatchingModifyRequestDTO matchingModifyRequestDTO);
 
     void closeMatching(String matchingId);
 

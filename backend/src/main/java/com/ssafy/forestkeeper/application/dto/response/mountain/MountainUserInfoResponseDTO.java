@@ -10,11 +10,12 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class MountainUserInfoResponseDTO{
+public class MountainUserInfoResponseDTO {
 
     @ApiModelProperty(name = "방문한 산 목록")
     private String mountainName;
-    
+
     @ApiModelProperty(name = "방문한 산 코드")
     private String mountainCode;
+
 }

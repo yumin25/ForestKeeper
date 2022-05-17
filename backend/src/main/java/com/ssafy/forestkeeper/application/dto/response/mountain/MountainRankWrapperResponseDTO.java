@@ -2,12 +2,13 @@ package com.ssafy.forestkeeper.application.dto.response.mountain;
 
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import io.swagger.annotations.ApiModel;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@ApiModel("CommunityGetListWrapperResponseDTO")
+import java.util.List;
+
+@ApiModel("MountainRankWrapperResponseDTO")
 @Builder
 @Getter
 @ToString
@@ -21,5 +22,7 @@ public class MountainRankWrapperResponseDTO extends BaseResponseDTO {
         mountainRankWrapperResponseDTO.setStatusCode(statusCode);
 
         return mountainRankWrapperResponseDTO;
+
     }
+
 }
