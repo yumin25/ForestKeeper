@@ -71,29 +71,31 @@ public class CommunityServiceImpl implements CommunityService {
 
         switch (type) {
             case "td":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
+                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
+                                mountainRepository.findById(mountainId)
+                                        .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")),
                                 communityCode, false, keyword, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "t":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 7)
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
+                                mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "d":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
-                                communityCode, false, keyword, PageRequest.of(page - 1, 7)
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
+                                mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "n":
-                communityList = communityRepository.findByCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
-                                communityCode, false,
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
+                                mountainId, communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
                                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")),
                                 PageRequest.of(page - 1, 7)
