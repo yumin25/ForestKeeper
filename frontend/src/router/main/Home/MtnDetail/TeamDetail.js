@@ -23,6 +23,7 @@ function TeamDetail({ userSlice }) {
     views: 0,
     closed: false,
   });
+  console.log(isParticipated);
   const matchingId = window.localStorage.getItem("matchingId");
   useEffect(() => {
     getArticle();
@@ -73,15 +74,17 @@ function TeamDetail({ userSlice }) {
   }
 
   function confirmParticipation() {
+    console.log(detail.participants);
+    console.log(userSlice);
     for (let i = 0; i < detail.participants.length; i++) {
       if (detail.participants[i].nickname == userSlice.userNickname) {
         setIsParticipated(true);
+        console.log("!!");
       }
     }
   }
 
   function apply() {
-    console.log(detail.id);
     const data = {
       matchingId: matchingId,
     };
@@ -95,8 +98,9 @@ function TeamDetail({ userSlice }) {
       });
   }
 
-  console.log(matchingId);
   function cancel() {
+    console.log(matchingId);
+    console.log(typeof matchingId);
     Send.delete(`/match/cancel/${matchingId}`)
       .then((res) => {
         console.log(res);
@@ -141,26 +145,41 @@ function TeamDetail({ userSlice }) {
         <div
           id="banner"
           style={{
-            width: "83.3vw",
-            height: "9vh",
+            width: "78.3vw",
+            height: "15vh",
             background: "#EAF9E6",
             borderRadius: 10,
             marginBottom: "4.8vh",
+            color: "#8ABC9A",
+            paddingTop: "2.1vh",
+            paddingLeft: "5vw",
+            fontSize: "2vh",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              fontSize: "2.8vh",
-              color: "#8ABC9A",
-              fontWeight: "bold",
-              paddingTop: "2.2vh",
-              paddingLeft: "5vw",
-            }}
-          >
-            <div style={{ width: "55vw" }}>{detail.ploggingDate}</div>
-            <div>
-              {detail.participants.length}/{detail.total} 명
+          <div style={{ display: "flex", marginBottom: "1.8vh" }}>
+            <div style={{ marginRight: "2vw", marginTop: "0.3vh" }}>
+              플로깅할 산 :{" "}
+            </div>
+            <div style={{ fontSize: "2.3vh" }}>
+              <b>{detail.mountainName}</b>{" "}
+            </div>
+          </div>
+          <div style={{ display: "flex", marginBottom: "1.8vh" }}>
+            <div style={{ marginRight: "2vw", marginTop: "0.3vh" }}>
+              일자 :{" "}
+            </div>
+            <div style={{ fontSize: "2.3vh" }}>
+              <b>{detail.ploggingDate}</b>{" "}
+            </div>
+          </div>
+          <div style={{ display: "flex" }}>
+            <div style={{ marginRight: "2vw", marginTop: "0.3vh" }}>
+              인원현황 :{" "}
+            </div>
+            <div style={{ fontSize: "2.3vh" }}>
+              <b>
+                {detail.participants.length}/{detail.total} 명
+              </b>
             </div>
           </div>
         </div>

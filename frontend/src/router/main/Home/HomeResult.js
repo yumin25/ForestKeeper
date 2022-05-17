@@ -4,7 +4,7 @@ import "swiper/swiper.min.css";
 import RecommendCard from "./RecommendCard";
 
 const HomeResult = ({ mountain }) => {
-  let num = 1;
+  let num = 0;
   return (
     <div>
       <div
@@ -20,7 +20,7 @@ const HomeResult = ({ mountain }) => {
         누적 방문 횟수 랭킹
       </div>
 
-      <div style={{ marginLeft: "5vw" }}>
+      <div style={{ marginLeft: "5  vw" }}>
         {mountain &&
           mountain.map((mtn) => (
             <div
@@ -32,21 +32,29 @@ const HomeResult = ({ mountain }) => {
               }}
             >
               <div style={{ marginRight: "3vw" }}>
-                <b>5</b>
+                <b>{(num += 1)}</b>
               </div>
-              <div style={{ width: "15vw", marginRight: "3vw" }}>
-                <b>{mtn.name}</b>
+              <div style={{ width: "12vw", marginRight: "3vw" }}>
+                <b>{mtn.mountainName}</b>
               </div>
               <div
                 style={{
                   color: "#ACACAC",
-                  width: "38vw",
-                  marginRight: "3vw",
+                  width: "45vw",
+                  marginRight: "2vw",
                 }}
               >
                 {mtn.address}
               </div>
-              <div>{mtn.count} 회</div>
+              <div
+                style={{
+                  textAlign: "center",
+                  width: "14vw",
+                  // background: "red",
+                }}
+              >
+                {mtn.visiterCount} 회
+              </div>
             </div>
           ))}
       </div>
