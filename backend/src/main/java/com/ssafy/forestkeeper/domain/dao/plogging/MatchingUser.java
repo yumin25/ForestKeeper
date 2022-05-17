@@ -32,8 +32,12 @@ public class MatchingUser extends BaseEntity {
     @Column(name = "matching_is_deleted")
     private boolean delete;
 
-    public void changeDelete() {
+    public void changeDeleteTrue() {
         this.delete = true;
+    }
+    
+    public void changeDeleteFalse() {
+    	this.delete = false;
     }
 
 }
