@@ -18,11 +18,13 @@ import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPlogging
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
+import com.ssafy.forestkeeper.domain.dao.mountain.MountainVisit;
 import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.user.User;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
+import com.ssafy.forestkeeper.domain.repository.mountain.MountainVisitRepository;
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepository;
 import com.ssafy.forestkeeper.domain.repository.trashcan.TrashCanRepository;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
@@ -43,6 +45,9 @@ public class PloggingServiceImpl implements PloggingService{
 	
 	private final ImageRepository imageRepository;
 	
+	private final MountainVisitRepository mountainVisitRepository;
+	
+	
     @Value("${cloud.aws.s3.hosting}")
     public String hosting;
 
@@ -53,7 +58,11 @@ public class PloggingServiceImpl implements PloggingService{
 				.orElseThrow(() -> new IllegalArgumentException("해당 산을 찾을 수 없습니다."));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Duration duration = Duration.between(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter), LocalDateTime.parse(ploggingRegisterDTO.getEndTime(), formatter));
-			
+		MountainVisit mountainVisit = mountainVisitRepository.findByMountainCode(mountain.getCode())
+				.orElse(MountainVisit.builder().mountain(mountain).visiterCount(0).build());
+		mountainVisit.increaseCount();
+		mountainVisitRepository.save(mountainVisit);
+		
 		Plogging plogging = Plogging.builder()
 								.distance(ploggingRegisterDTO.getDistance())
 								.startTime(LocalDateTime.parse(ploggingRegisterDTO.getStartTime(), formatter))

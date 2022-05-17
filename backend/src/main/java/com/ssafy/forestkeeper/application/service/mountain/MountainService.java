@@ -1,10 +1,12 @@
 package com.ssafy.forestkeeper.application.service.mountain;
 
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import java.util.List;
 import java.util.Optional;
+
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisiterRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.RecommendWrapperResponseDTO;
+import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 
 public interface MountainService {
 
@@ -23,4 +25,5 @@ public interface MountainService {
 
     RecommendWrapperResponseDTO getRecommendByHeight();
 
+    MountainVisiterRankWrapperResponseDTO getVisiterRank();
 }
