@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class MountainUserInfoWrapperResponseDTO extends BaseResponseDTO {
 
-    List<MountainUserInfoResponseDTO> list;
+    List<MountainUserInfoResponseDTO> mountainUserInfoResponseDTOList;
 
     public static MountainUserInfoWrapperResponseDTO of(String message, Integer statusCode, MountainUserInfoWrapperResponseDTO mountainUserInfoWrapperResponseDTO) {
 

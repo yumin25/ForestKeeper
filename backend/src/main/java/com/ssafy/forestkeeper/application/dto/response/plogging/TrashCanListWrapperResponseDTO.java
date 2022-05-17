@@ -17,7 +17,7 @@ import java.util.List;
 public class TrashCanListWrapperResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "쓰레기통 목록")
-    private List<TrashCan> list;
+    private List<TrashCan> trashCanList;
 
     public static TrashCanListWrapperResponseDTO of(String message, Integer statusCode, TrashCanListWrapperResponseDTO trashCanListWrapperResponseDTO) {
 

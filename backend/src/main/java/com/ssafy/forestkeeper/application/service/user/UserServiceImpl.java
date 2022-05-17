@@ -164,16 +164,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkNickname(String nickname) {
 
-        return userRepository.findByNicknameAndDelete(nickname, false)
-                .isPresent();
+        return userRepository.findByNicknameAndDelete(nickname, false).isPresent();
 
     }
 
     @Override
     public boolean checkEmail(String email) {
 
-        return userRepository.findByEmailAndDelete(email, false)
-                .isPresent();
+        return userRepository.findByEmailAndDelete(email, false).isPresent();
 
     }
 

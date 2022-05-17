@@ -79,7 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         return PloggingGetListWrapperResponseDTO.builder()
-                .list(ploggingListResponseDTOGetList)
+                .ploggingList(ploggingListResponseDTOGetList)
                 .build();
 
     }
@@ -105,7 +105,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         return MountainUserInfoWrapperResponseDTO.builder()
-                .list(list)
+                .mountainUserInfoResponseDTOList(list)
                 .build();
 
     }

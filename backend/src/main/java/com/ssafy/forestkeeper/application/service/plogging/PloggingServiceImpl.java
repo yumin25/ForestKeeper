@@ -184,7 +184,7 @@ public class PloggingServiceImpl implements PloggingService {
     public TrashCanListWrapperResponseDTO getTrashCanList() {
 
         return TrashCanListWrapperResponseDTO.builder()
-                .list(trashCanRepository.findAll())
+                .trashCanList(trashCanRepository.findAll())
                 .build();
 
     }
@@ -193,7 +193,7 @@ public class PloggingServiceImpl implements PloggingService {
     public TrashCanListWrapperResponseDTO getTrashCanList(String region) {
 
         return TrashCanListWrapperResponseDTO.builder()
-                .list(trashCanRepository.findByRegion(region).orElse(null))
+                .trashCanList(trashCanRepository.findByRegion(region).orElse(null))
                 .build();
 
     }
