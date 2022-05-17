@@ -41,4 +41,7 @@ public class MatchingGetListResponseDTO {
     @ApiModelProperty(name = "산 이름")
     private String mountainName;
 
+    @ApiModelProperty(name = "마감 여부")
+    private boolean close;
+
 }

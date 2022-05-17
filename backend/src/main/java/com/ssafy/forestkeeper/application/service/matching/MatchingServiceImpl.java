@@ -181,7 +181,7 @@ public class MatchingServiceImpl implements MatchingService {
                 userRepository.findByEmailAndDelete(
                                 SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")).getId(),
-                false, PageRequest.of(page - 1, 6)).get();
+                false, PageRequest.of(page - 1, 6)).orElse(null);
 
         List<Matching> matchingList = new ArrayList<>();
 
@@ -190,32 +190,6 @@ public class MatchingServiceImpl implements MatchingService {
         return convertMatchingListToDTO(matchingList);
 
     }
-
-    private MatchingGetListWrapperResponseDTO convertMatchingListToDTO(List<Matching> matchingList) {
-
-        List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
-
-        matchingList.forEach(matching ->
-                matchingGetListResponseDTOList.add(
-                        MatchingGetListResponseDTO.builder()
-                                .id(matching.getId())
-                                .nickname(matching.getUser().getNickname())
-                                .title(matching.getTitle())
-                                .createTime(matching.getCreateTime())
-                                .ploggingDate(matching.getPloggingDate())
-                                .total(matching.getTotal())
-                                .participants(matchingUserService.getParticipants(matching.getId()))
-                                .mountainName(matching.getMountain().getName())
-                                .build()
-                )
-        );
-
-        return MatchingGetListWrapperResponseDTO.builder()
-                .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
-                .build();
-
-    }
-
 
     @Override
     public void deleteMatching(String matchingId) {
@@ -234,6 +208,32 @@ public class MatchingServiceImpl implements MatchingService {
 
             matchingUserRepository.save(matchingUser);
         });
+
+    }
+
+    private MatchingGetListWrapperResponseDTO convertMatchingListToDTO(List<Matching> matchingList) {
+
+        List<MatchingGetListResponseDTO> matchingGetListResponseDTOList = new ArrayList<>();
+
+        matchingList.forEach(matching ->
+                matchingGetListResponseDTOList.add(
+                        MatchingGetListResponseDTO.builder()
+                                .id(matching.getId())
+                                .nickname(matching.getUser().getNickname())
+                                .title(matching.getTitle())
+                                .createTime(matching.getCreateTime())
+                                .ploggingDate(matching.getPloggingDate())
+                                .total(matching.getTotal())
+                                .participants(matchingUserService.getParticipants(matching.getId()))
+                                .mountainName(matching.getMountain().getName())
+                                .close(isClose(matching.getId()))
+                                .build()
+                )
+        );
+
+        return MatchingGetListWrapperResponseDTO.builder()
+                .matchingGetListResponseDTOList(matchingGetListResponseDTOList)
+                .build();
 
     }
 
