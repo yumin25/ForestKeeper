@@ -18,7 +18,7 @@ public interface UserService {
 
     Integer modifyNickname(String nickname);
 
-    Integer modifyPassword(String past_password, String new_password);
+    Integer modifyPassword(String currentPassword, String newPassword);
 
     void withdraw();
 

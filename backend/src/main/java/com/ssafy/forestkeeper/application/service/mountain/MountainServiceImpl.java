@@ -14,6 +14,7 @@ import com.ssafy.forestkeeper.domain.repository.mountain.MountainVisitRepository
 import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepositorySupport;
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.MountainNotFoundException;
+import com.ssafy.forestkeeper.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -22,19 +23,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MountainServiceImpl implements MountainService {
 
     private final MountainRepository mountainRepository;
+
     private final MountainVisitRepository mountainVisitRepository;
+
     private final ImageRepository imageRepository;
+
     private final UserRepository userRepository;
+
     private final MountainRepositorySupport mountainRepositorySupport;
+
     private final PloggingRepositorySupport ploggingRepositorySupport;
+
     private QPlogging qPlogging = QPlogging.plogging;
+
     private QMountain qMountain = QMountain.mountain;
 
     @Value("${cloud.aws.s3.hosting}")
@@ -51,31 +58,50 @@ public class MountainServiceImpl implements MountainService {
     }
 
     @Override
-    public Optional<List<Mountain>> searchMountain(String keyword, int page) {
+    public MountainSearchResponseDTO searchMountain(String keyword, int page) {
+
         int batch = 8;
-        Optional<List<Mountain>> result = Optional.ofNullable(
-                mountainRepositorySupport.findByNameContains(keyword,
-                        PageRequest.of(page * batch, batch)));
-        return result;
+
+        page = Math.max(page, 1);
+
+        List<Mountain> result = mountainRepositorySupport.findByNameContains(keyword, PageRequest.of(page * batch, batch));
+
+        List<MountainSearchDTO> list = new ArrayList<>();
+
+        result.forEach(mountain -> list.add(
+                        MountainSearchDTO.builder()
+                                .mountainCode(mountain.getCode())
+                                .name(mountain.getName())
+                                .address(mountain.getAddress())
+                                .build()
+                )
+        );
+
+        return MountainSearchResponseDTO.builder()
+                .searchList(list)
+                .total(list.size())
+                .build();
+
     }
 
     @Override
-
     public MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode) {
 
         List<Tuple> ploggingList = ploggingRepositorySupport.rankByDistance(
-                mountainRepository.findByCode(mountainCode).get());
+                mountainRepository.findByCode(mountainCode)
+                        .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")));
 
         List<MountainRankResponseDTO> mountainRankResponseDTOList = new ArrayList<>();
+
         Image image = imageRepository.findByUser(userRepository.findByEmailAndDelete(
-                        SecurityContextHolder.getContext().getAuthentication().getName(), false).get())
+                                SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .orElse(null);
+
         String imagePath;
-        if (image == null) {
-            imagePath = "";
-        } else {
-            imagePath = hosting + image.getSavedFileName();
-        }
+
+        if (image == null) imagePath = "";
+        else imagePath = hosting + image.getSavedFileName();
 
         ploggingList.forEach(plogging ->
                 mountainRankResponseDTOList.add(
@@ -90,21 +116,35 @@ public class MountainServiceImpl implements MountainService {
         return MountainRankWrapperResponseDTO.builder()
                 .mountainRankResponseDTOList(mountainRankResponseDTOList)
                 .build();
+
     }
 
     @Override
     public MountainRankWrapperResponseDTO getMountainRankByCount(String mountainCode) {
 
         List<Tuple> ploggingList = ploggingRepositorySupport.rankByCount(
-                mountainRepository.findByCode(mountainCode).get());
+                mountainRepository.findByCode(mountainCode)
+                        .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다."))
+        );
 
         List<MountainRankResponseDTO> mountainRankResponseDTOList = new ArrayList<>();
+
+        Image image = imageRepository.findByUser(userRepository.findByEmailAndDelete(
+                                SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
+                .orElse(null);
+
+        String imagePath;
+
+        if (image == null) imagePath = "";
+        else imagePath = hosting + image.getSavedFileName();
 
         ploggingList.forEach(plogging ->
                 mountainRankResponseDTOList.add(
                         MountainRankResponseDTO.builder()
                                 .nickname(plogging.get(qPlogging.user).getNickname())
                                 .count(plogging.get(qPlogging.count()))
+                                .imagePath(imagePath)
                                 .build()
                 )
         );
@@ -115,11 +155,6 @@ public class MountainServiceImpl implements MountainService {
 
     }
 
-    public int totalSearch(String keyword) {
-
-        return mountainRepositorySupport.findByNameContains(keyword).size();
-    }
-
     @Override
     public MountainRecommendWrapperResponseDTO getRecommendByDistance(double lat, double lng) {
 
@@ -128,56 +163,72 @@ public class MountainServiceImpl implements MountainService {
         List<MountainRecommendResponseDTO> nearMountainRecommendResponseDTOList = new ArrayList<>();
 
         recommendList.forEach(near ->
-                nearMountainRecommendResponseDTOList
-                        .add(MountainRecommendResponseDTO.builder()
+                nearMountainRecommendResponseDTOList.add(
+                        MountainRecommendResponseDTO.builder()
                                 .mountainCode(near.get(qMountain).getCode())
                                 .address(near.get(qMountain).getAddress())
                                 .name(near.get(qMountain).getName())
                                 .value(Math.round(Double.parseDouble(near.toArray()[0].toString()) * 10) / 10.0)
-                                .build()));
+                                .build()
+                )
+        );
 
         return MountainRecommendWrapperResponseDTO.builder()
-                .mountainRecommendResponseDTOList(nearMountainRecommendResponseDTOList).build();
+                .mountainRecommendResponseDTOList(nearMountainRecommendResponseDTOList)
+                .build();
+
     }
 
     @Override
     public MountainRecommendWrapperResponseDTO getRecommendByHeight() {
 
-        double avg = ploggingRepositorySupport.getAvg(userRepository.findByEmailAndDelete(
-                SecurityContextHolder.getContext().getAuthentication().getName(), false).get());
+        double avg = ploggingRepositorySupport.getAvg(
+                userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
+                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다."))
+        );
 
         List<Tuple> recommendList = mountainRepositorySupport.findByHeight(avg);
 
         List<MountainRecommendResponseDTO> nearMountainRecommendResponseDTOList = new ArrayList<>();
 
         recommendList.forEach(near ->
-                nearMountainRecommendResponseDTOList
-                        .add(MountainRecommendResponseDTO.builder()
+                nearMountainRecommendResponseDTOList.add(
+                        MountainRecommendResponseDTO.builder()
                                 .mountainCode(near.get(qMountain).getCode())
                                 .address(near.get(qMountain).getAddress())
                                 .name(near.get(qMountain).getName())
                                 .value(near.get(qMountain).getHeight())
-                                .build())
+                                .build()
+                )
         );
 
         return MountainRecommendWrapperResponseDTO.builder()
-                .mountainRecommendResponseDTOList(nearMountainRecommendResponseDTOList).build();
+                .mountainRecommendResponseDTOList(nearMountainRecommendResponseDTOList)
+                .build();
+
     }
 
-    public MountainVisitorRankWrapperResponseDTO getVisiterRank() {
+    public MountainVisitorRankWrapperResponseDTO getVisitorRank() {
+
         List<MountainVisitorRankResponseDTO> list = new ArrayList<>();
-        List<MountainVisit> visitList = mountainVisitRepository.findTop5ByOrderByVisiterCountDesc();
+
+        List<MountainVisit> visitList = mountainVisitRepository.findTop5ByOrderByVisitorCountDesc();
+
         for (MountainVisit visit : visitList) {
             Mountain mountain = visit.getMountain();
-            list.add(MountainVisitorRankResponseDTO.builder()
-                    .mountainCode(mountain.getCode())
-                    .address(mountain.getAddress()).mountainName(mountain.getName())
-                    .visitorCount(visit.getVisiterCount())
-                    .build());
+
+            list.add(
+                    MountainVisitorRankResponseDTO.builder()
+                            .mountainCode(mountain.getCode())
+                            .address(mountain.getAddress()).mountainName(mountain.getName())
+                            .visitorCount(visit.getVisitorCount())
+                            .build());
         }
 
         return MountainVisitorRankWrapperResponseDTO.builder()
                 .list(list)
                 .build();
+
     }
+
 }

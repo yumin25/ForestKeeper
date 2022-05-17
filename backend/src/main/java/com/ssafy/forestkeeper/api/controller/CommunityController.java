@@ -9,6 +9,7 @@ import com.ssafy.forestkeeper.application.service.community.CommunityService;
 import com.ssafy.forestkeeper.domain.enums.CommunityCode;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Api(value = "Community API", tags = {"Community"})
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/community")
@@ -39,7 +40,7 @@ public class CommunityController {
 
         communityService.registerCommunity(communityRegisterRequestDTO);
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성 성공", 201));
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDTO.of("글 작성 성공", 201));
 
     }
 

@@ -7,6 +7,7 @@ import com.ssafy.forestkeeper.application.dto.response.comment.CommentGetListWra
 import com.ssafy.forestkeeper.application.service.comment.CommentService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class CommentController {
 
         commentService.registerComment(commentRegisterRequestDTO);
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("댓글 작성에 성공했습니다.", 201));
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDTO.of("댓글 작성에 성공했습니다.", 201));
 
     }
 

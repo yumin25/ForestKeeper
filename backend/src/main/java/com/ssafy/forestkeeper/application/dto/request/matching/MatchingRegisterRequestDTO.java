@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @ApiModel("MatchingRegisterRequestDTO")
@@ -29,6 +30,7 @@ public class MatchingRegisterRequestDTO {
     private String ploggingDate;
 
     @ApiModelProperty(name = "총 인원")
+    @Min(1)
     private int total;
 
 }
