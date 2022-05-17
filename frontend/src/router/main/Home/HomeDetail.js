@@ -6,33 +6,7 @@ import HomeResult from "./HomeResult";
 const HomeDetail = () => {
   const [nearMountain, setNearMountain] = useState([]); // 근처 산 리스트
   const [avgMountain, setAvgMountain] = useState([]); // 방문한 평균높이 산 리스트
-  const [mountain, setMountain] = useState([
-    {
-      name: "아차산",
-      address: "서울특별시 서초구",
-      count: 2464,
-    },
-    {
-      name: "아차산",
-      address: "서울특별시 서초구",
-      count: 2464,
-    },
-    {
-      name: "아차산",
-      address: "서울특별시 서초구",
-      count: 2464,
-    },
-    {
-      name: "아차산",
-      address: "서울특별시 서초구",
-      count: 2464,
-    },
-    {
-      name: "아차산",
-      address: "서울특별시 서초구",
-      count: 2464,
-    },
-  ]);
+  const [mountain, setMountain] = useState([]);
 
   useEffect(() => {
     // 근처 산 리스트 요청
@@ -64,6 +38,14 @@ const HomeDetail = () => {
         setAvgMountain(data.recommendResponseDTOList);
       })
       .catch((err) => {});
+
+    // 방문자 순위
+    Send.get("/mountain/rank")
+      .then(({ data }) => {
+        console.log(data.list);
+        setMountain(data.list);
+      })
+      .catch((err) => {});
   }, []);
 
   return (
@@ -85,17 +67,11 @@ const HomeDetail = () => {
         </div>
         <div>
           <Recommend
-            title="방문했던 평균 높이 산"
+            title="숲지기가 방문한 산과 유사한 산"
             recommendList={avgMountain}
             near={false}
           />
         </div>
-
-        {/* <Recommend
-          title="숲지기가 방문한 산과 유사한 산"
-          recommendList={avgMountain}
-          near={false}
-        /> */}
       </div>
       <div
         style={{
