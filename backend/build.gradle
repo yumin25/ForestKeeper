@@ -21,48 +21,43 @@ repositories {
 
 dependencies {
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java'
 
     // Swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
-    implementation 'org.projectlombok:lombok:1.18.24'
-
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
-    //S3 Bucket
+    // S3 Bucket
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.14'
-    //implementation 'com.amazonaws:aws-java-sdk:1.12.201'
+    implementation 'net.coobird:thumbnailator:0.4.17'
 
-    // jasypt
+    // Jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-    // image-scaling
+    // Image-Scaling
     implementation 'com.mortennobel:java-image-scaling:0.8.6'
 
-    // mail
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // validation
+    // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // security
+    // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.6.2'
 
-    // jwt
+    // JWT
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
+    // Lombok
+    implementation 'org.projectlombok:lombok:1.18.24'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
 
     // JSON
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
@@ -94,13 +89,15 @@ dependencies {
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.6.7'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 test {
     useJUnitPlatform()
 }
 
-// querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
@@ -120,4 +117,3 @@ configurations {
     }
     querydsl.extendsFrom compileClasspath
 }
-// querydsl 추가 끝
