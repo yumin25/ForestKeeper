@@ -4,7 +4,9 @@ import "../Home.css";
 import Send from "../../../../config/Send";
 import { connect } from "react-redux";
 import x from "../../../../res/img/x.png";
+import { useSlider } from "@mui/base";
 function TeamDetail({ userSlice }) {
+  const [isParticipated, setIsParticipated] = useState(false);
   const [detail, setDetail] = useState({
     message: "",
     statusCode: "",
@@ -14,7 +16,7 @@ function TeamDetail({ userSlice }) {
     createTime: "",
     ploggingDate: "",
     total: 0,
-    participant: 0,
+    participants: [],
     mountainName: "",
     mountainCode: "",
     content: "",
@@ -60,6 +62,37 @@ function TeamDetail({ userSlice }) {
       .then((res) => {
         console.log(res);
         setDetail(res.data);
+        confirmParticipation();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function confirmParticipation() {
+    for (let i = 0; i < detail.participants.length; i++) {
+      if (detail.participants[i].nickname == userSlice.userNickname) {
+        setIsParticipated(true);
+      }
+    }
+  }
+
+  function apply() {
+    Send.post(`/match/join`, { matchingId: matchingId })
+      .then((res) => {
+        console.log(res);
+        getArticle();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function cancel() {
+    Send.delete(`/match/cancel/${matchingId}`)
+      .then((res) => {
+        console.log(res);
+        getArticle();
       })
       .catch((e) => {
         console.log(e);
@@ -79,21 +112,24 @@ function TeamDetail({ userSlice }) {
           //   background: "red",
         }}
       >
-        <div style={{ fontSize: "2.2vh", marginLeft: "2vw" }}>
-          <b>{detail.nickname}</b>
+        <div>
+          <div style={{ fontSize: "2.2vh", marginLeft: "2vw" }}>
+            <b>{detail.nickname}</b>
+          </div>
+          <div
+            style={{
+              color: "#ACACAC",
+              fontSize: "2vh",
+              marginLeft: "2vw",
+              marginBottom: "3vh",
+            }}
+          >
+            {detail.createTime.substr(0, 10) +
+              " " +
+              detail.createTime.substr(11, 8)}
+          </div>
         </div>
-        <div
-          style={{
-            color: "#ACACAC",
-            fontSize: "2vh",
-            marginLeft: "2vw",
-            marginBottom: "3vh",
-          }}
-        >
-          {detail.createTime.substr(0, 10) +
-            " " +
-            detail.createTime.substr(11, 8)}
-        </div>
+
         <div
           id="banner"
           style={{
@@ -116,7 +152,7 @@ function TeamDetail({ userSlice }) {
           >
             <div style={{ width: "55vw" }}>{detail.ploggingDate}</div>
             <div>
-              {detail.participant}/{detail.total} 명
+              {detail.participants.length}/{detail.total} 명
             </div>
           </div>
         </div>
@@ -133,16 +169,21 @@ function TeamDetail({ userSlice }) {
         <div style={{ marginLeft: "2vw", marginBottom: "7vh" }}>
           {detail.content}
         </div>
-        {userSlice.userNickname == detail.nickname ? (
-          detail.closed == false ? (
-            <button style={btnStyle} onClick={() => closeMatching()}>
-              마감하기
-            </button>
-          ) : (
-            <button style={clickdeBtnStyle}>마감완료</button>
-          )
+
+        {detail.closed == true ? (
+          <button style={clickdeBtnStyle}>마감완료</button>
+        ) : userSlice.userNickname == detail.nickname ? (
+          <button style={btnStyle} onClick={() => closeMatching()}>
+            마감하기
+          </button>
+        ) : isParticipated == false ? (
+          <button style={btnStyle} onClick={() => apply()}>
+            신청하기
+          </button>
         ) : (
-          <button style={btnStyle}></button>
+          <button style={clickdeBtnStyle} onClick={() => cancel()}>
+            신청취소
+          </button>
         )}
       </div>
       <Bar></Bar>
