@@ -79,7 +79,7 @@ public class MountainServiceImpl implements MountainService {
 
         return MountainSearchResponseDTO.builder()
                 .searchList(list)
-                .total(list.size())
+                .total(mountainRepositorySupport.findByNameContains(keyword).size())
                 .build();
 
     }
