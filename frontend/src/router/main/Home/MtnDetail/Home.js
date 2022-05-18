@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import { Route, Routes } from "react-router-dom";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 function NaverMapAPI({ lat, lng, handleMenu }) {
   const navermaps = window.naver.maps;
-
+  let useParam = useParams();
   return (
     <>
       <button
-        onClick={() => handleMenu("teamList")}
+        onClick={() =>
+          (document.location.href = `/teamList/${useParam.mountainCode}`)
+        }
         style={{
           position: "absolute",
           zIndex: 2,
@@ -76,11 +78,7 @@ function Home({ visitor, distance, lat, lng, handleMenu }) {
           error={<p>Maps Load Error</p>}
           loading={<p>Maps Loading...</p>}
         >
-          <NaverMapAPI
-            lat={lat}
-            lng={lng}
-            handleMenu={handleMenu}
-          ></NaverMapAPI>
+          <NaverMapAPI lat={lat} lng={lng}></NaverMapAPI>
         </RenderAfterNavermapsLoaded>
       </div>
     </>

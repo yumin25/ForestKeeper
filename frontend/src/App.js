@@ -15,7 +15,11 @@ import Temp from "./router/main/Home/Temp";
 import MyPage from "./router/accounts/mypage/MyPage";
 import TeamWrite from "./router/main/Home/MtnDetail/TeamWrite";
 import TeamDetail from "./router/main/Home/MtnDetail/TeamDetail";
+
+import TeamList from "./router/main/Home/MtnDetail/TeamList";
+
 import Landing from "./router/main/Home/Land";
+
 function App() {
   const cors = require("cors");
   return (
@@ -26,7 +30,10 @@ function App() {
           <Route path="/accounts/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
 
-          <Route path="/accounts/mypage/recorddetail" element={<RecordDetail />} />
+          <Route
+            path="/accounts/mypage/recorddetail"
+            element={<RecordDetail />}
+          />
 
           <Route path="/trash" element={<Trash />} />
 
@@ -37,6 +44,7 @@ function App() {
 
           <Route path="/articleWrite/:mountainCode" element={<Write />} />
           <Route path="/teamWrite/:mountainCode" element={<TeamWrite />} />
+          <Route path="/teamList/:mountainCode" element={<TeamList />} />
           <Route path="/teamDetail" element={<TeamDetail />} />
           <Route path="/" element={<Index />}>
             <Route index element={<Home />} />

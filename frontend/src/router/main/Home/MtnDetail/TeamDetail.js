@@ -3,8 +3,8 @@ import Bar from "../Bar";
 import "../Home.css";
 import Send from "../../../../config/Send";
 import { connect } from "react-redux";
-import x from "../../../../res/img/x.png";
-import axios from "axios";
+import back from "../../../../res/img/back.png";
+
 function TeamDetail({ userSlice }) {
   const [isParticipated, setIsParticipated] = useState(false);
   const [detail, setDetail] = useState({
@@ -124,13 +124,28 @@ function TeamDetail({ userSlice }) {
     <>
       {/* 92.5vh */}
       <div
+        style={{ height: "10.5vh" }}
+        onClick={() =>
+          (document.location.href = `/teamList/${detail.mountainCode}`)
+        }
+      >
+        <img
+          style={{
+            marginTop: "5vh",
+            marginLeft: "8.3vw",
+            width: "2.5vh",
+            height: "2.5vh",
+          }}
+          src={back}
+        />
+      </div>
+
+      <div
         style={{
           marginLeft: "8.3vw",
           width: "83.3vw",
           marginRight: "8.3vw",
-          height: "84vh",
-          marginTop: "8.5vh",
-          //   background: "red",
+          height: "82vh",
         }}
       >
         <div>
