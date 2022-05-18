@@ -74,8 +74,8 @@ public class MountainController {
 
         MountainRankWrapperResponseDTO mountainRankWrapperResponseDTO = null;
 
-        if ("distance".equals(by)) {
-            mountainRankWrapperResponseDTO = mountainService.getMountainRankByDistance(mountainCode);
+        if ("exp".equals(by)) {
+            mountainRankWrapperResponseDTO = mountainService.getMountainRankByExp(mountainCode);
         } else if ("count".equals(by)) {
             mountainRankWrapperResponseDTO = mountainService.getMountainRankByCount(mountainCode);
         }

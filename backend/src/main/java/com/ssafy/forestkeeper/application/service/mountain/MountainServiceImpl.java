@@ -1,11 +1,28 @@
 package com.ssafy.forestkeeper.application.service.mountain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.querydsl.core.Tuple;
-import com.ssafy.forestkeeper.application.dto.response.mountain.*;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRecommendResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRecommendWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisitorRankResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisitorRankWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.MountainVisit;
 import com.ssafy.forestkeeper.domain.dao.mountain.QMountain;
+import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.plogging.QPlogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
@@ -15,14 +32,8 @@ import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepositorySuppo
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.MountainNotFoundException;
 import com.ssafy.forestkeeper.exception.UserNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -85,33 +96,30 @@ public class MountainServiceImpl implements MountainService {
     }
 
     @Override
-    public MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode) {
+    public MountainRankWrapperResponseDTO getMountainRankByExp(String mountainCode) {
 
-        List<Tuple> ploggingList = ploggingRepositorySupport.rankByDistance(
+        List<Tuple> ploggingList = ploggingRepositorySupport.rankByExp(
                 mountainRepository.findByCode(mountainCode)
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")));
 
         List<MountainRankResponseDTO> mountainRankResponseDTOList = new ArrayList<>();
 
-        Image image = imageRepository.findByUser(userRepository.findByEmailAndDelete(
-                                SecurityContextHolder.getContext().getAuthentication().getName(), false)
-                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .orElse(null);
-
+        Image image;
         String imagePath;
-
-        if (image == null) imagePath = "";
-        else imagePath = hosting + image.getSavedFileName();
-
-        ploggingList.forEach(plogging ->
-                mountainRankResponseDTOList.add(
-                        MountainRankResponseDTO.builder()
-                                .nickname(plogging.get(qPlogging.user).getNickname())
-                                .distance(plogging.get(qPlogging.distance.sum()))
-                                .imagePath(imagePath)
-                                .build()
-                )
-        );
+        
+        for(Tuple plogging : ploggingList) {
+        	image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
+        	
+            if (image == null) imagePath = "";
+            else imagePath = hosting + "thumb/" + image.getSavedFileName();
+        	mountainRankResponseDTOList.add(
+                    MountainRankResponseDTO.builder()
+                            .nickname(plogging.get(qPlogging.user).getNickname())
+                            .exp(plogging.get(qPlogging.exp.sum()))
+                            .imagePath(imagePath)
+                            .build()
+            );
+        }
 
         return MountainRankWrapperResponseDTO.builder()
                 .mountainRankResponseDTOList(mountainRankResponseDTOList)
@@ -129,25 +137,22 @@ public class MountainServiceImpl implements MountainService {
 
         List<MountainRankResponseDTO> mountainRankResponseDTOList = new ArrayList<>();
 
-        Image image = imageRepository.findByUser(userRepository.findByEmailAndDelete(
-                                SecurityContextHolder.getContext().getAuthentication().getName(), false)
-                        .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
-                .orElse(null);
-
+        Image image;
         String imagePath;
-
-        if (image == null) imagePath = "";
-        else imagePath = hosting + image.getSavedFileName();
-
-        ploggingList.forEach(plogging ->
-                mountainRankResponseDTOList.add(
-                        MountainRankResponseDTO.builder()
-                                .nickname(plogging.get(qPlogging.user).getNickname())
-                                .count(plogging.get(qPlogging.count()))
-                                .imagePath(imagePath)
-                                .build()
-                )
-        );
+        
+        for(Tuple plogging : ploggingList) {
+        	image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
+        	
+            if (image == null) imagePath = "";
+            else imagePath = hosting + "thumb/" + image.getSavedFileName();
+        	mountainRankResponseDTOList.add(
+                    MountainRankResponseDTO.builder()
+                            .nickname(plogging.get(qPlogging.user).getNickname())
+                            .count(plogging.get(qPlogging.count()))
+                            .imagePath(imagePath)
+                            .build()
+            );
+        }
 
         return MountainRankWrapperResponseDTO.builder()
                 .mountainRankResponseDTOList(mountainRankResponseDTOList)
