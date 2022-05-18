@@ -57,14 +57,12 @@ public class MountainRepositorySupport {
                 .divide(Math.PI)
                 .multiply(Expressions.constant(60 * 1.1515 * 1.609344));
 
-        List<Tuple> tuples = jpaQueryFactory
+        return jpaQueryFactory
                 .select(dist.as("distance"), qMountain)
                 .from(qMountain)
                 .orderBy(dist.asc())
                 .limit(5)
                 .fetch();
-
-        return tuples;
 
     }
 
