@@ -15,7 +15,11 @@ import Temp from "./router/main/Home/Temp";
 import MyPage from "./router/accounts/mypage/MyPage";
 import TeamWrite from "./router/main/Home/MtnDetail/TeamWrite";
 import TeamDetail from "./router/main/Home/MtnDetail/TeamDetail";
+
 import TeamList from "./router/main/Home/MtnDetail/TeamList";
+
+import Landing from "./router/main/Home/Land";
+
 function App() {
   const cors = require("cors");
   return (
@@ -23,8 +27,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/accounts/signup" element={<Signup />} />
-
           <Route path="/accounts/login" element={<Login />} />
+          <Route path="/landing" element={<Landing />} />
 
           <Route
             path="/accounts/mypage/recorddetail"

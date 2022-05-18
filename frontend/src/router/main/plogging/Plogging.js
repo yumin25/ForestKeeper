@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PloggingMap from "./PloggingMap";
 import Send from "../../../config/Send";
 let tracker;
 let distanceTracker;
 function Plogging() {
+  const navigate = useNavigate();
   const [myLocation, setMyLocation] = useState({
     latitude: 37.579722,
     longitude: 126.976033,
@@ -109,6 +111,12 @@ function Plogging() {
 
   useEffect(() => {
     findMountain();
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("idToken")) {
+      navigate("/accounts/login");
+    }
   }, []);
 
   return (

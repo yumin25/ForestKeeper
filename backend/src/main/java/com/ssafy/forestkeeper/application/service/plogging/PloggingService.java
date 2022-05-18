@@ -4,12 +4,9 @@ import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterReques
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingTotalInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
-import com.ssafy.forestkeeper.domain.dao.mountain.TrashCan;
 import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface PloggingService {
 
@@ -26,5 +23,7 @@ public interface PloggingService {
     void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId);
 
     MountainPloggingInfoResponseDTO getMountainPlogging(String mountainName);
+    
+    PloggingTotalInfoResponseDTO getTotalInfo();
 
 }
