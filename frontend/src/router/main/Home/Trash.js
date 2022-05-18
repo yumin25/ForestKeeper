@@ -94,7 +94,7 @@ function Trash() {
       }
     )
       .then((res) => {
-        setTrashList(res.data.list);
+        setTrashList(res.data.trashCanList);
         console.log(res);
       })
       .catch((e) => {

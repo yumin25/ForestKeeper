@@ -1,8 +1,8 @@
 package com.ssafy.forestkeeper.api.controller;
 
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingJoinPostDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyPatchDTO;
-import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterPostDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingModifyRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRegisterRequestDTO;
+import com.ssafy.forestkeeper.application.dto.request.matching.MatchingRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingGetListWrapperResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.matching.MatchingResponseDTO;
@@ -10,6 +10,7 @@ import com.ssafy.forestkeeper.application.service.matching.MatchingService;
 import com.ssafy.forestkeeper.application.service.matching.MatchingUserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Api(value = "Matching API", tags = {"Mathcing"})
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/match")
@@ -35,22 +36,12 @@ public class MatchingController {
     })
     @PostMapping
     public ResponseEntity<? extends BaseResponseDTO> register(
-            @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterPostDTO matchingRegisterPostDTO
+            @ApiParam(value = "매칭 글 등록", required = true) @RequestBody @Valid MatchingRegisterRequestDTO matchingRegisterRequestDTO
     ) {
 
-        if (matchingRegisterPostDTO.getTotal() == 0) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원은 1명 이상이어야 합니다.", 409));
-        }
+        matchingService.registerMatching(matchingRegisterRequestDTO);
 
-        try {
-            matchingService.registerMatching(matchingRegisterPostDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 작성에 실패했습니다.", 409));
-        }
-
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("글 작성에 성공했습니다.", 201));
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDTO.of("글 작성에 성공했습니다.", 201));
 
     }
 
@@ -63,22 +54,16 @@ public class MatchingController {
     })
     @PatchMapping
     public ResponseEntity<? extends BaseResponseDTO> modify(
-            @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyPatchDTO matchingModifyPatchDTO
+            @ApiParam(value = "매칭 글 수정", required = true) @RequestBody @Valid MatchingModifyRequestDTO matchingModifyRequestDTO
     ) {
 
-        if (matchingModifyPatchDTO.getTotal() < matchingUserService.getParticipants(matchingModifyPatchDTO.getMatchingId()).size()) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("총 인원이 참여 인원보다 적습니다.", 409));
+        if (matchingModifyRequestDTO.getTotal() < matchingUserService.getParticipants(matchingModifyRequestDTO.getMatchingId()).size()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of("총 인원이 참여 인원보다 적습니다.", 409));
         }
 
-        try {
-            matchingService.modifyMatching(matchingModifyPatchDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("글 수정에 실패했습니다.", 409));
-        }
+        matchingService.modifyMatching(matchingModifyRequestDTO);
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("글 수정에 성공했습니다.", 201));
+        return ResponseEntity.ok(BaseResponseDTO.of("글 수정에 성공했습니다.", 200));
 
     }
 
@@ -91,37 +76,30 @@ public class MatchingController {
     })
     @PostMapping("/join")
     public ResponseEntity<? extends BaseResponseDTO> joinMatching(
-            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingRequestDTO matchingRequestDTO
     ) {
 
-        String matchingId = matchingJoinPostDTO.getMatchingId();
+        String matchingId = matchingRequestDTO.getMatchingId();
 
         if (matchingService.isFull(matchingId)) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 가득 찬 매칭입니다.", 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of("이미 가득 찬 매칭입니다.", 409));
         }
 
         if (matchingService.isClose(matchingId)) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 마감된 매칭입니다.", 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of("이미 마감된 매칭입니다.", 409));
         }
 
         if (matchingService.isDelete(matchingId)) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("삭제된 매칭입니다.", 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of("삭제된 매칭입니다.", 409));
         }
 
         if (matchingUserService.isJoin(matchingId)) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("이미 참여중인 매칭입니다.", 409));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDTO.of("이미 참여중인 매칭입니다.", 409));
         }
 
-        try {
-            matchingUserService.joinMatching(matchingJoinPostDTO.getMatchingId());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            System.err.println(e);
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭에 실패했습니다.", 409));
-        }
+        matchingUserService.joinMatching(matchingRequestDTO.getMatchingId());
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("매칭 합류에 성공했습니다.", 200));
+        return ResponseEntity.ok(BaseResponseDTO.of("매칭 합류에 성공했습니다.", 200));
 
     }
 
@@ -134,19 +112,12 @@ public class MatchingController {
     })
     @PatchMapping("/close")
     public ResponseEntity<? extends BaseResponseDTO> closeMatching(
-            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingJoinPostDTO matchingJoinPostDTO
+            @ApiParam(value = "매칭 정보", required = true) @Valid @RequestBody MatchingRequestDTO matchingRequestDTO
     ) {
 
-        try {
-            matchingService.closeMatching(matchingJoinPostDTO.getMatchingId());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            System.err.println(e);
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 마감에 실패했습니다.", 409));
-        }
+        matchingService.closeMatching(matchingRequestDTO.getMatchingId());
 
-        return ResponseEntity.status(201).body(BaseResponseDTO.of("매칭 마감에 성공했습니다.", 200));
+        return ResponseEntity.ok(BaseResponseDTO.of("매칭 마감에 성공했습니다.", 200));
 
     }
 
@@ -163,18 +134,10 @@ public class MatchingController {
             @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
-        MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
-
-        try {
-            matchingGetListWrapperResponseDTO = matchingService.getMatchingList(mountainCode, page);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 목록 조회에 실패했습니다.", 409));
-        }
-
-        return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
-                matchingGetListWrapperResponseDTO));
+        return ResponseEntity.ok(
+                MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
+                        matchingService.getMatchingList(mountainCode, page))
+        );
 
     }
 
@@ -189,18 +152,10 @@ public class MatchingController {
             @ApiParam(value = "페이지 번호") @RequestParam(defaultValue = "1") int page
     ) {
 
-        MatchingGetListWrapperResponseDTO matchingGetListWrapperResponseDTO = null;
-
-        try {
-            matchingGetListWrapperResponseDTO = matchingService.getMyMatching(page);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 목록 조회에 실패했습니다.", 409));
-        }
-
-        return ResponseEntity.ok(MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
-                matchingGetListWrapperResponseDTO));
+        return ResponseEntity.ok(
+                MatchingGetListWrapperResponseDTO.of("매칭 목록 조회에 성공했습니다.", 200,
+                        matchingService.getMyMatching(page))
+        );
 
     }
 
@@ -215,18 +170,7 @@ public class MatchingController {
             @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
-        MatchingResponseDTO matchingResponseDTO = null;
-
-        try {
-            matchingResponseDTO = matchingService.getMatching(matchingId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 글 조회에 실패했습니다.", 409));
-        }
-
-        return ResponseEntity.ok(MatchingResponseDTO.of("매칭 글조회에 성공했습니다.", 200,
-                matchingResponseDTO));
+        return ResponseEntity.ok(MatchingResponseDTO.of("매칭 글 조회에 성공했습니다.", 200, matchingService.getMatching(matchingId)));
 
     }
 
@@ -242,13 +186,7 @@ public class MatchingController {
             @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
-        try {
-            matchingService.deleteMatching(matchingId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of("매칭 글 삭제에 실패했습니다.", 409));
-        }
+        matchingService.deleteMatching(matchingId);
 
         return ResponseEntity.ok(BaseResponseDTO.of("매칭 글 삭제에 성공했습니다.", 200));
 
@@ -265,13 +203,7 @@ public class MatchingController {
             @ApiParam(value = "페이지 번호") @PathVariable @NotBlank String matchingId
     ) {
 
-        try {
-            matchingUserService.cancelMatching(matchingId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(BaseResponseDTO.of(e.getMessage(), 404));
-        } catch (Exception e) {
-            return ResponseEntity.status(409).body(BaseResponseDTO.of(e.getMessage(), 409));
-        }
+        matchingUserService.cancelMatching(matchingId);
 
         return ResponseEntity.ok(BaseResponseDTO.of("매칭 참여 취소에 성공했습니다.", 200));
 

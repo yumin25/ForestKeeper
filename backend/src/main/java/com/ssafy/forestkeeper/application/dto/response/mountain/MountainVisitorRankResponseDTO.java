@@ -5,13 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-@ApiModel("MountainVisiterRankResponseDTO")
+@ApiModel("MountainVisitorRankResponseDTO")
+@Builder
 @Getter
 @ToString
-@Builder
-public class MountainVisiterRankResponseDTO {
+public class MountainVisitorRankResponseDTO {
+
     private String mountainName;
+
     private String mountainCode;
+
     private String address;
-    private long visiterCount;
+
+    private long visitorCount;
+
 }

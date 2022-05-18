@@ -16,8 +16,8 @@ const Temp = () => {
             lng: position.coords.longitude,
           },
         }).then(({ data }) => {
-          console.log(data.recommendResponseDTOList);
-          setNearMountain(data.recommendResponseDTOList);
+          console.log(data.mountainRecommendResponseDTOList);
+          setNearMountain(data.mountainRecommendResponseDTOList);
         });
       });
     } else {
@@ -31,8 +31,8 @@ const Temp = () => {
       },
     })
       .then(({ data }) => {
-        console.log(data.recommendResponseDTOList);
-        setAvgMountain(data.recommendResponseDTOList);
+        console.log(data.mountainRecommendResponseDTOList);
+        setAvgMountain(data.mountainRecommendResponseDTOList);
       })
       .catch((err) => {});
   }, []);

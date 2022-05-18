@@ -31,4 +31,5 @@ public class TrashCan extends BaseEntity {
 
     @Column(name = "trash_can_type")
     private short type;
+
 }

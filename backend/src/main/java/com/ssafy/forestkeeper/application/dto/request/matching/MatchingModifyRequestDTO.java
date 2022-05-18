@@ -7,10 +7,14 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
-@ApiModel("MatchingRegisterPostDTO")
+@ApiModel("MatchingModifyRequestDTO")
 @Getter
 @ToString
-public class MatchingRegisterPostDTO {
+public class MatchingModifyRequestDTO {
+
+    @ApiModelProperty(name = "매칭 ID")
+    @NotBlank
+    private String matchingId;
 
     @ApiModelProperty(name = "산 코드")
     @NotBlank

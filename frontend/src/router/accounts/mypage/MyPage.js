@@ -26,7 +26,7 @@ function MyPage({ userSlice }) {
     })
       .then((res) => {
         // console.log(res.data.list);
-        setPloggingList(res.data.list);
+        setPloggingList(res.data.ploggingGetListResponseDTOList);
       })
       .catch((e) => {
         console.log(e);
@@ -50,8 +50,8 @@ function MyPage({ userSlice }) {
     })
       .then((resp) => {
         // console.log(resp.data.list);
-        setMountainList(resp.data.list);
-        for (let i = 0; i < resp.data.list.length; i++) {
+        setMountainList(resp.data.mountainUserInfoResponseDTOList);
+        for (let i = 0; i < resp.data.mountainUserInfoResponseDTOList.length; i++) {
           isOpen.push(0);
           isOpenPlogging.push([0]);
         }
@@ -81,10 +81,10 @@ function MyPage({ userSlice }) {
     Send.get(`/userinfo/${mountainCode}`)
       .then((res) => {
         // console.log(res.data.list);
-        setMtPloggingList(res.data.list);
+        setMtPloggingList(res.data.ploggingGetListResponseDTOList);
         e.preventDefault();
         let newArray = [...isOpenPlogging];
-        newArray[index] = res.data.list;
+        newArray[index] = res.data.ploggingGetListResponseDTOList;
         setIsOpenPlogging(newArray);
       })
       .catch((e) => {

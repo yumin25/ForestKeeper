@@ -12,7 +12,11 @@ import lombok.ToString;
 public class MountainRankResponseDTO {
 
     private String nickname;
+
     private long count;
+
     private double distance;
+
     private String imagePath;
+
 }

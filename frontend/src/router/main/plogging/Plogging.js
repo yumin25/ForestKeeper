@@ -18,7 +18,7 @@ function Plogging() {
       }
     )
       .then((res) => {
-        setTrashList(res.data.list);
+        setTrashList(res.data.trashCanList);
         console.log(res);
       })
       .catch((e) => {
@@ -143,11 +143,11 @@ function Plogging() {
             lng: position.coords.longitude,
           },
         }).then(({ data }) => {
-          setMtCode(data.recommendResponseDTOList[0].mountainCode);
+          setMtCode(data.mountainRecommendResponseDTOList[0].mountainCode);
         });
       });
     } else {
-      window.alert("현재위치를 알수 없습니다.");
+      window.alert("현재 위치를 알 수 없습니다.");
     }
   };
   useEffect(() => {

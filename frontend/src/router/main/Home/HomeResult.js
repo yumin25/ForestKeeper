@@ -53,7 +53,7 @@ const HomeResult = ({ mountain }) => {
                   // background: "red",
                 }}
               >
-                {mtn.visiterCount} 회
+                {mtn.visitorCount} 회
               </div>
             </div>
           ))}

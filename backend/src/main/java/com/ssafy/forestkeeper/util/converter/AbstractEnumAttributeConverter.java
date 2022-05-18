@@ -46,4 +46,5 @@ public class AbstractEnumAttributeConverter<E extends Enum<E> & CommonType> impl
         return EnumValueConvertUtils.ofCode(targetEnumClass, dbData);
 
     }
+
 }

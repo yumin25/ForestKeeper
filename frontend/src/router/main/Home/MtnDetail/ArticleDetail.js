@@ -66,7 +66,7 @@ function ArticleDetail({ userSlice }) {
     Send.delete(`/comment/community/${commentId}`)
       .then((res) => {
         console.log(res);
-        if (res.code === 201) {
+        if (res.code === 200) {
           getArticle();
         }
       })
@@ -205,8 +205,7 @@ function ArticleDetail({ userSlice }) {
 
                   <div style={{ fontSize: "1.7vh" }}>{comment.description}</div>
                   <div style={{ color: "#ACACAC", marginBottom: "1.5vh" }}>
-                    {comment.createTime.substr(0, 10) +
-                      comment.createTime.substr(11, 8)}
+                    {comment.createTime.substr(0, 10) + " " + comment.createTime.substr(11, 8)}
                   </div>
                 </div>
               ))}

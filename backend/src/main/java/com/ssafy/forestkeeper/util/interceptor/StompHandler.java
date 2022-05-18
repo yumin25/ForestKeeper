@@ -37,7 +37,6 @@ public class StompHandler implements ChannelInterceptor {
                         )
                 );
 
-                System.out.println("email: " + SecurityContextHolder.getContext().getAuthentication().getName());
             }
 
 //			if (user != null) {
@@ -47,6 +46,7 @@ public class StompHandler implements ChannelInterceptor {
 //				SecurityContextHolder.getContext().setAuthentication(auth);
 //				accessor.setUser(auth);
 //			}
+
         }
 
         return message;

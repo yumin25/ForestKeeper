@@ -1,20 +1,16 @@
 package com.ssafy.forestkeeper.application.dto.request.user;
 
-import javax.validation.constraints.NotBlank;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@ApiModel("UserSignUpDTO")
+import javax.validation.constraints.NotBlank;
+
+@ApiModel("UserSignUpRequestDTO")
 @Getter
-@Setter
 @ToString
-@NoArgsConstructor
-public class UserSignUpDTO {
+public class UserSignUpRequestDTO {
 
     @ApiModelProperty(name = "이메일")
     @NotBlank
@@ -31,4 +27,5 @@ public class UserSignUpDTO {
     @ApiModelProperty(name = "닉네임")
     @NotBlank
     private String nickname;
+
 }

@@ -1,18 +1,12 @@
 package com.ssafy.forestkeeper.domain.dao.plogging;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.ssafy.forestkeeper.domain.dao.BaseEntity;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.user.User;
-
 import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -30,14 +24,14 @@ public class Plogging extends BaseEntity {
 
     @Column(name = "plogging_end_time")
     private LocalDateTime endTime;
-    
+
     @Column(name = "plogging_duration_time")
     private String durationTime;
 
     @Column(name = "plogging_exp")
     private long exp;
 
-    @Column(name = "plogging_coordinates", columnDefinition ="TEXT")
+    @Column(name = "plogging_coordinates", columnDefinition = "TEXT")
     private String coords;
 
     @ManyToOne(fetch = FetchType.LAZY)

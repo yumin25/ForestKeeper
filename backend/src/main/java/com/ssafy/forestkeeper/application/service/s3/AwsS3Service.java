@@ -8,4 +8,6 @@ public interface AwsS3Service {
 
     void uploadThumbFile(MultipartFile image, String fileName, int size);
 
+    String createFileName(String originalFileName);
+
 }

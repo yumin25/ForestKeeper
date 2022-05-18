@@ -19,12 +19,12 @@ const HomeDetail = () => {
             lng: position.coords.longitude,
           },
         }).then(({ data }) => {
-          console.log(data.recommendResponseDTOList);
-          setNearMountain(data.recommendResponseDTOList);
+          console.log(data.mountainRecommendResponseDTOList);
+          setNearMountain(data.mountainRecommendResponseDTOList);
         });
       });
     } else {
-      window.alert("현재위치를 알수 없습니다.");
+      window.alert("현재 위치를 알 수 없습니다.");
     }
 
     // 비슷한 높이 산 요청
@@ -34,16 +34,16 @@ const HomeDetail = () => {
       },
     })
       .then(({ data }) => {
-        console.log(data.recommendResponseDTOList);
-        setAvgMountain(data.recommendResponseDTOList);
+        console.log(data.mountainRecommendResponseDTOList);
+        setAvgMountain(data.mountainRecommendResponseDTOList);
       })
       .catch((err) => {});
 
     // 방문자 순위
     Send.get("/mountain/rank")
       .then(({ data }) => {
-        console.log(data.list);
-        setMountain(data.list);
+        console.log(data.mountainVisitorRankResponseDTOList);
+        setMountain(data.mountainVisitorRankResponseDTOList);
       })
       .catch((err) => {});
   }, []);

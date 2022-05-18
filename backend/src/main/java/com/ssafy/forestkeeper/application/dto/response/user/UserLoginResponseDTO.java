@@ -24,4 +24,5 @@ public class UserLoginResponseDTO extends BaseResponseDTO {
         return userLoginResponseDTO;
 
     }
+
 }
