@@ -5,6 +5,7 @@ import Send from "../../../../config/Send";
 import "../Home.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 function TeamWrite() {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
@@ -76,7 +77,7 @@ function TeamWrite() {
         console.log(res);
         if (res.data.statusCode === 201) {
           alert("글이 등록되었습니다.");
-          document.location.href = `/detail/${useParam.mountainCode}`;
+          document.location.href = `/teamList/${useParam.mountainCode}`;
         }
       })
       .catch((e) => {

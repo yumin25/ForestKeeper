@@ -19,7 +19,6 @@ function Detail({ userSlice }) {
   const [visitor, setVisitor] = useState(0);
   const [distance, setDistance] = useState(0);
   const [count, setCount] = useState(0);
-  const [menu, setMenu] = useState("default");
   const [mountainId, setMountainId] = useState();
   let useParam = useParams();
   const url = "https://k6a306.p.ssafy.io/api";
@@ -61,9 +60,6 @@ function Detail({ userSlice }) {
       });
   }
 
-  function handleMenu(param) {
-    setMenu(param);
-  }
   return (
     <>
       <div style={{ height: "92.5vh" }}>
@@ -137,117 +133,112 @@ function Detail({ userSlice }) {
           {Info.address}
         </div>
 
-        {menu == "default" ? (
-          <div id="tabs" style={{ height: "74vh" }}>
-            {tab == "star" ? (
-              <>
+        <div id="tabs" style={{ height: "74vh" }}>
+          {tab == "star" ? (
+            <>
+              <div
+                id="tab"
+                style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
+                  fontSize: "2vh",
+                  display: "flex",
+                  marginBottom: "2vh",
+                }}
+              >
                 <div
-                  id="tab"
+                  style={{ marginRight: "2.5vw" }}
+                  onClick={() => setTab("home")}
+                >
+                  Home
+                </div>
+                <div
                   style={{
-                    marginLeft: "9vw",
-                    marginRight: "6vw",
-                    fontSize: "2vh",
-                    display: "flex",
-                    marginBottom: "2vh",
+                    fontWeight: 900,
+                    color: "#002831",
+                    marginRight: "2.5vw",
                   }}
                 >
-                  <div
-                    style={{ marginRight: "2.5vw" }}
-                    onClick={() => setTab("home")}
-                  >
-                    Home
-                  </div>
-                  <div
-                    style={{
-                      fontWeight: 900,
-                      color: "#002831",
-                      marginRight: "2.5vw",
-                    }}
-                  >
-                    명예의 전당
-                  </div>
-                  <div onClick={() => setTab("about")}>About {Info.name}</div>
+                  명예의 전당
                 </div>
-                <Star mountainCode={useParam.mountainCode} url={url}></Star>
-              </>
-            ) : tab == "about" ? (
-              <>
+                <div onClick={() => setTab("about")}>About {Info.name}</div>
+              </div>
+              <Star mountainCode={useParam.mountainCode} url={url}></Star>
+            </>
+          ) : tab == "about" ? (
+            <>
+              <div
+                id="tab"
+                style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
+                  fontSize: "2vh",
+                  display: "flex",
+                  marginBottom: "2vh",
+                }}
+              >
                 <div
-                  id="tab"
+                  style={{ marginRight: "2.5vw" }}
+                  onClick={() => setTab("home")}
+                >
+                  Home
+                </div>
+                <div
+                  onClick={() => setTab("star")}
+                  style={{ marginRight: "2.5vw" }}
+                >
+                  명예의 전당
+                </div>
+                <div
                   style={{
-                    marginLeft: "9vw",
-                    marginRight: "6vw",
-                    fontSize: "2vh",
-                    display: "flex",
-                    marginBottom: "2vh",
+                    fontWeight: 900,
+                    color: "#002831",
                   }}
                 >
-                  <div
-                    style={{ marginRight: "2.5vw" }}
-                    onClick={() => setTab("home")}
-                  >
-                    Home
-                  </div>
-                  <div
-                    onClick={() => setTab("star")}
-                    style={{ marginRight: "2.5vw" }}
-                  >
-                    명예의 전당
-                  </div>
-                  <div
-                    style={{
-                      fontWeight: 900,
-                      color: "#002831",
-                    }}
-                  >
-                    About {Info.name}
-                  </div>
+                  About {Info.name}
                 </div>
-                <About url={url} mountainId={mountainId}></About>
-              </>
-            ) : (
-              <>
+              </div>
+              <About url={url} mountainId={mountainId}></About>
+            </>
+          ) : (
+            <>
+              <div
+                id="tab"
+                style={{
+                  marginLeft: "9vw",
+                  marginRight: "6vw",
+                  fontSize: "2vh",
+                  display: "flex",
+                  marginBottom: "1.5vh",
+                }}
+              >
                 <div
-                  id="tab"
                   style={{
-                    marginLeft: "9vw",
-                    marginRight: "6vw",
-                    fontSize: "2vh",
-                    display: "flex",
-                    marginBottom: "1.5vh",
+                    fontWeight: 900,
+                    color: "#002831",
+                    marginRight: "2.5vw",
                   }}
                 >
-                  <div
-                    style={{
-                      fontWeight: 900,
-                      color: "#002831",
-                      marginRight: "2.5vw",
-                    }}
-                  >
-                    Home
-                  </div>
-                  <div
-                    onClick={() => setTab("star")}
-                    style={{ marginRight: "2.5vw" }}
-                  >
-                    명예의 전당
-                  </div>
-                  <div onClick={() => setTab("about")}>About {Info.name}</div>
+                  Home
                 </div>
+                <div
+                  onClick={() => setTab("star")}
+                  style={{ marginRight: "2.5vw" }}
+                >
+                  명예의 전당
+                </div>
+                <div onClick={() => setTab("about")}>About {Info.name}</div>
+              </div>
 
-                <Home
-                  visitor={visitor}
-                  distance={distance}
-                  lat={Info.lat}
-                  lng={Info.lng}
-                  handleMenu={handleMenu}
-                ></Home>
-              </>
-            )}
-          </div>
-        ) : (
-          <TeamList mountainCode={useParam.mountainCode}></TeamList>
-        )}
+              <Home
+                visitor={visitor}
+                distance={distance}
+                lat={Info.lat}
+                lng={Info.lng}
+              ></Home>
+            </>
+          )}
+        </div>
       </div>
       <Bar></Bar>
     </>
