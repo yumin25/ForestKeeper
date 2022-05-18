@@ -1,51 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  RenderAfterNavermapsLoaded,
-  NaverMap,
-  Marker,
-  Polyline,
-} from "react-naver-maps";
-import ReactTimerStopwatch from "react-stopwatch-timer";
+import { RenderAfterNavermapsLoaded, NaverMap, Marker, Polyline } from "react-naver-maps";
 import location from "../../../res/img/location.png";
 import play from "../../../res/img/play.png";
 import stop from "../../../res/img/stop.png";
 import File from "../../../config/File";
 import "./PloggingMap.css";
 let stopwatchtimer;
-function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
-  const TrashStyle = {
-    position: "absolute",
-    border: "0.1px solid #8ABC9A",
-    borderRadius: 15,
-    background: "#8ABC9A",
-    color: "white",
-    borderRadius: 15,
-    fontSize: "1.7vh",
-    left: "70vw",
-    top: "3vh",
-    height: "5vh",
-    width: "28vw",
-    zIndex: 2,
-  };
-
+function MapAPI({ myLocation, trackingPath }) {
   const navermaps = window.naver.maps;
   const [lat, setLat] = useState(37.579722);
   const [long, setLong] = useState(126.976033);
   const [isClicked, setIsClicked] = useState(false);
-  let dddd = 11;
   let count = 0;
-  var map = new navermaps.Map("map", {
-    center: new navermaps.LatLng(lat, long),
-    zoom: 15,
-    mapTypeId: navermaps.MapTypeId.NORMAL,
-  });
-
-  var bounds = map.getBounds(),
-    southWest = bounds.getSW(),
-    northEast = bounds.getNE(),
-    lngSpan = northEast.lng() - southWest.lng(),
-    latSpan = northEast.lat() - southWest.lat();
 
   useEffect(() => {
     if (isClicked == false) {
@@ -60,110 +27,27 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
     setLong(myLocation.longitude);
   }, [myLocation]);
 
-  useEffect(() => {
-    if (isOn == false) {
-      setLat(map.getCenter()._lat);
-      setLong(map.getCenter()._lng);
-    }
-  }, [map.getCenter()]);
-
-  // function displayMarker() {
-  //   count++;
-  //   console.log(count);
-  //   var position = new navermaps.LatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
-  //   let num = 0;
-
-  //   if (count != 0 && count % 2 == 0) {
-  //     var map1 = new navermaps.Map("map", {
-  //       center: new navermaps.LatLng(lat, long),
-  //       zoom: 15,
-  //       mapTypeId: navermaps.MapTypeId.NORMAL,
-  //     });
-  //     map = new navermaps.Map("map", {
-  //       center: new navermaps.LatLng(lat, long),
-  //       zoom: 15,
-  //       mapTypeId: navermaps.MapTypeId.NORMAL,
-  //     });
-  //   } else {
-  //     for (var i = 0; i < trashList.length; i++) {
-  //       if (
-  //         trashList[i].latitude >= map.getBounds()._min._lat &&
-  //         trashList[i].latitude <= map.getBounds()._max._lat &&
-  //         trashList[i].longitude >= map.getBounds()._min._lng &&
-  //         trashList[i].longitude <= map.getBounds()._max._lng
-  //       ) {
-  //         num += 1;
-  //         var marker = new navermaps.Marker({
-  //           position: new navermaps.LatLng(trashList[i].latitude, trashList[i].longitude),
-  //           map: map,
-  //         });
-  //       }
-  //     }
-  //   }
-
-  //   console.log(num);
-  // }
-
   return (
-    <div>
-      {/* <button style={TrashStyle} onClick={() => displayMarker()}>
-        쓰레기통 찾기
-      </button> */}
-
-      {/* {isOn === true ? ( */}
-      <NaverMap
-        mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
-        style={{
-          width: "100vw", // 네이버지도 가로 길이
-          height: "92.5vh", // 네이버지도 세로 길이
-          position: "relative",
-          zIndex: 1,
-        }}
-        center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
-        defaultZoom={15} // 지도 초기 확대 배율
-      >
-        {myLocation.latitude !== 37.554722 &&
-          myLocation.longitude !== 126.970833 && (
-            <Marker
-              key={1}
-              position={
-                new navermaps.LatLng(myLocation.latitude, myLocation.longitude)
-              }
-            />
-          )}
-        <Polyline
-          path={trackingPath}
-          strokeColor={"red"}
-          strokeStyle={"solid"}
-          strokeOpacity={1}
-          strokeWeight={3}
-        />
-      </NaverMap>
-      {/* ) : (
-        <div
-          id="map"
-          style={{
-            // zIndex: 1,
-            width: "50vw",
-            height: "92.5vh",
-          }}
-        />
-      )} */}
-    </div>
+    <NaverMap
+      mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
+      style={{
+        width: "100vw", // 네이버지도 가로 길이
+        height: "92.5vh", // 네이버지도 세로 길이
+        position: "relative",
+        zIndex: 1,
+      }}
+      center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
+      defaultZoom={15} // 지도 초기 확대 배율
+    >
+      {myLocation.latitude !== 37.554722 && myLocation.longitude !== 126.970833 && (
+        <Marker key={1} position={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)} />
+      )}
+      <Polyline path={trackingPath} strokeColor={"red"} strokeStyle={"solid"} strokeOpacity={1} strokeWeight={3} />
+    </NaverMap>
   );
 }
 
-function PloggingMap({
-  getLocation,
-  myLocation,
-  tracking,
-  stopTracking,
-  trackingPath,
-  allDistance,
-  distTracking,
-  mtCode,
-  trashList,
-}) {
+function PloggingMap({ getLocation, myLocation, tracking, stopTracking, trackingPath, allDistance, distTracking, mtCode, trashList }) {
   const navigate = useNavigate();
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   const [isOn, setIsOn] = useState(false);
@@ -220,16 +104,7 @@ function PloggingMap({
     var min = date.getMinutes();
     // var s = date.getSeconds();
 
-    var result =
-      y +
-      "-" +
-      makeZeroNum(m, 2) +
-      "-" +
-      makeZeroNum(d, 2) +
-      " " +
-      makeZeroNum(h, 2) +
-      ":" +
-      makeZeroNum(min, 2);
+    var result = y + "-" + makeZeroNum(m, 2) + "-" + makeZeroNum(d, 2) + " " + makeZeroNum(h, 2) + ":" + makeZeroNum(min, 2);
     // + ":" + makeZeroNum(s, 2);
     return result;
   };
@@ -246,10 +121,8 @@ function PloggingMap({
 
   // 끝시간
   const timeRecord = () => {
-    let timeHour =
-      Number(watch().slice(11, 13)) + Number(currentTime.slice(0, 2));
-    let timeMin =
-      Number(watch().slice(14, 16)) + Number(currentTime.slice(3, 5));
+    let timeHour = Number(watch().slice(11, 13)) + Number(currentTime.slice(0, 2));
+    let timeMin = Number(watch().slice(14, 16)) + Number(currentTime.slice(3, 5));
 
     if (timeMin >= 60) {
       timeHour += 1;
@@ -278,10 +151,7 @@ function PloggingMap({
       distance: allDistance.reduce(reducer).toFixed(2),
       coords: trackingPath ? trackingPath : [],
     };
-    formData.append(
-      "dto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
+    formData.append("dto", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
     File.post("/plogging", formData)
       .then((res) => {
@@ -410,12 +280,7 @@ function PloggingMap({
           error={<p>Maps Load Error</p>}
           loading={<p>Maps Loading...</p>}
         >
-          <MapAPI
-            myLocation={myLocation}
-            trackingPath={trackingPath}
-            trashList={trashList}
-            isOn={isOn}
-          />
+          <MapAPI myLocation={myLocation} trackingPath={trackingPath} trashList={trashList} isOn={isOn} />
         </RenderAfterNavermapsLoaded>
       </div>
     </>
