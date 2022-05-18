@@ -45,8 +45,12 @@ function RecordDetail() {
     formData.append("image", image);
     if (image) {
       File.post(`/plogging/ai?ploggingId=${id}`, formData).then((res) => {
-        // console.log(res.data);
         getDetail(localStorage.getItem("ploggingId"));
+        alert(
+          `${res.data.message}
+  - 경험치 : ${res.data.exp}
+  - 종류 : ${res.data.type}`
+        );
       });
     }
   };
@@ -65,7 +69,7 @@ function RecordDetail() {
   useEffect(() => {
     certify();
   }, [image]);
-  console.log(detail);
+
   return (
     <>
       <div
@@ -101,7 +105,7 @@ function RecordDetail() {
                 <div style={{ margin: "1vh 0", fontSize: "10vw", color: "#8ABC9A", fontWeight: "700" }}>{detail.date}</div>
                 <div style={{ display: "flex" }}>
                   <div style={{ margin: "1vh 0", fontSize: "8vw", color: "#8ABC9A", fontWeight: "700" }}>{detail.mountainName}</div>
-                  {detail.exp >= 1000 ? (
+                  {detail.exp >= 100 ? (
                     <button
                       type="input"
                       style={{

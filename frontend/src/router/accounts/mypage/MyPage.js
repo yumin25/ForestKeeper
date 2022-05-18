@@ -259,7 +259,7 @@ function MyPage({ userSlice }) {
                       }}
                     >
                       <div style={{ margin: "auto", width: "70vw", display: "flex" }}>
-                        {content.exp >= 1000 ? (
+                        {content.exp >= 100 ? (
                           <img src={certed} alt="img" style={{ height: "80px", width: "80px" }} />
                         ) : (
                           <img src={uncerted} alt="img" style={{ height: "80px", width: "80px" }} />
@@ -335,7 +335,7 @@ function MyPage({ userSlice }) {
                               key={idx}
                               onClick={(e) => setId(plogging.ploggingId, e)}
                             >
-                              {plogging.exp >= 1000 ? (
+                              {plogging.exp >= 100 ? (
                                 <img src={certed} alt="img" style={{ height: "80px", width: "80px" }} />
                               ) : (
                                 <img src={uncerted} alt="img" style={{ height: "80px", width: "80px" }} />
