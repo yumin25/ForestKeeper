@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import Bar from "./Bar";
 import "./Home.css";
@@ -9,6 +10,7 @@ import HomeDetail from "./HomeDetail";
 import SearchList from "./SearchList";
 
 function Home() {
+  const navigate = useNavigate();
   const [pageState, setPageState] = useState("home");
   const [keyword, setKeyword] = useState("");
   const [myLocation, setMyLocation] = useState({
@@ -48,16 +50,16 @@ function Home() {
     }
   };
 
+  useEffect(() => {
+    if (!localStorage.getItem("idToken")) {
+      navigate("/landing");
+    }
+  }, []);
   return (
     <>
       {pageState == "home" ? (
         <>
-          <SearchInput
-            keyword={keyword}
-            keywordHandler={keywordHandler}
-            onSubmit={onSubmit}
-            goSearch={goSearch}
-          ></SearchInput>
+          <SearchInput keyword={keyword} keywordHandler={keywordHandler} onSubmit={onSubmit} goSearch={goSearch}></SearchInput>
 
           <HomeDetail></HomeDetail>
         </>
