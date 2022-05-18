@@ -263,8 +263,8 @@ public class PloggingServiceImpl implements PloggingService {
 		}
 		
 		return PloggingTotalInfoResponseDTO.builder()
-											.numberOfPeople(distance)
-											.totalDistance(num)
+											.numberOfUsers(num)
+											.totalDistance(distance)
 											.build();
 	}
     
