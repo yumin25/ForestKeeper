@@ -56,13 +56,18 @@ function Home() {
     }
   }, []);
   return (
-    <>
+    <div>
       {pageState == "home" ? (
-        <>
-          <SearchInput keyword={keyword} keywordHandler={keywordHandler} onSubmit={onSubmit} goSearch={goSearch}></SearchInput>
+        <div>
+          <SearchInput
+            keyword={keyword}
+            keywordHandler={keywordHandler}
+            onSubmit={onSubmit}
+            goSearch={goSearch}
+          ></SearchInput>
 
           <HomeDetail></HomeDetail>
-        </>
+        </div>
       ) : (
         <SearchList
           keyword={keyword}
@@ -71,7 +76,7 @@ function Home() {
           mountainCodeHandler={mountainCodeHandler}
         ></SearchList>
       )}
-    </>
+    </div>
   );
 }
 

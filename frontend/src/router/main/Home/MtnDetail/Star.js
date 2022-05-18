@@ -62,7 +62,7 @@ function UserItem({ user, tab }) {
             className="topResult"
             style={{ marginTop: "0.8vh", fontSize: "1.8vh" }}
           >
-            {user.distance} km
+            {user.exp} exp
           </div>
         )}
       </div>
@@ -75,19 +75,19 @@ function Star({ mountainCode, url }) {
     {
       nickname: "",
       count: 0,
-      distance: 0.0,
+      exp: 0.0,
       imagePath: "",
     },
     {
       nickname: "",
       count: 0,
-      distance: 0.0,
+      exp: 0.0,
       imagePath: "",
     },
     {
       nickname: "",
       count: 0,
-      distance: 0.0,
+      exp: 0.0,
       imagePath: "",
     },
   ]);
@@ -144,8 +144,8 @@ function Star({ mountainCode, url }) {
         {tab == "count" ? (
           <>
             <button style={ClickedStyle}>횟수</button>
-            <button onClick={() => setTab("distance")} style={UnClickedStyle}>
-              거리
+            <button onClick={() => setTab("exp")} style={UnClickedStyle}>
+              경험치
             </button>
           </>
         ) : (
@@ -153,7 +153,7 @@ function Star({ mountainCode, url }) {
             <button onClick={() => setTab("count")} style={UnClickedStyle}>
               횟수
             </button>
-            <button style={ClickedStyle}>거리</button>
+            <button style={ClickedStyle}>경험치</button>
           </>
         )}
       </div>
@@ -215,7 +215,7 @@ function Star({ mountainCode, url }) {
                     className="topResult"
                     style={{ fontSize: "1.8vh" }}
                   >
-                    {users[1].distance} km
+                    {users[1].exp} exp
                   </div>
                 )}
           </div>
@@ -288,7 +288,7 @@ function Star({ mountainCode, url }) {
                   className="topResult"
                   style={{ fontSize: "1.8vh" }}
                 >
-                  {users[0].distance} km
+                  {users[0].exp} exp
                 </div>
               )}
         </div>
@@ -337,7 +337,7 @@ function Star({ mountainCode, url }) {
                   className="topResult"
                   style={{ fontSize: "1.8vh" }}
                 >
-                  {users[2].distance} km
+                  {users[2].exp} exp
                 </div>
               )}
         </div>
