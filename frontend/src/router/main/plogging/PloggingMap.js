@@ -110,39 +110,36 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
         쓰레기통 찾기
       </button> */}
 
-      {isOn === true ? (
-        <NaverMap
-          mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
-          style={{
-            width: "100vw", // 네이버지도 가로 길이
-            height: "92.5vh", // 네이버지도 세로 길이
-            position: "relative",
-            zIndex: 1,
-          }}
-          center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
-          defaultZoom={15} // 지도 초기 확대 배율
-        >
-          {myLocation.latitude !== 37.554722 &&
-            myLocation.longitude !== 126.970833 && (
-              <Marker
-                key={1}
-                position={
-                  new navermaps.LatLng(
-                    myLocation.latitude,
-                    myLocation.longitude
-                  )
-                }
-              />
-            )}
-          <Polyline
-            path={trackingPath}
-            strokeColor={"red"}
-            strokeStyle={"solid"}
-            strokeOpacity={1}
-            strokeWeight={3}
-          />
-        </NaverMap>
-      ) : (
+      {/* {isOn === true ? ( */}
+      <NaverMap
+        mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
+        style={{
+          width: "100vw", // 네이버지도 가로 길이
+          height: "92.5vh", // 네이버지도 세로 길이
+          position: "relative",
+          zIndex: 1,
+        }}
+        center={{ lat: myLocation.latitude, lng: myLocation.longitude }} // 지도 초기 위치
+        defaultZoom={15} // 지도 초기 확대 배율
+      >
+        {myLocation.latitude !== 37.554722 &&
+          myLocation.longitude !== 126.970833 && (
+            <Marker
+              key={1}
+              position={
+                new navermaps.LatLng(myLocation.latitude, myLocation.longitude)
+              }
+            />
+          )}
+        <Polyline
+          path={trackingPath}
+          strokeColor={"red"}
+          strokeStyle={"solid"}
+          strokeOpacity={1}
+          strokeWeight={3}
+        />
+      </NaverMap>
+      {/* ) : (
         <div
           id="map"
           style={{
@@ -151,7 +148,7 @@ function MapAPI({ myLocation, trackingPath, trashList, isOn }) {
             height: "92.5vh",
           }}
         />
-      )}
+      )} */}
     </div>
   );
 }
