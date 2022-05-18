@@ -22,11 +22,11 @@ public class MattermostProperties {
 
     private String color = "#ff5d52";
 
-    private String authorName = "Server Notification";
+    private String authorName;
 
-    private String authorIcon = "https://i.ibb.co/kG8x5sv/premium-icon-notification-bell-4519342.png";
+    private String authorIcon;
 
-    private String title = "title";
+    private String title;
 
     private String text = "";
 
