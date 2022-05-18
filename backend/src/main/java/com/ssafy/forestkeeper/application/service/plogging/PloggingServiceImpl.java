@@ -1,10 +1,21 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.ssafy.forestkeeper.application.dto.request.plogging.CoordinatesDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.MountainPloggingInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingDetailResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.plogging.PloggingTotalInfoResponseDTO;
 import com.ssafy.forestkeeper.application.dto.response.plogging.TrashCanListWrapperResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
@@ -20,16 +31,8 @@ import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.MountainNotFoundException;
 import com.ssafy.forestkeeper.exception.PloggingNotFoundException;
 import com.ssafy.forestkeeper.exception.UserNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -249,5 +252,22 @@ public class PloggingServiceImpl implements PloggingService {
                 .build();
 
     }
+
+	@Override
+	public PloggingTotalInfoResponseDTO getTotalInfo() {
+		List<Plogging> list = ploggingRepository.findAll();
+		long distance = 0;
+		long num = userRepository.findAll().size();
+		for(Plogging plogging : list) {
+			distance += plogging.getDistance();
+		}
+		
+		return PloggingTotalInfoResponseDTO.builder()
+											.numberOfPeople(distance)
+											.totalDistance(num)
+											.build();
+	}
+    
+    
 
 }
