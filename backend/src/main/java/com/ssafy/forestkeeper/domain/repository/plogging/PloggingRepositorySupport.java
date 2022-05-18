@@ -20,7 +20,7 @@ public class PloggingRepositorySupport {
 
     public List<Tuple> rankByDistance(Mountain mountain) {
 
-        List<Tuple> tuples = jpaQueryFactory
+        return jpaQueryFactory
                 .select(qPlogging.user, qPlogging.distance.sum())
                 .from(qPlogging)
                 .where(qPlogging.mountain.eq(mountain))
@@ -30,13 +30,11 @@ public class PloggingRepositorySupport {
                 .limit(10)
                 .fetch();
 
-        return tuples;
-
     }
 
     public List<Tuple> rankByCount(Mountain mountain) {
 
-        List<Tuple> tuples = jpaQueryFactory
+        return jpaQueryFactory
                 .select(qPlogging.user, qPlogging.count())
                 .from(qPlogging)
                 .where(qPlogging.mountain.eq(mountain))
@@ -46,13 +44,11 @@ public class PloggingRepositorySupport {
                 .limit(10)
                 .fetch();
 
-        return tuples;
-
     }
-    
+
     public List<Tuple> rankByExp(Mountain mountain) {
 
-        List<Tuple> tuples = jpaQueryFactory
+        return jpaQueryFactory
                 .select(qPlogging.user, qPlogging.exp.sum())
                 .from(qPlogging)
                 .where(qPlogging.mountain.eq(mountain))
@@ -61,8 +57,6 @@ public class PloggingRepositorySupport {
                 .offset(0)
                 .limit(10)
                 .fetch();
-
-        return tuples;
 
     }
 

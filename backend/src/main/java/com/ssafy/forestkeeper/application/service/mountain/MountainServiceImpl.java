@@ -1,28 +1,11 @@
 package com.ssafy.forestkeeper.application.service.mountain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import com.querydsl.core.Tuple;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRankWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRecommendResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainRecommendWrapperResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainSearchResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisitorRankResponseDTO;
-import com.ssafy.forestkeeper.application.dto.response.mountain.MountainVisitorRankWrapperResponseDTO;
+import com.ssafy.forestkeeper.application.dto.response.mountain.*;
 import com.ssafy.forestkeeper.domain.dao.image.Image;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import com.ssafy.forestkeeper.domain.dao.mountain.MountainVisit;
 import com.ssafy.forestkeeper.domain.dao.mountain.QMountain;
-import com.ssafy.forestkeeper.domain.dao.plogging.Plogging;
 import com.ssafy.forestkeeper.domain.dao.plogging.QPlogging;
 import com.ssafy.forestkeeper.domain.repository.image.ImageRepository;
 import com.ssafy.forestkeeper.domain.repository.mountain.MountainRepository;
@@ -32,8 +15,14 @@ import com.ssafy.forestkeeper.domain.repository.plogging.PloggingRepositorySuppo
 import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.MountainNotFoundException;
 import com.ssafy.forestkeeper.exception.UserNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -106,13 +95,13 @@ public class MountainServiceImpl implements MountainService {
 
         Image image;
         String imagePath;
-        
-        for(Tuple plogging : ploggingList) {
-        	image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
-        	
+
+        for (Tuple plogging : ploggingList) {
+            image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
+
             if (image == null) imagePath = "";
             else imagePath = hosting + "thumb/" + image.getSavedFileName();
-        	mountainRankResponseDTOList.add(
+            mountainRankResponseDTOList.add(
                     MountainRankResponseDTO.builder()
                             .nickname(plogging.get(qPlogging.user).getNickname())
                             .exp(plogging.get(qPlogging.exp.sum()))
@@ -139,13 +128,13 @@ public class MountainServiceImpl implements MountainService {
 
         Image image;
         String imagePath;
-        
-        for(Tuple plogging : ploggingList) {
-        	image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
-        	
+
+        for (Tuple plogging : ploggingList) {
+            image = imageRepository.findByUser(plogging.get(qPlogging.user)).orElse(null);
+
             if (image == null) imagePath = "";
             else imagePath = hosting + "thumb/" + image.getSavedFileName();
-        	mountainRankResponseDTOList.add(
+            mountainRankResponseDTOList.add(
                     MountainRankResponseDTO.builder()
                             .nickname(plogging.get(qPlogging.user).getNickname())
                             .count(plogging.get(qPlogging.count()))

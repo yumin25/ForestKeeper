@@ -1,15 +1,5 @@
 package com.ssafy.forestkeeper.application.service.plogging;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import com.ssafy.forestkeeper.application.dto.request.plogging.CoordinatesDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.ExpRegisterRequestDTO;
 import com.ssafy.forestkeeper.application.dto.request.plogging.PloggingRegisterRequestDTO;
@@ -31,8 +21,16 @@ import com.ssafy.forestkeeper.domain.repository.user.UserRepository;
 import com.ssafy.forestkeeper.exception.MountainNotFoundException;
 import com.ssafy.forestkeeper.exception.PloggingNotFoundException;
 import com.ssafy.forestkeeper.exception.UserNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -228,6 +226,7 @@ public class PloggingServiceImpl implements PloggingService {
         List<Plogging> ploggingList = ploggingRepository.findByMountain(mountain).orElse(null);
 
         long distance = 0L;
+
         int visitor = 0;
 
         List<Plogging> visitList = ploggingRepository.findByUserAndMountainOrderByStartTimeDesc(user, mountain).orElse(new ArrayList<>());
@@ -242,6 +241,7 @@ public class PloggingServiceImpl implements PloggingService {
 
         for (Plogging plogging : ploggingList) {
             visitor++;
+
             distance += (int) plogging.getDistance();
         }
 
@@ -253,21 +253,24 @@ public class PloggingServiceImpl implements PloggingService {
 
     }
 
-	@Override
-	public PloggingTotalInfoResponseDTO getTotalInfo() {
-		List<Plogging> list = ploggingRepository.findAll();
-		long distance = 0;
-		long num = userRepository.findAll().size();
-		for(Plogging plogging : list) {
-			distance += plogging.getDistance();
-		}
-		
-		return PloggingTotalInfoResponseDTO.builder()
-											.numberOfUsers(num)
-											.totalDistance(distance)
-											.build();
-	}
-    
-    
+    @Override
+    public PloggingTotalInfoResponseDTO getTotalInfo() {
+
+        List<Plogging> list = ploggingRepository.findAll();
+
+        long num = list.size();
+
+        long distance = 0;
+
+        for (Plogging plogging : list) {
+            distance += plogging.getDistance();
+        }
+
+        return PloggingTotalInfoResponseDTO.builder()
+                .numberOfUsers(num)
+                .totalDistance(distance)
+                .build();
+
+    }
 
 }

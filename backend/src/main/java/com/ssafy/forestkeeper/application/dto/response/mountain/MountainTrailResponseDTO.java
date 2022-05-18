@@ -3,7 +3,6 @@ package com.ssafy.forestkeeper.application.dto.response.mountain;
 import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;

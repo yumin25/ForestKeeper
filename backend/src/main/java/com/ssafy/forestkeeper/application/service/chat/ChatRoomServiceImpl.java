@@ -142,7 +142,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             return o2.getMessage().getSendTime().compareTo(o1.getMessage().getSendTime());
         });
 
-        return ChatRoomGetListWrapperResponseDTO.builder().chatRooms(chatRooms).build();
+        return ChatRoomGetListWrapperResponseDTO.builder().chatRoomGetListResponseDTOList(chatRooms).build();
 
     }
 

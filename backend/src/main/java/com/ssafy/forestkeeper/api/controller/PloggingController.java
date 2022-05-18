@@ -118,8 +118,9 @@ public class PloggingController {
     public ResponseEntity<?> getTotalInfo() {
 
         return ResponseEntity.ok(
-        		PloggingTotalInfoResponseDTO.of("총 참여인원, 총 거리 조회에 성공했습니다.", 200, ploggingService.getTotalInfo())
+                PloggingTotalInfoResponseDTO.of("총 참여인원, 총 거리 조회에 성공했습니다.", 200, ploggingService.getTotalInfo())
         );
 
     }
+
 }

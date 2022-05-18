@@ -16,7 +16,7 @@ import java.util.List;
 public class ChatRoomGetListWrapperResponseDTO extends BaseResponseDTO {
 
     @ApiModelProperty(name = "채팅방 목록")
-    private List<ChatRoomGetListResponseDTO> chatRooms;
+    private List<ChatRoomGetListResponseDTO> chatRoomGetListResponseDTOList;
 
     public static ChatRoomGetListWrapperResponseDTO of(String message, Integer statusCode, ChatRoomGetListWrapperResponseDTO chatRoomGetListWrapperResponseDTO) {
 

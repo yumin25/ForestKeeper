@@ -23,7 +23,7 @@ public interface PloggingService {
     void registerPloggingImg(String originalFileName, String savedFileName, String ploggingId);
 
     MountainPloggingInfoResponseDTO getMountainPlogging(String mountainName);
-    
+
     PloggingTotalInfoResponseDTO getTotalInfo();
 
 }

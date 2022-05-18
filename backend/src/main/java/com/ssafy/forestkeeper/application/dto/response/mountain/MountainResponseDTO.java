@@ -4,7 +4,9 @@ import com.ssafy.forestkeeper.application.dto.response.BaseResponseDTO;
 import com.ssafy.forestkeeper.domain.dao.mountain.Mountain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 @ApiModel("MountainResponseDTO")
 @Builder
