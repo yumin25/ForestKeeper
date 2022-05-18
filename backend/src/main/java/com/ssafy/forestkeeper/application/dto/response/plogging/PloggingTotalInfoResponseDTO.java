@@ -15,7 +15,7 @@ import lombok.ToString;
 public class PloggingTotalInfoResponseDTO extends BaseResponseDTO{
 
     @ApiModelProperty(name = "플로깅 참여자 수")
-    private long numberOfPeople;
+    private long numberOfUsers;
 
     @ApiModelProperty(name = "총 플로깅 거리")
     private long totalDistance;
