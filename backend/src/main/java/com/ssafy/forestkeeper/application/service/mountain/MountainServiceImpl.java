@@ -96,9 +96,9 @@ public class MountainServiceImpl implements MountainService {
     }
 
     @Override
-    public MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode) {
+    public MountainRankWrapperResponseDTO getMountainRankByExp(String mountainCode) {
 
-        List<Tuple> ploggingList = ploggingRepositorySupport.rankByDistance(
+        List<Tuple> ploggingList = ploggingRepositorySupport.rankByExp(
                 mountainRepository.findByCode(mountainCode)
                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")));
 
@@ -115,7 +115,7 @@ public class MountainServiceImpl implements MountainService {
         	mountainRankResponseDTOList.add(
                     MountainRankResponseDTO.builder()
                             .nickname(plogging.get(qPlogging.user).getNickname())
-                            .distance(plogging.get(qPlogging.distance.sum()))
+                            .exp(plogging.get(qPlogging.exp.sum()))
                             .imagePath(imagePath)
                             .build()
             );

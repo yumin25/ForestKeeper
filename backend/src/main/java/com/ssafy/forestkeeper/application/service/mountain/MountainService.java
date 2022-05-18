@@ -8,7 +8,7 @@ public interface MountainService {
 
     MountainSearchResponseDTO searchMountain(String keyword, int page);
 
-    MountainRankWrapperResponseDTO getMountainRankByDistance(String mountainCode);
+    MountainRankWrapperResponseDTO getMountainRankByExp(String mountainCode);
 
     MountainRankWrapperResponseDTO getMountainRankByCount(String mountainCode);
 
