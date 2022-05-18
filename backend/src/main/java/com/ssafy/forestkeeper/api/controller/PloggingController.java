@@ -113,4 +113,13 @@ public class PloggingController {
 
     }
 
+    @ApiOperation(value = "웰컴 페이지에 보여주는 정보")
+    @GetMapping("/welcome")
+    public ResponseEntity<?> getTotalInfo() {
+
+        return ResponseEntity.ok(
+        		PloggingTotalInfoResponseDTO.of("총 참여인원, 총 거리 조회에 성공했습니다.", 200, ploggingService.getTotalInfo())
+        );
+
+    }
 }

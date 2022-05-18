@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // authorizeRequests() : HttpServletRequests 를 사용하는 요청들에 대한 접근 제한을 설정
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/user/**", "/api/plogging/welcome").permitAll()
                 .antMatchers("/api/user/modify/**").hasRole("USER")
                 .antMatchers("/api/v3/**", "/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/v3/api-docs").permitAll()
                 .antMatchers("/ws-fk/**").permitAll()
