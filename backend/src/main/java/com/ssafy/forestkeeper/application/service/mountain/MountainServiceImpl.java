@@ -101,7 +101,7 @@ public class MountainServiceImpl implements MountainService {
         String imagePath;
 
         if (image == null) imagePath = "";
-        else imagePath = hosting + image.getSavedFileName();
+        else imagePath = hosting + "thumb/" + image.getSavedFileName();
 
         ploggingList.forEach(plogging ->
                 mountainRankResponseDTOList.add(
@@ -137,7 +137,7 @@ public class MountainServiceImpl implements MountainService {
         String imagePath;
 
         if (image == null) imagePath = "";
-        else imagePath = hosting + image.getSavedFileName();
+        else imagePath = hosting + "thumb/" +image.getSavedFileName();
 
         ploggingList.forEach(plogging ->
                 mountainRankResponseDTOList.add(
