@@ -141,6 +141,6 @@ public class PloggingAiServiceImpl implements PloggingAiService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 플로깅을 찾을 수 없습니다."));
         plogging.changeExp(exp);
         ploggingRepository.save(plogging);
-        return PloggingExperienceResponseDTO.builder().exp(exp).build();
+        return PloggingExperienceResponseDTO.builder().exp(exp).type(type).build();
     }
 }
