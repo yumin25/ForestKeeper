@@ -49,6 +49,22 @@ public class PloggingRepositorySupport {
         return tuples;
 
     }
+    
+    public List<Tuple> rankByExp(Mountain mountain) {
+
+        List<Tuple> tuples = jpaQueryFactory
+                .select(qPlogging.user, qPlogging.exp.sum())
+                .from(qPlogging)
+                .where(qPlogging.mountain.eq(mountain))
+                .groupBy(qPlogging.user)
+                .orderBy(qPlogging.exp.sum().desc())
+                .offset(0)
+                .limit(10)
+                .fetch();
+
+        return tuples;
+
+    }
 
     public double getAvg(User user) {
 

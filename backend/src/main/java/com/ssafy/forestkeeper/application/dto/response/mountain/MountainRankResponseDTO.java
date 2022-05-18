@@ -15,7 +15,7 @@ public class MountainRankResponseDTO {
 
     private long count;
 
-    private double distance;
+    private long exp;
 
     private String imagePath;
 
