@@ -114,15 +114,15 @@ function DownloadMobile() {
             <div style={{ margin: "1vh 1vh", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
           </div>
         </div>
-        <div style={{ padding: "0vh 12vw", display: "flex", flexDirection: "column", width: "80vw" }}>
-          <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
+        <div style={{ padding: "0vh 12vw", display: "flex", width: "80vw" }}>
+          <a style={{ fontWeight: "700", textDecoration: "none", color: "black", marginRight: "3vw" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
             DOWNLOAD
           </a>
           <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://lab.ssafy.com/s06-final/S06P31A306"}>
             DOCS
           </a>
-          <div style={{ marginTop: "0", fontSize: "4vw" }}>© 2022 ForestKeeper All rights reserved.</div>
         </div>
+        <div style={{ padding: "0vh 12vw", marginTop: "1vh", fontSize: "4vw" }}>© 2022 ForestKeeper All rights reserved.</div>
       </div>
     </div>
   );
