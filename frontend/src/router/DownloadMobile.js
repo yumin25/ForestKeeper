@@ -122,7 +122,7 @@ function DownloadMobile() {
             DOCS
           </a>
         </div>
-        <div style={{ padding: "0vh 12vw", marginTop: "1vh", fontSize: "4vw" }}>© 2022 ForestKeeper All rights reserved.</div>
+        <div style={{ padding: "0vh 12vw", marginTop: "1vh", fontSize: "3vw" }}>© 2022 ForestKeeper All rights reserved.</div>
       </div>
     </div>
   );
