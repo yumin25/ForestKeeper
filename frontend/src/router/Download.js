@@ -25,13 +25,19 @@ function Download() {
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
       <div style={{ position: "sticky", top: "0", height: "10vh", backgroundColor: "white" }}>
         <div style={{ margin: "auto 10vw", height: "10vh", display: "flex", justifyContent: "space-between" }}>
-          <div style={{ margin: "auto 0", display: "flex", justifyContent: "space-around" }}>
-            <img src={shortlogo} alt="" style={{ height: "7vh" }} />
-            <div style={{ margin: "auto 0", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
-          </div>
+          <a style={{ margin: "auto 0", fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io"}>
+            <div style={{ margin: "auto 0", display: "flex", justifyContent: "space-around" }}>
+              <img src={shortlogo} alt="" style={{ height: "7vh" }} />
+              <div style={{ margin: "auto 0", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
+            </div>
+          </a>
           <div style={{ margin: "auto 0", display: "flex", justifyContent: "space-around", width: "15vw" }}>
-            <div style={{ fontWeight: "700" }}>DOWNLOAD</div>
-            <div style={{ fontWeight: "700" }}>DOCS</div>
+            <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
+              DOWNLOAD
+            </a>
+            <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://lab.ssafy.com/s06-final/S06P31A306"}>
+              DOCS
+            </a>
           </div>
         </div>
       </div>
@@ -71,7 +77,7 @@ function Download() {
           <img src={mt_detail} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px" }} />
           <img src={ranking_list} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px", margin: "-8vh" }} />
         </div>
-        <div style={{ marginRight: "20vw", padding: "15vh 0", width: "40vw" }}>
+        <div style={{ marginRight: "20vw", padding: "15vh 0", width: "45vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>산의 정보를 찾아보고</div>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>플로깅 챌린지에 참여해보세요.</div>
           <div style={{ fontSize: "2vh", marginTop: "3vh" }}>숲지기 어플에선 산의 정보를 찾을 수 있고.</div>
@@ -80,7 +86,7 @@ function Download() {
         </div>
       </div>
       <div style={{ height: "55vh", backgroundColor: "#EAEAEA", display: "flex" }}>
-        <div style={{ margin: "0 10vw", padding: "15vh 0 0 10vw", width: "40vw" }}>
+        <div style={{ margin: "0 10vw", padding: "15vh 0 0 10vw", width: "45vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>함께 플로깅할 친구를 찾아보세요.</div>
           <div style={{ fontSize: "2vh", marginTop: "3vh" }}>혼자 산에 가서 플로깅하기엔 조금 부끄럽다고요?</div>
           <div style={{ fontSize: "2vh" }}>함께 플로깅할 친구를 모집할 수 있답니다.</div>
@@ -96,14 +102,30 @@ function Download() {
           <img src={mypage} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px" }} />
           <img src={plogging_result} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px", margin: "-8vh" }} />
         </div>
-        <div style={{ marginRight: "20vw", padding: "15vh 0", width: "40vw" }}>
+        <div style={{ marginRight: "20vw", padding: "15vh 0", width: "45vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>플로깅 인증하고 기록을 남겨보세요.</div>
           <div style={{ fontSize: "2vh", marginTop: "3vh" }}>어떤 쓰레기를 주웠나 인증 고고!</div>
           <div style={{ fontSize: "2vh" }}>주운 쓰레기의 양과 종류에 따라 경험치가 부여된답니다.</div>
           <div style={{ fontSize: "2vh" }}>마이페이지에서 지난 기록까지 한눈에 확인해보자구요~</div>
         </div>
       </div>
-      <div style={{ height: "15vh", backgroundColor: "#B8DEB3" }}></div>
+      <div style={{ height: "12vh", backgroundColor: "#B8DEB3" }}>
+        <div style={{ margin: "0 20vw", paddingTop: "1vh", height: "2vh", display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <img src={shortlogo} alt="" style={{ height: "7vh" }} />
+            <div style={{ margin: "1vh 0 0 0", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
+          </div>
+          <div style={{ marginTop: "7vh" }}>© 2022 ForestKeeper All rights reserved.</div>
+          <div style={{ margin: "1vh 0", display: "flex", justifyContent: "space-around", width: "15vw" }}>
+            <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
+              DOWNLOAD
+            </a>
+            <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://lab.ssafy.com/s06-final/S06P31A306"}>
+              DOCS
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
