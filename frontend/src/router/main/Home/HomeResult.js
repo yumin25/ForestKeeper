@@ -4,6 +4,7 @@ import "swiper/swiper.min.css";
 import RecommendCard from "./RecommendCard";
 
 const HomeResult = ({ mountain }) => {
+  console.log(mountain);
   let num = 0;
   return (
     <div>
@@ -24,6 +25,9 @@ const HomeResult = ({ mountain }) => {
         {mountain &&
           mountain.map((mtn, idx) => (
             <div
+              onClick={() =>
+                (document.location.href = `/detail/${mtn.mountainCode}`)
+              }
               style={{
                 display: "flex",
                 height: "3.3vh",

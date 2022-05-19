@@ -74,11 +74,11 @@ function TeamDetail({ userSlice }) {
   }
 
   function confirmParticipation() {
-    for (let i = 0; i < detail.participants.length; i++) {
-      if (detail.participants[i].nickname == userSlice.userNickname) {
-        setIsParticipated(true);
-      } else {
-        setIsParticipated(false);
+    if (isParticipated == false) {
+      for (let i = 0; i < detail.participants.length; i++) {
+        if (detail.participants[i].nickname == userSlice.userNickname) {
+          setIsParticipated(true);
+        }
       }
     }
   }
@@ -101,6 +101,7 @@ function TeamDetail({ userSlice }) {
     Send.delete(`/match/cancel/${matchingId}`)
       .then((res) => {
         console.log(res);
+        setIsParticipated(false);
         getArticle();
       })
       .catch((e) => {
@@ -119,7 +120,6 @@ function TeamDetail({ userSlice }) {
         console.log(e);
       });
   }
-
   return (
     <>
       {/* 92.5vh */}
