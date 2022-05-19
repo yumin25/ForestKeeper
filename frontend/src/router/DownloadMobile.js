@@ -84,7 +84,7 @@ function DownloadMobile() {
       <div style={{ height: "30vh", backgroundColor: "#EAEAEA", display: "flex" }}>
         <div style={{ margin: "0 3vw", padding: "18vw 0 0 5vw", width: "60vw" }}>
           <div style={{ fontSize: "3.5vw", fontWeight: "700" }}>함께 플로깅할 친구를 찾아보세요.</div>
-          <div style={{ fontSize: "3vw", marginTop: "3vh" }}>혼자 산에 가서 플로깅하기엔 조금 부끄럽다고요?</div>
+          <div style={{ fontSize: "3vw", marginTop: "3vh" }}>혼자 산에 가서 플로깅하기엔 부끄럽다고요?</div>
           <div style={{ fontSize: "3vw" }}>함께 플로깅할 친구를 모집할 수 있답니다.</div>
           <div style={{ fontSize: "3vw" }}>원하는 시간, 원하는 동료와 함께 줍줍!</div>
         </div>
@@ -121,7 +121,7 @@ function DownloadMobile() {
           <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://lab.ssafy.com/s06-final/S06P31A306"}>
             DOCS
           </a>
-          <div style={{ marginTop: "0", fontSize: "1vw" }}>© 2022 ForestKeeper All rights reserved.</div>
+          <div style={{ marginTop: "0", fontSize: "4vw" }}>© 2022 ForestKeeper All rights reserved.</div>
         </div>
       </div>
     </div>
