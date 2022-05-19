@@ -37,7 +37,7 @@ function Login({ saveUser, userSlice }) {
             })
             .then((response) => {
               saveUser(response.data);
-              document.location.href = `/`;
+              document.location.href = `/home`;
             });
         }
       })

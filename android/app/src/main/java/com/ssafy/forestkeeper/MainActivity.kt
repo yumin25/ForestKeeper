@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-        webView.loadUrl("https://k6a306.p.ssafy.io/")
+        webView.loadUrl("https://k6a306.p.ssafy.io/home")
     }
 
     fun selectImage(filePathCallback: ValueCallback<Array<Uri>>?){

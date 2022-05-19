@@ -19,6 +19,7 @@ import TeamDetail from "./router/main/Home/MtnDetail/TeamDetail";
 import TeamList from "./router/main/Home/MtnDetail/TeamList";
 
 import Landing from "./router/main/Home/Land";
+import Download from "./router/Download";
 
 function App() {
   const cors = require("cors");
@@ -26,14 +27,12 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Route exact path="/" element={<Download />} />
           <Route path="/accounts/signup" element={<Signup />} />
           <Route path="/accounts/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
 
-          <Route
-            path="/accounts/mypage/recorddetail"
-            element={<RecordDetail />}
-          />
+          <Route path="/accounts/mypage/recorddetail" element={<RecordDetail />} />
 
           <Route path="/trash" element={<Trash />} />
 
@@ -46,8 +45,8 @@ function App() {
           <Route path="/teamWrite/:mountainCode" element={<TeamWrite />} />
           <Route path="/teamList/:mountainCode" element={<TeamList />} />
           <Route path="/teamDetail" element={<TeamDetail />} />
-          <Route path="/" element={<Index />}>
-            <Route index element={<Home />} />
+          <Route path="*" element={<Index />}>
+            <Route path="home" element={<Home />} />
             <Route path="plogging" element={<Plogging />} />
             <Route path="accounts/mypage" element={<MyPage />} />
           </Route>

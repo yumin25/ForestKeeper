@@ -22,7 +22,7 @@ const HomeResult = ({ mountain }) => {
 
       <div style={{ marginLeft: "5vw" }}>
         {mountain &&
-          mountain.map((mtn) => (
+          mountain.map((mtn, idx) => (
             <div
               style={{
                 display: "flex",
@@ -30,11 +30,12 @@ const HomeResult = ({ mountain }) => {
                 marginBottom: "2vh",
                 fontSize: "1.8vh",
               }}
+              key={idx}
             >
               <div style={{ marginRight: "3vw" }}>
                 <b>{(num += 1)}</b>
               </div>
-              <div style={{ width: "16vw", marginRight: "2vw" }}>
+              <div style={{ width: "15.5vw", marginRight: "2.5vw" }}>
                 <b>{mtn.mountainName}</b>
               </div>
               <div

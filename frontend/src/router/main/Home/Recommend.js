@@ -18,16 +18,10 @@ const Recommend = ({ title, recommendList, near }) => {
         {title}
       </div>
       <div>
-        <Swiper
-          slidesPerView={1.6}
-          spaceBetween={10}
-          centeredSlides={false}
-          loop={true}
-          className="mySwiper"
-        >
+        <Swiper slidesPerView={1.6} spaceBetween={10} centeredSlides={false} loop={true} className="mySwiper">
           {recommendList.length > 0
-            ? recommendList.map((mountain) => (
-                <SwiperSlide>
+            ? recommendList.map((mountain, idx) => (
+                <SwiperSlide key={idx}>
                   <RecommendCard mountain={mountain} near={near} />
                 </SwiperSlide>
               ))

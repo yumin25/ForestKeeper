@@ -10,9 +10,9 @@ function Index() {
     <>
       <div>
         <Routes>
-          <Route index path="/" element={<Home />} />
+          <Route path="/home" exact element={<Home />} />
           <Route path="/plogging" exact element={<Plogging />} />
-          <Route path="/accounts/mypage" element={<MyPage />} />
+          <Route path="/accounts/mypage" exact element={<MyPage />} />
         </Routes>
         <Bar />
       </div>
