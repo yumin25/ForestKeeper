@@ -63,7 +63,7 @@ function Home({ visitor, distance, lat, lng, handleMenu }) {
         }}
       >
         <div id="text" style={{ color: "#8ABC9A" }}>
-          <div style={{ fontSize: "1.5vh" }}>누적 방문 횟수/거리</div>
+          <div style={{ fontSize: "1.5vh" }}>누적 방문 인원/거리</div>
           <div
             style={{ display: "flex", fontSize: "3.5vh", fontWeight: "bold" }}
           >
