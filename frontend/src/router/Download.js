@@ -41,7 +41,7 @@ function Download() {
           </div>
         </div>
       </div>
-      <div style={{ padding: "2vh 5vw", height: "50vh", backgroundColor: "#B8DEB3", display: "flex" }}>
+      <div style={{ padding: "2vh 12vw", height: "50vh", backgroundColor: "#B8DEB3", display: "flex" }}>
         <div style={{ margin: "7vh 5vh", width: "50vw" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div style={{ margin: "0", fontSize: "5vh", fontWeight: "700", color: "black" }}>등산과 플로깅의 만남</div>
