@@ -23,7 +23,7 @@ function NavBar() {
       <div style={{ display: "flex", height: "7.5vh" }}>
         <div id="home" style={{ width: "33vw" }} onClick={() => goHome()}>
           {now == "HOME" ? (
-            <NavLink to={"/"}>
+            <NavLink to={"/home"}>
               <img
                 style={{
                   marginTop: "2vh",
@@ -35,7 +35,7 @@ function NavBar() {
               />
             </NavLink>
           ) : (
-            <NavLink to={"/"}>
+            <NavLink to={"/home"}>
               <img
                 style={{
                   marginTop: "2vh",

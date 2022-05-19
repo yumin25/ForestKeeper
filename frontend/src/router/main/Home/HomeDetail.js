@@ -19,7 +19,7 @@ const HomeDetail = () => {
             lng: position.coords.longitude,
           },
         }).then(({ data }) => {
-          console.log(data.mountainRecommendResponseDTOList);
+          // console.log(data.mountainRecommendResponseDTOList);
           setNearMountain(data.mountainRecommendResponseDTOList);
         });
       });
@@ -34,7 +34,7 @@ const HomeDetail = () => {
       },
     })
       .then(({ data }) => {
-        console.log(data.mountainRecommendResponseDTOList);
+        // console.log(data.mountainRecommendResponseDTOList);
         setAvgMountain(data.mountainRecommendResponseDTOList);
       })
       .catch((err) => {});
@@ -42,7 +42,7 @@ const HomeDetail = () => {
     // 방문자 순위
     Send.get("/mountain/rank")
       .then(({ data }) => {
-        console.log(data.mountainVisitorRankResponseDTOList);
+        // console.log(data.mountainVisitorRankResponseDTOList);
         setMountain(data.mountainVisitorRankResponseDTOList);
       })
       .catch((err) => {});
@@ -59,18 +59,10 @@ const HomeDetail = () => {
         }}
       >
         <div style={{ marginBottom: "4vh" }}>
-          <Recommend
-            title="숲지기 근처 산"
-            recommendList={nearMountain}
-            near={true}
-          />
+          <Recommend title="숲지기 근처 산" recommendList={nearMountain} near={true} />
         </div>
         <div>
-          <Recommend
-            title="숲지기가 방문한 산과 유사한 산"
-            recommendList={avgMountain}
-            near={false}
-          />
+          <Recommend title="숲지기가 방문한 산과 유사한 산" recommendList={avgMountain} near={false} />
         </div>
       </div>
       <div
