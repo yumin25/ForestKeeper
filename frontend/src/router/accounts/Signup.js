@@ -90,7 +90,7 @@ function Signup() {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     } else {
-      console.log(email, password, name, nickname);
+      //console.log(email, password, name, nickname);
       let formData = new FormData();
       formData.append("image", profile);
 

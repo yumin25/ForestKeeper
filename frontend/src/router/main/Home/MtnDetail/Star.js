@@ -92,9 +92,8 @@ function Star({ mountainCode, url }) {
     },
   ]);
   // const LowRanker = users.slice(3, users.length);
-  const [LowRanker, setLowRanker] = useState(users.slice(3, users.length));
+  const [LowRanker, setLowRanker] = useState();
 
-  console.log(users);
   const [rank, setRank] = useState(2);
   const [rankNum, setRankNum] = useState([4, 5, 6, 7, 8, 9, 10]);
   const [tab, setTab] = useState("count");
@@ -104,7 +103,7 @@ function Star({ mountainCode, url }) {
   }, [tab]);
 
   function getRank() {
-    console.log(mountainCode);
+    //console.log(mountainCode);
     setRank(2);
     Send.get(url + `/mountain/rank/${mountainCode}`, {
       params: {
@@ -114,6 +113,12 @@ function Star({ mountainCode, url }) {
       .then(function (response) {
         console.log(response.data);
         setUsers(response.data.mountainRankResponseDTOList);
+        setLowRanker(
+          response.data.mountainRankResponseDTOList.slice(
+            3,
+            response.data.mountainRankResponseDTOList.length
+          )
+        );
       })
       .catch(function (error) {
         console.log(error);
