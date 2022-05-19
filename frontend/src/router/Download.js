@@ -46,15 +46,15 @@ function Download() {
                 border: "none",
                 borderRadius: "2rem",
                 width: "15vw",
-                height: "5vh",
+                height: "6vh",
                 color: "white",
-                marginTop: "2vh",
+                margin: "7vh 0",
               }}
               onClick={() => (document.location.href = `/`)}
             >
               <div style={{ margin: "0", fontSize: "3vh", fontWeight: "700", color: "white" }}>동행하기</div>
             </button>
-            <div style={{ marginTop: "10vh" }}>
+            <div style={{ marginTop: "0vh" }}>
               <span style={{ margin: "0", fontSize: "2.5vh", fontWeight: "500", color: "black" }}>지금 </span>
               <span style={{ margin: "0", fontSize: "3vh", fontWeight: "700", color: "black" }}>{userNum}</span>
               <span style={{ margin: "0", fontSize: "2.5vh", fontWeight: "500", color: "black" }}>명이 </span>
@@ -66,39 +66,39 @@ function Download() {
         </div>
         <img src={landing} alt="" style={{ float: "right" }} />
       </div>
-      <div style={{ height: "50vh", backgroundColor: "white", display: "flex" }}>
-        <div style={{ margin: "0 10vw", padding: "2vh 0 0 10vw", width: "35vw" }}>
-          <img src={mt_detail} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray" }} />
-          <img src={ranking_list} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", margin: "-8vh" }} />
+      <div style={{ height: "55vh", backgroundColor: "white", display: "flex" }}>
+        <div style={{ margin: "0 10vw", padding: "5vh 0 0 10vw", width: "35vw" }}>
+          <img src={mt_detail} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px" }} />
+          <img src={ranking_list} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px", margin: "-8vh" }} />
         </div>
         <div style={{ marginRight: "20vw", padding: "15vh 0", width: "40vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>산의 정보를 찾아보고</div>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>플로깅 챌린지에 참여해보세요.</div>
-          <div style={{ fontSize: "2vh" }}>숲지기 어플에선 산의 정보를 찾을 수 있고.</div>
+          <div style={{ fontSize: "2vh", marginTop: "3vh" }}>숲지기 어플에선 산의 정보를 찾을 수 있고.</div>
           <div style={{ fontSize: "2vh" }}>명예의 전당에서 누가 플로깅을 많이 했나 확인할 수 있어요.</div>
           <div style={{ fontSize: "2vh" }}>플로깅 횟수로도, 경험치로도 확인할 수 있답니다.</div>
         </div>
       </div>
-      <div style={{ height: "50vh", backgroundColor: "#EAEAEA", display: "flex" }}>
+      <div style={{ height: "55vh", backgroundColor: "#EAEAEA", display: "flex" }}>
         <div style={{ margin: "0 10vw", padding: "15vh 0 0 10vw", width: "40vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>함께 플로깅할 친구를 찾아보세요.</div>
-          <div style={{ fontSize: "2vh" }}>혼자 산에 가서 플로깅하기엔 조금 부끄럽다고요?</div>
+          <div style={{ fontSize: "2vh", marginTop: "3vh" }}>혼자 산에 가서 플로깅하기엔 조금 부끄럽다고요?</div>
           <div style={{ fontSize: "2vh" }}>함께 플로깅할 친구를 모집할 수 있답니다.</div>
           <div style={{ fontSize: "2vh" }}>원하는 시간, 원하는 동료와 함께 줍줍!</div>
         </div>
-        <div style={{ marginRight: "20vw", padding: "2vh 0", width: "30vw" }}>
-          <img src={matching_list} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray" }} />
-          <img src={matching_detail} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", margin: "-8vh" }} />
+        <div style={{ marginRight: "20vw", padding: "5vh 0", width: "30vw" }}>
+          <img src={matching_list} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px" }} />
+          <img src={matching_detail} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px", margin: "-8vh" }} />
         </div>
       </div>
-      <div style={{ height: "50vh", backgroundColor: "white", display: "flex" }}>
-        <div style={{ margin: "0 10vw", padding: "2vh 0 0 10vw", width: "35vw" }}>
-          <img src={mypage} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray" }} />
-          <img src={plogging_result} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", margin: "-8vh" }} />
+      <div style={{ height: "55vh", backgroundColor: "white", display: "flex" }}>
+        <div style={{ margin: "0 10vw", padding: "5vh 0 0 10vw", width: "35vw" }}>
+          <img src={mypage} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px" }} />
+          <img src={plogging_result} alt="" style={{ width: "10vw", boxShadow: "0px 5px 10px 2px darkgray", borderRadius: "10px", margin: "-8vh" }} />
         </div>
         <div style={{ marginRight: "20vw", padding: "15vh 0", width: "40vw" }}>
           <div style={{ fontSize: "3.5vh", fontWeight: "700" }}>플로깅 인증하고 기록을 남겨보세요.</div>
-          <div style={{ fontSize: "2vh" }}>어떤 쓰레기를 주웠나 인증 고고!</div>
+          <div style={{ fontSize: "2vh", marginTop: "3vh" }}>어떤 쓰레기를 주웠나 인증 고고!</div>
           <div style={{ fontSize: "2vh" }}>주운 쓰레기의 양과 종류에 따라 경험치가 부여된답니다.</div>
           <div style={{ fontSize: "2vh" }}>마이페이지에서 지난 기록까지 한눈에 확인해보자구요~</div>
         </div>
