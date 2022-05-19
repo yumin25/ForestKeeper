@@ -31,6 +31,15 @@ spring:
             - RewritePath=/api/?(?<segment>.*), /$\{segment}
             - JwtAuthentication
 
+        - id: chat
+            uri: lb://CHAT
+            #uri: http://localhost:8084 # 포워딩할 주소, http://localhost:8000/api로 들어오면 http://localhost:8084 로 포워딩
+            predicates:
+              - Path=/chat/** # 해당 gateway 서버의 /user/**로 들어오는 요청은 service로 인식하겠다는 조건
+            filters:
+              - RewritePath=/chat/?(?<segment>.*), /$\{segment}
+              - JwtAuthentication
+
 
 jwt:
   secret: 7ZSM66Gc6rmFICsg65Ox7IKwIOyVsSDshJzruYTsiqQg7Iiy7KeA6riwIEZvcmVzdCBLZWVwZXI=
