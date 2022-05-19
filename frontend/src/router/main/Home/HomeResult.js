@@ -41,8 +41,8 @@ const HomeResult = ({ mountain }) => {
               <div
                 style={{
                   color: "#ACACAC",
-                  width: "45vw",
-                  marginRight: "2vw",
+                  width: "43vw",
+                  marginRight: "1vw",
                 }}
               >
                 {mtn.address}
