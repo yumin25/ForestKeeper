@@ -34,14 +34,14 @@ const HomeResult = ({ mountain }) => {
               <div style={{ marginRight: "3vw" }}>
                 <b>{(num += 1)}</b>
               </div>
-              <div style={{ width: "12vw", marginRight: "3vw" }}>
+              <div style={{ width: "16vw", marginRight: "2vw" }}>
                 <b>{mtn.mountainName}</b>
               </div>
               <div
                 style={{
                   color: "#ACACAC",
-                  width: "45vw",
-                  marginRight: "2vw",
+                  width: "43vw",
+                  marginRight: "1vw",
                 }}
               >
                 {mtn.address}
