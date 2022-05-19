@@ -19,7 +19,7 @@ function Download() {
     });
   };
   const mobileVersion = () => {
-    document.location.href = "http://localhost:3000/m";
+    document.location.href = "https://k6a306.p.ssafy.io/m";
   };
   useEffect(() => {
     welcome();
