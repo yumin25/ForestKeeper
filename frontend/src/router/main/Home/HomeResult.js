@@ -35,7 +35,7 @@ const HomeResult = ({ mountain }) => {
               <div style={{ marginRight: "3vw" }}>
                 <b>{(num += 1)}</b>
               </div>
-              <div style={{ width: "15.5vw", marginRight: "3vw" }}>
+              <div style={{ width: "15.5vw", marginRight: "2.5vw" }}>
                 <b>{mtn.mountainName}</b>
               </div>
               <div
