@@ -111,7 +111,6 @@ function Star({ mountainCode, url }) {
       },
     })
       .then(function (response) {
-        console.log(response.data);
         setUsers(response.data.mountainRankResponseDTOList);
         setLowRanker(
           response.data.mountainRankResponseDTOList.slice(
@@ -175,7 +174,7 @@ function Star({ mountainCode, url }) {
           display: "flex",
         }}
       >
-        <div id="second" style={{ width: "19vw", marginRight: "10vw" }}>
+        <div id="second" style={{ width: "21vw", marginRight: "8vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
               {users[1] &&
@@ -190,8 +189,8 @@ function Star({ mountainCode, url }) {
               <img
                 src={second}
                 style={{
-                  top: "36vh",
-                  left: "19.5vw",
+                  top: "33vh",
+                  left: "22vw",
                   position: "absolute",
                   width: "8.8vw",
                   height: "8.5vw",
@@ -226,7 +225,7 @@ function Star({ mountainCode, url }) {
           </div>
         </div>
 
-        <div id="first" style={{ width: "23vw", marginRight: "10vw" }}>
+        <div id="first" style={{ width: "23vw", marginRight: "8vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center" }}>
               {users[0] &&
@@ -259,8 +258,8 @@ function Star({ mountainCode, url }) {
               <img
                 src={first}
                 style={{
-                  top: "30vh",
-                  left: "50.5vw",
+                  top: "26.5vh",
+                  left: "52.5vw",
                   position: "absolute",
                   width: "9.3vw",
                   height: "9vw",
@@ -298,7 +297,7 @@ function Star({ mountainCode, url }) {
               )}
         </div>
 
-        <div id="third" style={{ width: "19vw" }}>
+        <div id="third" style={{ width: "21vw" }}>
           <div id="images">
             <div id="profile" style={{ textAlign: "center", marginTop: "6vh" }}>
               {users[2] &&
@@ -313,8 +312,8 @@ function Star({ mountainCode, url }) {
               <img
                 src={third}
                 style={{
-                  top: "36vh",
-                  left: "80.5vw",
+                  top: "33vh",
+                  left: "81.5vw",
                   position: "absolute",
                   width: "8.3vw",
                   height: "8vw",
