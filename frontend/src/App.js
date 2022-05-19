@@ -20,6 +20,7 @@ import TeamList from "./router/main/Home/MtnDetail/TeamList";
 
 import Landing from "./router/main/Home/Land";
 import Download from "./router/Download";
+import DownloadMobile from "./router/DownloadMobile";
 
 function App() {
   const cors = require("cors");
@@ -28,6 +29,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Download />} />
+          <Route exact path="/m" element={<DownloadMobile />} />
           <Route path="/accounts/signup" element={<Signup />} />
           <Route path="/accounts/login" element={<Login />} />
           <Route path="/landing" element={<Landing />} />
@@ -45,7 +47,7 @@ function App() {
           <Route path="/teamWrite/:mountainCode" element={<TeamWrite />} />
           <Route path="/teamList/:mountainCode" element={<TeamList />} />
           <Route path="/teamDetail" element={<TeamDetail />} />
-          <Route path="*" element={<Index />}>
+          <Route path="/" element={<Index />}>
             <Route path="home" element={<Home />} />
             <Route path="plogging" element={<Plogging />} />
             <Route path="accounts/mypage" element={<MyPage />} />

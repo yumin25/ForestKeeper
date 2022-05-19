@@ -18,8 +18,14 @@ function Download() {
       setDist(res.data.totalDistance);
     });
   };
+  const mobileVersion = () => {
+    document.location.href = "http://localhost:3000/m";
+  };
   useEffect(() => {
     welcome();
+    if (window.outerWidth < 800 || window.innerWidth < 800) {
+      mobileVersion();
+    }
   }, []);
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
