@@ -24,11 +24,11 @@ function Download() {
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
       <div style={{ position: "sticky", top: "0", height: "10vh", backgroundColor: "white" }}>
-        <div style={{ margin: "auto 10vw", height: "10vh", display: "flex", justifyContent: "space-between" }}>
+        <div style={{ margin: "auto 15vw", height: "10vh", display: "flex", justifyContent: "space-between" }}>
           <a style={{ margin: "auto 0", fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io"}>
             <div style={{ margin: "auto 0", display: "flex", justifyContent: "space-around" }}>
               <img src={shortlogo} alt="" style={{ height: "7vh" }} />
-              <div style={{ margin: "auto 0", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
+              <div style={{ margin: "auto 1vw", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
             </div>
           </a>
           <div style={{ margin: "auto 0", display: "flex", justifyContent: "space-around", width: "15vw" }}>
@@ -58,7 +58,9 @@ function Download() {
               }}
               onClick={() => (document.location.href = `/`)}
             >
-              <div style={{ margin: "0", fontSize: "3vh", fontWeight: "700", color: "white" }}>동행하기</div>
+              <a style={{ margin: "auto 0", fontWeight: "700", textDecoration: "none", color: "white" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
+                <div style={{ margin: "0", fontSize: "3vh", fontWeight: "700", color: "white" }}>동행하기</div>
+              </a>
             </button>
             <div style={{ marginTop: "0vh" }}>
               <span style={{ margin: "0", fontSize: "2.5vh", fontWeight: "500", color: "black" }}>지금 </span>
@@ -109,13 +111,13 @@ function Download() {
           <div style={{ fontSize: "2vh" }}>마이페이지에서 지난 기록까지 한눈에 확인해보자구요~</div>
         </div>
       </div>
-      <div style={{ height: "12vh", backgroundColor: "#B8DEB3" }}>
-        <div style={{ margin: "0 20vw", paddingTop: "1vh", height: "2vh", display: "flex", justifyContent: "space-between" }}>
+      <div style={{ height: "18vh", backgroundColor: "#B8DEB3" }}>
+        <div style={{ margin: "0 15vw", paddingTop: "1vh", height: "2vh", display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <img src={shortlogo} alt="" style={{ height: "7vh" }} />
-            <div style={{ margin: "1vh 0 0 0", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
+            <div style={{ margin: "1vh 1vh", fontSize: "3vh", fontWeight: "700" }}>Forest Keeper</div>
           </div>
-          <div style={{ marginTop: "7vh" }}>© 2022 ForestKeeper All rights reserved.</div>
+          <div style={{ marginTop: "12vh" }}>© 2022 ForestKeeper All rights reserved.</div>
           <div style={{ margin: "1vh 0", display: "flex", justifyContent: "space-around", width: "15vw" }}>
             <a style={{ fontWeight: "700", textDecoration: "none", color: "black" }} href={"https://k6a306.p.ssafy.io/api/apk"}>
               DOWNLOAD
