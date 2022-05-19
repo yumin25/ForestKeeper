@@ -4,6 +4,9 @@ import mtn_icon from "../../../res/img/mtn_icon.png";
 const RecommendCard = ({ mountain, near }) => {
   return (
     <div
+      onClick={() =>
+        (document.location.href = `/detail/${mountain.mountainCode}`)
+      }
       style={{
         borderRadius: "15px",
         background: "#EAF9E6",
