@@ -55,8 +55,8 @@
     <tr>
         <td height="140px" align="center"> <a href="https://github.com/gud_ejr">
             <img src="https://avatars.githubusercontent.com/gud_ejr" width="140px" /> <br><br> 👑 염형덕 <br>(Back-End) </a> <br></td>
-        <td height="140px" align="center"> <a href="https://github.com/">
-            <img src="https://avatars.githubusercontent.com/" width="140px" /> <br><br> 🙂 공윤환 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/rhddbsghks">
+            <img src="https://avatars.githubusercontent.com/rhddbsghks" width="140px" /> <br><br> 🙂 공윤환 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/sumini97">
             <img src="https://avatars.githubusercontent.com/sumini97" width="140px" /> <br><br> 😆 김수민 <br>(Front-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/yumin25">
@@ -70,7 +70,7 @@
         <td align="center">REST API<br/>DATABASE</td>
         <td align="center">REST API</td>
         <td align="center">UI/UX</td>
-        <td align="center">REST API<br/>SECURITY</td>
+        <td align="center">REST API<br/>SECURITY<br/>ANDROID</td>
         <td align="center">REST API<br/>INFRA<br/>REDIS</td>
         <td align="center">UI/UX</td>
     </tr>
@@ -255,7 +255,7 @@
 | 공통코드 | [공통코드 바로가기](/docs/공통코드.md) |
 | 와이어프레임 | [와이어프레임 바로가기](/docs/와이어프레임.md) |
 | 컨벤션 | [컨벤션 바로가기](/docs/컨벤션.md) |
-| 포팅 매뉴얼 | [포팅 매뉴얼 바로가기](/exec/서울_3반_A306_포팅_매뉴얼.pdf) |
-| 외부 서비스 정보 | [외부 서비스 정보 바로가기](/exec/서울_3반_A306_외부_서비스_정보.pdf) |
-| 시연 시나리오 | [시연 시나리오 바로가기](/exec/서울_3반_A306_시연_시나리오.pdf) |
+| 포팅 매뉴얼 | [포팅 매뉴얼 바로가기](/exec/서울_3반_A306_포팅매뉴얼.pdf) |
+| 외부 서비스 정보 | [외부 서비스 정보 바로가기](/exec/서울_3반_A306_외부서비스정보.pdf) |
+| 시연 시나리오 | [시연 시나리오 바로가기](/exec/서울_3반_A306_시연시나리오.pdf) |
 | 발표자료 | [발표자료 바로가기](/exec/서울_3반_A306_발표자료.pdf) |
