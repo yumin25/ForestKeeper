@@ -38,7 +38,7 @@
 
 ### Mountain
 
-![Mountain](https://user-images.githubusercontent.com/76759852/169602532-5d0d1d9d-8f0a-450e-aacb-fda39ecdbf0f.png)
+![Mountain](https://user-images.githubusercontent.com/76759852/169605258-5e771e5d-9836-4022-bef5-6e34469189f9.png)
 
 
 ### Plogging
