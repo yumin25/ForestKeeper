@@ -100,7 +100,7 @@
 <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
-<img src="https://img.shields.io/badge/Amazon S3-FA5858?style=for-the-badge&logo=Amazon S3&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
+<img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 
 <br>
 
@@ -126,6 +126,7 @@
 |                    |                    | Redis              | 7.0.0              |
 |                    | Cloud Storage      | AWS S3             |                    |
 |                    | Build              | Gradle             | 7.4.1              |
+|                    | API Docs           | Swagger            | 3.0.0              |
 |                    | IDE                | IntelliJ           | 2022.01            |
 | **FrontEnd**       | HTML5              |                    |                    |
 |                    | CSS3               |                    |                    |
