@@ -74,7 +74,7 @@ function Plogging() {
     tracker = setInterval(function () {
       getLocation();
       handleTrackingPath();
-    }, 1000);
+    }, 5000);
   };
   const distTracking = () => {
     handleAllDistance();
