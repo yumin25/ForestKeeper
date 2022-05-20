@@ -43,7 +43,7 @@
 
 ### Plogging
 
-![Plogging](https://user-images.githubusercontent.com/76759852/169603431-ecbd91d5-b2d4-4257-a469-5acef702c43a.png)
+![Plogging](https://user-images.githubusercontent.com/76759852/169603858-9e2eb8c9-e979-4826-a141-46983c383e18.png)
 
 
 ### Chat
