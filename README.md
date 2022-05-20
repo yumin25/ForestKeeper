@@ -55,8 +55,8 @@
     <tr>
         <td height="140px" align="center"> <a href="https://github.com/gud_ejr">
             <img src="https://avatars.githubusercontent.com/gud_ejr" width="140px" /> <br><br> 👑 염형덕 <br>(Back-End) </a> <br></td>
-        <td height="140px" align="center"> <a href="https://github.com/">
-            <img src="https://avatars.githubusercontent.com/" width="140px" /> <br><br> 🙂 공윤환 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/rhddbsghks">
+            <img src="https://avatars.githubusercontent.com/rhddbsghks" width="140px" /> <br><br> 🙂 공윤환 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/sumini97">
             <img src="https://avatars.githubusercontent.com/sumini97" width="140px" /> <br><br> 😆 김수민 <br>(Front-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/yumin25">
@@ -70,7 +70,7 @@
         <td align="center">REST API<br/>DATABASE</td>
         <td align="center">REST API</td>
         <td align="center">UI/UX</td>
-        <td align="center">REST API<br/>SECURITY</td>
+        <td align="center">REST API<br/>SECURITY<br/>ANDROID</td>
         <td align="center">REST API<br/>INFRA<br/>REDIS</td>
         <td align="center">UI/UX</td>
     </tr>
