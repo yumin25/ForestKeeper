@@ -33,7 +33,7 @@
 
 ### User
 
-![User](https://user-images.githubusercontent.com/76759852/169601537-0502e992-3d07-4ca7-90c4-b668a87b04a3.png)
+![User](https://user-images.githubusercontent.com/76759852/169605539-555cdd7a-d441-40d4-bf58-96e3ca8a1bc2.png)
 
 
 ### Mountain
