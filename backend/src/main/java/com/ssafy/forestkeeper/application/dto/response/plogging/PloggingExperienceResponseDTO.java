@@ -18,7 +18,7 @@ public class PloggingExperienceResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "경험치")
     private int exp;
 
-    @ApiModelProperty(name = "타입")
+    @ApiModelProperty(name = "쓰레기 분류")
     private List<String> type;
 
     public static PloggingExperienceResponseDTO of(String message, Integer statusCode, PloggingExperienceResponseDTO ploggingExperienceResponseDTO) {

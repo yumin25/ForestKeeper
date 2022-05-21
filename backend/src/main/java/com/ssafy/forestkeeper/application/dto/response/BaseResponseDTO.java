@@ -14,7 +14,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class BaseResponseDTO {
 
-    @ApiModelProperty(name = "응답 메시지", example = "성공했습니다.")
+    @ApiModelProperty(name = "응답 메시지", example = "성공")
     String message;
 
     @ApiModelProperty(name = "응답 코드", example = "200")

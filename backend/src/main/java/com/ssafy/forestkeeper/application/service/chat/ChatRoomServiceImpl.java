@@ -53,7 +53,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 채팅방 생성
         ChatRoom chatRoom = ChatRoom.builder()
                 .name(name)
-                .userCount(userList.size())
                 .build();
 
         chatRoomRepository.save(chatRoom);
@@ -139,7 +138,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRooms.sort((o1, o2) -> {
             if (o1.getMessage() == null || o2.getMessage() == null) return 0;
 
-            return o2.getMessage().getSendTime().compareTo(o1.getMessage().getSendTime());
+            return o2.getMessage().getCreatedAt().compareTo(o1.getMessage().getCreatedAt());
         });
 
         return ChatRoomGetListWrapperResponseDTO.builder().chatRoomGetListResponseDTOList(chatRooms).build();
@@ -164,10 +163,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                         .build()
         );
 
-        chatRoom.increaseUserCount();
-
-        chatRoomRepository.save(chatRoom);
-
     }
 
     @Override
@@ -178,10 +173,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         ChatRoom room = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException("채팅방 정보가 존재하지 않습니다."));
-
-        room.decreaseUserCount();
-
-        chatRoomRepository.save(room);
 
         ChatRoomUser chatRoomUser = chatRoomUserRepository.findByUserAndChatRoom(me, room)
                 .orElseThrow(() -> new ChatRoomUserNotFoundException("채팅방 내 회원 정보가 존재하지 않습니다."));

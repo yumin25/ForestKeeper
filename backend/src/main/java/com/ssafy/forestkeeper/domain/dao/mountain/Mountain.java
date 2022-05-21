@@ -18,34 +18,34 @@ public class Mountain extends BaseEntity implements Serializable {
     @Column(name = "mountain_code", unique = true)
     private String code;
 
-    @Column(name = "mountain_name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "mountain_address")
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "mountain_admin")
-    private String admin;
-
-    @Column(name = "mountain_admin_tel")
-    private String tel;
-
-    @Column(name = "mountain_description", columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "mountain_height")
+    @Column(name = "height")
     private double height;
-
-    @Column(name = "is_famous")
-    private short isFamous;
-
-    @Column(name = "famous_description", columnDefinition = "TEXT")
-    private String famousDescription;
 
     @Column(name = "latitude")
     private double lat;
 
     @Column(name = "longitude")
     private double lng;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "is_famous")
+    private boolean famous;
+
+    @Column(name = "famous_description", columnDefinition = "TEXT")
+    private String famousDescription;
+
+    @Column(name = "admin")
+    private String admin;
+
+    @Column(name = "admin_tel")
+    private String adminTel;
 
 }

@@ -40,7 +40,7 @@ public class ChatMessageDTO {
     @ApiModelProperty(name = "메시지 보낸 시간")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime sendTime;
+    private LocalDateTime createdAt;
 
     @ApiModelProperty(name = "메시지 삭제 여부")
     private boolean delete;

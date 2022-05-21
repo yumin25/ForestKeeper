@@ -14,6 +14,6 @@ public interface MatchingRepository extends JpaRepository<Matching, String> {
 
     Optional<Matching> findByIdAndDelete(String matchingId, boolean delete);
 
-    Optional<List<Matching>> findByPloggingDateGreaterThanEqualAndDeleteOrderByCreateTimeDesc(LocalDate today, boolean delete, Pageable pageable);
+    Optional<List<Matching>> findByPloggingDateGreaterThanEqualAndDeleteOrderByCreatedAtDesc(LocalDate today, boolean delete, Pageable pageable);
 
 }

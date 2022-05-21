@@ -26,4 +26,5 @@ public class PloggingGetListWrapperResponseDTO extends BaseResponseDTO {
         return ploggingGetListWrapperResponseDTO;
 
     }
+
 }

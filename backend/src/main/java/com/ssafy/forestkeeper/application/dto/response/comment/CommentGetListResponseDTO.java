@@ -24,6 +24,6 @@ public class CommentGetListResponseDTO {
     private String description;
 
     @ApiModelProperty(name = "작성 시간")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
 }

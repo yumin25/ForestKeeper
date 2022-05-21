@@ -21,21 +21,21 @@ import java.time.LocalDateTime;
 public class ChatMessage extends BaseEntity implements Serializable {
 
     // 인덱스
-    @Column(name = "chat_message_index")
+    @Column(name = "chat_index")
     private long index;
 
     // 내용
-    @Column(name = "chat_message_content")
+    @Column(name = "content")
     private String content;
 
     // 시간
-    @Column(name = "chat_message_send_time")
+    @Column(name = "created_at")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime sendTime;
+    private LocalDateTime createdAt;
 
     // 삭제 여부
-    @Column(name = "chat_message_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
 
     // 채팅방

@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment extends BaseEntity {
 
-    @Column(name = "comment_description")
+    @Column(name = "description")
     @Lob
     private String description;
 
-    @Column(name = "comment_create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column(name = "comment_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)

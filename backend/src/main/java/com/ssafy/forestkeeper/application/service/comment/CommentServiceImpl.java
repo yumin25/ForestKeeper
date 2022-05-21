@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.builder()
                 .description(commentRegisterRequestDTO.getDescription())
-                .createTime(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .community(communityRepository.findById(commentRegisterRequestDTO.getCommunityId())
@@ -54,14 +54,14 @@ public class CommentServiceImpl implements CommentService {
 
         List<CommentGetListResponseDTO> commentGetListResponseDTOList = new ArrayList<>();
 
-        commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false).orElse(null)
+        commentRepository.findByCommunityAndDeleteOrderByCreatedAt(community, false).orElse(null)
                 .forEach(comment ->
                         commentGetListResponseDTOList.add(
                                 CommentGetListResponseDTO.builder()
                                         .commentId(comment.getId())
                                         .nickname(comment.getUser().getNickname())
                                         .description(comment.getDescription())
-                                        .createTime(comment.getCreateTime())
+                                        .createdAt(comment.getCreatedAt())
                                         .build()
                         )
                 );

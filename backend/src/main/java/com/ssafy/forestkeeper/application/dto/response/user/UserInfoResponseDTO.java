@@ -22,10 +22,10 @@ public class UserInfoResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "이름")
     private String name;
 
-    @ApiModelProperty(name = "프로필 사진 경로")
+    @ApiModelProperty(name = "프로필 사진 주소")
     private String imagePath;
 
-    @ApiModelProperty(name = "썸네일 사진 경로")
+    @ApiModelProperty(name = "프로필 썸네일 주소")
     private String thumbnailPath;
 
     public static UserInfoResponseDTO of(String message, Integer statusCode, UserInfoResponseDTO userInfoResponseDTO) {

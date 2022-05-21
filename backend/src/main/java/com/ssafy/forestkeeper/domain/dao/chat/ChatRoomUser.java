@@ -17,16 +17,16 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class ChatRoomUser extends BaseEntity {
 
-    @Column(name = "chat_room_user_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void changeDelete() {
         this.delete = true;

@@ -44,7 +44,7 @@ public class MatchingServiceImpl implements MatchingService {
         Matching matching = Matching.builder()
                 .title(matchingRegisterRequestDTO.getTitle())
                 .content(matchingRegisterRequestDTO.getContent())
-                .createTime(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .ploggingDate(LocalDate.parse(matchingRegisterRequestDTO.getPloggingDate()))
                 .total(matchingRegisterRequestDTO.getTotal())
                 .user(userRepository.findByEmailAndDelete(
@@ -145,7 +145,7 @@ public class MatchingServiceImpl implements MatchingService {
                 .title(matching.getTitle())
                 .content(matching.getContent())
                 .views(matching.getViews())
-                .createTime(matching.getCreateTime())
+                .createdAt(matching.getCreatedAt())
                 .ploggingDate(matching.getPloggingDate())
                 .total(matching.getTotal())
                 .participants(matchingUserService.getParticipants(matchingId))
@@ -162,7 +162,7 @@ public class MatchingServiceImpl implements MatchingService {
 
         page = Math.max(page, 1);
 
-        List<Matching> matchingList = matchingRepository.findByPloggingDateGreaterThanEqualAndDeleteOrderByCreateTimeDesc(LocalDate.now(), false,
+        List<Matching> matchingList = matchingRepository.findByPloggingDateGreaterThanEqualAndDeleteOrderByCreatedAtDesc(LocalDate.now(), false,
                         PageRequest.of(page - 1, 7))
                 .orElse(null);
 
@@ -175,7 +175,7 @@ public class MatchingServiceImpl implements MatchingService {
                                         .id(matching.getId())
                                         .nickname(matching.getUser().getNickname())
                                         .title(matching.getTitle())
-                                        .createTime(matching.getCreateTime())
+                                        .createdAt(matching.getCreatedAt())
                                         .ploggingDate(matching.getPloggingDate())
                                         .total(matching.getTotal())
                                         .participants(matchingUserService.getParticipants(matching.getId()))
@@ -216,7 +216,7 @@ public class MatchingServiceImpl implements MatchingService {
                                 .id(matching.getId())
                                 .nickname(matching.getUser().getNickname())
                                 .title(matching.getTitle())
-                                .createTime(matching.getCreateTime())
+                                .createdAt(matching.getCreatedAt())
                                 .ploggingDate(matching.getPloggingDate())
                                 .total(matching.getTotal())
                                 .participants(matchingUserService.getParticipants(matching.getId()))

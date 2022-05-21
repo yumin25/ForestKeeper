@@ -105,7 +105,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                         .userId(chatMessage.getUser().getId())
                         .nickname(chatMessage.getUser().getNickname())
                         .content(chatMessage.getContent())
-                        .sendTime(chatMessage.getSendTime())
+                        .createdAt(chatMessage.getCreatedAt())
                         .delete(chatMessage.isDelete())
                         .build()
                 )
@@ -132,7 +132,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                         .user(userRepository.findByNicknameAndDelete(value.getNickname(), false)
                                 .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                         .content(value.getContent())
-                        .sendTime(value.getSendTime())
+                        .createdAt(value.getCreatedAt())
                         .build();
 
                 redisChatMessageTemplate.opsForList().rightPush(key, chatMessage);
@@ -189,7 +189,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .userId(chatMessage.getUser().getId())
                 .nickname(chatMessage.getUser().getNickname())
                 .content(chatMessage.getContent())
-                .sendTime(chatMessage.getSendTime())
+                .createdAt(chatMessage.getCreatedAt())
                 .delete(chatMessage.isDelete())
                 .build();
 

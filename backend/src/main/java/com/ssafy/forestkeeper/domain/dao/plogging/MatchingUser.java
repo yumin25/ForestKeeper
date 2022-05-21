@@ -14,16 +14,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class MatchingUser extends BaseEntity {
 
-    @Column(name = "matching_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "matching_id")
     private Matching matching;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void changeDeleteTrue() {
         this.delete = true;

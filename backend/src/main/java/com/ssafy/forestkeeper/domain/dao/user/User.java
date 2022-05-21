@@ -18,19 +18,19 @@ public class User extends BaseEntity {
     @Column(name = "user_code")
     private UserCode userCode;
 
-    @Column(name = "user_name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "user_nickname")
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "user_email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "user_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
 
     // 닉네임 변경

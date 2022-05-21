@@ -19,18 +19,21 @@ import java.util.List;
 @AllArgsConstructor
 public class Matching extends BaseEntity {
 
-    @Column(name = "match_title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "match_content")
+    @Column(name = "content")
     @Lob
     private String content;
 
-    @Column(name = "match_create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Column(name = "plogging_date")
     private LocalDate ploggingDate;
+
+    @Column(name = "total")
+    private int total;
 
     @Column(name = "views")
     private long views;
@@ -38,15 +41,12 @@ public class Matching extends BaseEntity {
     @Column(name = "is_closed")
     private boolean close;
 
-    @Column(name = "total")
-    private int total;
+    @Column(name = "is_deleted")
+    private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(name = "matching_is_deleted")
-    private boolean delete;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_code", referencedColumnName = "mountain_code")
@@ -68,8 +68,7 @@ public class Matching extends BaseEntity {
         this.delete = true;
     }
 
-    public void changeMatching(String title, String content, LocalDate ploggingDate, int total,
-                               Mountain mountain) {
+    public void changeMatching(String title, String content, LocalDate ploggingDate, int total, Mountain mountain) {
         this.title = title;
         this.content = content;
         this.ploggingDate = ploggingDate;

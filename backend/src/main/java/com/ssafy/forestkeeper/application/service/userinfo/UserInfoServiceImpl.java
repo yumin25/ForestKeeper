@@ -44,7 +44,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public PloggingGetListWrapperResponseDTO getPloggingList(int page) {
 
-        List<Plogging> ploggingList = ploggingRepository.findByUserOrderByStartTimeDesc(
+        List<Plogging> ploggingList = ploggingRepository.findByUserOrderByStartedAtDesc(
                         userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                                 .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")), PageRequest.of(page - 1, 10))
                 .orElseThrow(() -> new PloggingNotFoundException("글 정보가 존재하지 않습니다."));
@@ -68,7 +68,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
             ploggingListResponseDTOGetList.add(
                     PloggingGetListResponseDTO.builder()
-                            .date(plogging.getStartTime().toLocalDate().toString())
+                            .date(plogging.getStartedAt().toLocalDate().toString())
                             .ploggingId(plogging.getId())
                             .distance(plogging.getDistance())
                             .time(plogging.getDurationTime())
@@ -117,7 +117,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         Mountain mountain = mountainRepository.findByCode(mountainCode)
                 .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다."));
 
-        List<Plogging> ploggingList = ploggingRepository.findByUserAndMountainOrderByStartTimeDesc(
+        List<Plogging> ploggingList = ploggingRepository.findByUserAndMountainOrderByStartedAtDesc(
                         userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                                 .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")), mountain)
                 .orElseThrow(() -> new PloggingNotFoundException("플로깅 정보가 존재하지 않습니다."));

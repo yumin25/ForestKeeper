@@ -43,7 +43,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .communityCode(communityRegisterRequestDTO.getCommunityCode())
                 .title(communityRegisterRequestDTO.getTitle())
                 .description(communityRegisterRequestDTO.getDescription())
-                .createTime(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
                 .mountain(mountainRepository.findById(communityRegisterRequestDTO.getMountainId())
@@ -57,7 +57,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityGetListWrapperResponseDTO getCommunityList(String mountainId, CommunityCode communityCode, int page) {
 
-        List<Community> communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteOrderByCreateTimeDesc(mountainId, communityCode, false, PageRequest.of(page - 1, 7))
+        List<Community> communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteOrderByCreatedAtDesc(mountainId, communityCode, false, PageRequest.of(page - 1, 7))
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
         return convertCommunityListToDTO(communityList);
@@ -71,7 +71,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         switch (type) {
             case "td":
-                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(
+                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreatedAtDesc(
                                 mountainRepository.findById(mountainId)
                                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")),
                                 communityCode, false, keyword, keyword, PageRequest.of(page - 1, 7)
@@ -80,21 +80,21 @@ public class CommunityServiceImpl implements CommunityService {
 
                 break;
             case "t":
-                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreatedAtDesc(
                                 mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "d":
-                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreatedAtDesc(
                                 mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
                 break;
             case "n":
-                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreatedAtDesc(
                                 mountainId, communityCode, false,
                                 userRepository.findByNicknameAndDelete(keyword, false)
                                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")),
@@ -124,7 +124,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .title(community.getTitle())
                 .description(community.getDescription())
                 .views(community.getViews())
-                .createTime(community.getCreateTime())
+                .createdAt(community.getCreatedAt())
                 .build();
 
     }
@@ -151,7 +151,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         communityRepository.save(community);
 
-        List<Comment> commentList = commentRepository.findByCommunityAndDeleteOrderByCreateTime(community, false)
+        List<Comment> commentList = commentRepository.findByCommunityAndDeleteOrderByCreatedAt(community, false)
                 .orElse(null);
 
         commentList.forEach(comment -> {
@@ -172,7 +172,7 @@ public class CommunityServiceImpl implements CommunityService {
                                 .communityId(community.getId())
                                 .nickname(community.getUser().getNickname())
                                 .title(community.getTitle())
-                                .createTime(community.getCreateTime())
+                                .createdAt(community.getCreatedAt())
                                 .comments(commentRepository.countByCommunityAndDelete(community, false))
                                 .build()
                 )

@@ -24,7 +24,7 @@ public class CommunityGetListResponseDTO {
     private String title;
 
     @ApiModelProperty(name = "작성 시간")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @ApiModelProperty(name = "댓글 수")
     private long comments;

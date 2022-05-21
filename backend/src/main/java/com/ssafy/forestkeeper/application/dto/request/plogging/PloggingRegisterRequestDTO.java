@@ -15,11 +15,11 @@ public class PloggingRegisterRequestDTO {
 
     @ApiModelProperty(name = "플로깅 시작 시간")
     @NotBlank
-    private String startTime;
+    private String startedAt;
 
     @ApiModelProperty(name = "플로깅 종료 시간")
     @NotBlank
-    private String endTime;
+    private String endedAt;
 
     @ApiModelProperty(name = "플로깅 거리")
     @NotBlank

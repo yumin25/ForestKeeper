@@ -17,15 +17,15 @@ public interface CommunityRepository extends JpaRepository<Community, String> {
 
     Optional<Community> findByIdAndDelete(String communityId, boolean delete);
 
-    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteOrderByCreateTimeDesc(String mountainId, CommunityCode communityCode, boolean delete, Pageable pageable);
+    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteOrderByCreatedAtDesc(String mountainId, CommunityCode communityCode, boolean delete, Pageable pageable);
 
-    @Query("SELECT c FROM Community c WHERE c.mountain = :mountain AND c.communityCode = :communityCode AND c.delete = :delete AND (c.title LIKE %:title% OR c.description LIKE %:description%)")
-    Optional<List<Community>> findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreateTimeDesc(Mountain mountain, CommunityCode communityCode, boolean delete, String title, String description, Pageable pageable);
+    @Query("SELECT c FROM Community c WHERE c.mountain = :mountain AND c.communityCode = :communityCode AND c.delete = :delete AND (c.title LIKE %:title% OR c.description LIKE %:description%) ORDER BY c.createdAt DESC")
+    Optional<List<Community>> findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreatedAtDesc(Mountain mountain, CommunityCode communityCode, boolean delete, String title, String description, Pageable pageable);
 
-    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreateTimeDesc(String mountainId, CommunityCode communityCode, boolean delete, String title, Pageable pageable);
+    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndTitleContainingOrderByCreatedAtDesc(String mountainId, CommunityCode communityCode, boolean delete, String title, Pageable pageable);
 
-    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreateTimeDesc(String mountainId, CommunityCode communityCode, boolean delete, String description, Pageable pageable);
+    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreatedAtDesc(String mountainId, CommunityCode communityCode, boolean delete, String description, Pageable pageable);
 
-    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreateTimeDesc(String mountainId, CommunityCode communityCode, boolean delete, User user, Pageable pageable);
+    Optional<List<Community>> findByMountainIdAndCommunityCodeAndDeleteAndUserOrderByCreatedAtDesc(String mountainId, CommunityCode communityCode, boolean delete, User user, Pageable pageable);
 
 }

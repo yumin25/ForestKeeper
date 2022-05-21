@@ -24,7 +24,7 @@ public class ChatMessageResponseDTO {
     private String content;
 
     @ApiModelProperty(name = "메시지 보낸 시간")
-    private LocalDateTime sendTime;
+    private LocalDateTime createdAt;
 
     @ApiModelProperty(name = "메시지 삭제 여부")
     private boolean delete;

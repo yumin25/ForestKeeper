@@ -60,8 +60,8 @@ public class PloggingServiceImpl implements PloggingService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         Duration duration = Duration.between(
-                LocalDateTime.parse(ploggingRegisterRequestDTO.getStartTime(), formatter),
-                LocalDateTime.parse(ploggingRegisterRequestDTO.getEndTime(), formatter)
+                LocalDateTime.parse(ploggingRegisterRequestDTO.getStartedAt(), formatter),
+                LocalDateTime.parse(ploggingRegisterRequestDTO.getEndedAt(), formatter)
         );
 
         MountainVisit mountainVisit = mountainVisitRepository.findByMountainCode(mountain.getCode())
@@ -77,8 +77,8 @@ public class PloggingServiceImpl implements PloggingService {
 
         Plogging plogging = Plogging.builder()
                 .distance(ploggingRegisterRequestDTO.getDistance())
-                .startTime(LocalDateTime.parse(ploggingRegisterRequestDTO.getStartTime(), formatter))
-                .endTime(LocalDateTime.parse(ploggingRegisterRequestDTO.getEndTime(), formatter))
+                .startedAt(LocalDateTime.parse(ploggingRegisterRequestDTO.getStartedAt(), formatter))
+                .endedAt(LocalDateTime.parse(ploggingRegisterRequestDTO.getEndedAt(), formatter))
                 .exp(0L)
                 .durationTime(getDuration(duration))
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
@@ -158,7 +158,7 @@ public class PloggingServiceImpl implements PloggingService {
         }
 
         return PloggingDetailResponseDTO.builder()
-                .date(plogging.getStartTime().toLocalDate().toString())
+                .date(plogging.getStartedAt().toLocalDate().toString())
                 .mountainName(plogging.getMountain().getName())
                 .distance(plogging.getDistance())
                 .time(plogging.getDurationTime())
@@ -229,7 +229,7 @@ public class PloggingServiceImpl implements PloggingService {
 
         int visitor = 0;
 
-        List<Plogging> visitList = ploggingRepository.findByUserAndMountainOrderByStartTimeDesc(user, mountain).orElse(new ArrayList<>());
+        List<Plogging> visitList = ploggingRepository.findByUserAndMountainOrderByStartedAtDesc(user, mountain).orElse(new ArrayList<>());
 
         if (ploggingList == null) {
             return MountainPloggingInfoResponseDTO.builder()

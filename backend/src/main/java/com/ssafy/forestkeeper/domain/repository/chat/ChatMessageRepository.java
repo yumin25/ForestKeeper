@@ -13,6 +13,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, String
 
     Optional<List<ChatMessage>> findByChatRoom(ChatRoom chatRoom);
 
-    Optional<ChatMessage> findTopByChatRoomOrderBySendTimeDesc(ChatRoom chatRoom);
+    Optional<ChatMessage> findTopByChatRoomOrderByCreatedAtDesc(ChatRoom chatRoom);
 
 }

@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface PloggingRepository extends JpaRepository<Plogging, String> {
 
-    Optional<List<Plogging>> findByUserOrderByStartTimeDesc(User user, Pageable pageable);
+    Optional<List<Plogging>> findByUserOrderByStartedAtDesc(User user, Pageable pageable);
 
     Optional<List<Plogging>> findByUser(User user);
 
-    Optional<List<Plogging>> findByUserAndMountainOrderByStartTimeDesc(User user, Mountain mountain);
+    Optional<List<Plogging>> findByUserAndMountainOrderByStartedAtDesc(User user, Mountain mountain);
 
     Optional<List<Plogging>> findByMountain(Mountain mountain);
 

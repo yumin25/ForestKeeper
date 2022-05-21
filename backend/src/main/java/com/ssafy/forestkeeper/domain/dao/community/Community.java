@@ -20,20 +20,20 @@ public class Community extends BaseEntity {
     @Column(name = "community_code")
     private CommunityCode communityCode;
 
-    @Column(name = "community_title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "community_description")
+    @Column(name = "description")
     @Lob
     private String description;
 
-    @Column(name = "community_create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column(name = "community_views")
+    @Column(name = "views")
     private long views;
 
-    @Column(name = "community_is_deleted")
+    @Column(name = "is_deleted")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)

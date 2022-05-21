@@ -25,7 +25,7 @@ public class CommunityResponseDTO extends BaseResponseDTO {
     private String description;
 
     @ApiModelProperty(name = "작성 시간")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @ApiModelProperty(name = "조회수")
     private long views;

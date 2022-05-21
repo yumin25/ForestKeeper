@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
 
-    Optional<List<Comment>> findByCommunityAndDeleteOrderByCreateTime(Community community, boolean delete);
+    Optional<List<Comment>> findByCommunityAndDeleteOrderByCreatedAt(Community community, boolean delete);
 
     long countByCommunityAndDelete(Community community, boolean delete);
 

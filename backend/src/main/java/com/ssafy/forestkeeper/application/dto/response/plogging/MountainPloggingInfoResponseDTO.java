@@ -13,13 +13,13 @@ import lombok.ToString;
 @ToString
 public class MountainPloggingInfoResponseDTO extends BaseResponseDTO {
 
-    @ApiModelProperty(name = "누적 방문자 수")
+    @ApiModelProperty(name = "누적 플로깅한 사람 수")
     private int visitor;
 
     @ApiModelProperty(name = "누적 거리")
     private long distance;
 
-    @ApiModelProperty(name = "누적 거리")
+    @ApiModelProperty(name = "누적 방문자 수")
     private int count;
 
     public static MountainPloggingInfoResponseDTO of(String message, Integer statusCode, MountainPloggingInfoResponseDTO mountainPloggingInfoResponseDTO) {

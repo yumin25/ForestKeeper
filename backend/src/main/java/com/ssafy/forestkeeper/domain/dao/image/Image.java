@@ -15,13 +15,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Image extends BaseEntity {
 
-    @Column(name = "image_original_file_name")
+    @Column(name = "original_file_name")
     private String originalFileName;
 
-    @Column(name = "image_saved_file_name")
+    @Column(name = "saved_file_name")
     private String savedFileName;
 
-    @Column(name = "image_is_resized")
+    @Column(name = "is_resized")
     private boolean resize;
 
     @ManyToOne(fetch = FetchType.LAZY)

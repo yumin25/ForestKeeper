@@ -18,7 +18,7 @@ public class MountainSearchResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "산 검색 리스트")
     private List<MountainSearchDTO> mountainSearchDTOList;
 
-    @ApiModelProperty(name = "전체 결과")
+    @ApiModelProperty(name = "검색된 산 개수")
     private int total;
 
     public static MountainSearchResponseDTO of(String message, Integer statusCode, MountainSearchResponseDTO mountainSearchResponseDTO) {

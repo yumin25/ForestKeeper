@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface TrashCanRepository extends JpaRepository<TrashCan, String> {
+
     Optional<List<TrashCan>> findByRegion(String region);
 
 }

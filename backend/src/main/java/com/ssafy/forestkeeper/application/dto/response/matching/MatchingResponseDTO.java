@@ -28,7 +28,7 @@ public class MatchingResponseDTO extends BaseResponseDTO {
     private String title;
 
     @ApiModelProperty(name = "작성 시간")
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     @ApiModelProperty(name = "플로깅 날짜")
     private LocalDate ploggingDate;

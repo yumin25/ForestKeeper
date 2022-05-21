@@ -24,17 +24,17 @@ DROP TABLE IF EXISTS `mountain`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mountain` (
   `id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `mountain_address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mountain_admin` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `admin` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `mountain_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mountain_description` text COLLATE utf8mb4_general_ci,
+  `description` text COLLATE utf8mb4_general_ci,
   `famous_description` text COLLATE utf8mb4_general_ci,
-  `mountain_height` double DEFAULT NULL,
+  `height` double DEFAULT NULL,
   `is_famous` smallint DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `mountain_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mountain_admin_tel` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `admin_tel` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
