@@ -7,7 +7,7 @@ import x from "../../../../res/img/x.png";
 function ArticleDetail({ userSlice }) {
   const [nickname, setNickname] = useState();
   const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
+  const [content, setContent] = useState();
   const [createdAt, setcreatedAt] = useState("2022-05-06T13:20:33.548201");
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState();
@@ -23,7 +23,7 @@ function ArticleDetail({ userSlice }) {
         console.log(res);
         setNickname(res.data.nickname);
         setTitle(res.data.title);
-        setDescription(res.data.description);
+        setContent(res.data.content);
         setcreatedAt(res.data.createdAt);
         setComments(res.data.comments);
         Send.get(
@@ -47,7 +47,7 @@ function ArticleDetail({ userSlice }) {
   function createComment() {
     const data = {
       communityId: communityId,
-      description: commentContent,
+      content: commentContent,
     };
     Send.post(`/comment`, JSON.stringify(data))
       .then((res) => {
@@ -126,7 +126,7 @@ function ArticleDetail({ userSlice }) {
             {title}
           </div>
           <div id="content" style={{ fontSize: "1.8vh" }}>
-            {description}
+            {content}
           </div>
         </div>
         <div id="comments">
@@ -203,7 +203,7 @@ function ArticleDetail({ userSlice }) {
                     )}
                   </div>
 
-                  <div style={{ fontSize: "1.7vh" }}>{comment.description}</div>
+                  <div style={{ fontSize: "1.7vh" }}>{comment.content}</div>
                   <div style={{ color: "#ACACAC", marginBottom: "1.5vh" }}>
                     {comment.createdAt.substr(0, 10) + " " + comment.createdAt.substr(11, 8)}
                   </div>

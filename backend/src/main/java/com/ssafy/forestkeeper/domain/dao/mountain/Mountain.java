@@ -36,7 +36,7 @@ public class Mountain extends BaseEntity implements Serializable {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "is_famous")
+    @Column(name = "famous_yn")
     private boolean famous;
 
     @Column(name = "famous_description", columnDefinition = "TEXT")

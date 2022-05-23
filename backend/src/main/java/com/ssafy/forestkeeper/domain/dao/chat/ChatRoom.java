@@ -19,7 +19,7 @@ public class ChatRoom extends BaseEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     public void changeDelete() {

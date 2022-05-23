@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
     public void registerComment(CommentRegisterRequestDTO commentRegisterRequestDTO) {
 
         Comment comment = Comment.builder()
-                .description(commentRegisterRequestDTO.getDescription())
+                .content(commentRegisterRequestDTO.getContent())
                 .createdAt(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
                                 CommentGetListResponseDTO.builder()
                                         .commentId(comment.getId())
                                         .nickname(comment.getUser().getNickname())
-                                        .description(comment.getDescription())
+                                        .content(comment.getContent())
                                         .createdAt(comment.getCreatedAt())
                                         .build()
                         )
@@ -78,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findByIdAndDelete(commentModifyRequestDTO.getCommentId(), false)
                 .orElseThrow(() -> new CommentNotFoundException("댓글 정보가 존재하지 않습니다."));
 
-        comment.changeComment(commentModifyRequestDTO.getDescription());
+        comment.changeComment(commentModifyRequestDTO.getContent());
 
         commentRepository.save(comment);
 

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class MatchingUser extends BaseEntity {
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)

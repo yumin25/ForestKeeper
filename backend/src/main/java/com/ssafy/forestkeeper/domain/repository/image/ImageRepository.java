@@ -13,6 +13,4 @@ public interface ImageRepository extends JpaRepository<Image, String> {
 
     Optional<Image> findByPlogging(Plogging plogging);
 
-    void deleteByUser(User user);
-
 }

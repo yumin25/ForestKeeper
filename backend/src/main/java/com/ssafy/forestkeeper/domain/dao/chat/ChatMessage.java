@@ -35,7 +35,7 @@ public class ChatMessage extends BaseEntity implements Serializable {
     private LocalDateTime createdAt;
 
     // 삭제 여부
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     // 채팅방
