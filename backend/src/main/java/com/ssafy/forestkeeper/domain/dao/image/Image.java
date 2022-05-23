@@ -21,7 +21,7 @@ public class Image extends BaseEntity {
     @Column(name = "saved_file_name")
     private String savedFileName;
 
-    @Column(name = "is_resized")
+    @Column(name = "resize_yn")
     private boolean resize;
 
     @ManyToOne(fetch = FetchType.LAZY)

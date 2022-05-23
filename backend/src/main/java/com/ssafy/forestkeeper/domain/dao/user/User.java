@@ -30,7 +30,7 @@ public class User extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     // 닉네임 변경

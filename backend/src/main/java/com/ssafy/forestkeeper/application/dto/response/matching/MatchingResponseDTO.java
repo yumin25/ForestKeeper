@@ -27,6 +27,9 @@ public class MatchingResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "제목")
     private String title;
 
+    @ApiModelProperty(name = "내용")
+    private String content;
+
     @ApiModelProperty(name = "작성 시간")
     private LocalDateTime createdAt;
 
@@ -45,10 +48,7 @@ public class MatchingResponseDTO extends BaseResponseDTO {
     @ApiModelProperty(name = "산 코드")
     private String mountainCode;
 
-    @ApiModelProperty(name = "매칭 글 내용")
-    private String content;
-
-    @ApiModelProperty(name = "조회수")
+    @ApiModelProperty(name = "조회 수")
     private long views;
 
     @ApiModelProperty(name = "참여 여부")

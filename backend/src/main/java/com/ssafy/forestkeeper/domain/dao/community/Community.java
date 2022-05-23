@@ -23,9 +23,9 @@ public class Community extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "content")
     @Lob
-    private String description;
+    private String content;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -33,7 +33,7 @@ public class Community extends BaseEntity {
     @Column(name = "views")
     private long views;
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,9 +45,9 @@ public class Community extends BaseEntity {
     private Mountain mountain;
 
     // 글 수정
-    public void changeCommunity(String title, String description) {
+    public void changeCommunity(String title, String content) {
         this.title = title;
-        this.description = description;
+        this.content = content;
     }
 
     // 조회수 증가

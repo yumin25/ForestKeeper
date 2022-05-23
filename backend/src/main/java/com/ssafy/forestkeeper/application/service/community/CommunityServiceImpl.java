@@ -42,7 +42,7 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = Community.builder()
                 .communityCode(communityRegisterRequestDTO.getCommunityCode())
                 .title(communityRegisterRequestDTO.getTitle())
-                .description(communityRegisterRequestDTO.getDescription())
+                .content(communityRegisterRequestDTO.getContent())
                 .createdAt(LocalDateTime.now())
                 .user(userRepository.findByEmailAndDelete(SecurityContextHolder.getContext().getAuthentication().getName(), false)
                         .orElseThrow(() -> new UserNotFoundException("회원 정보가 존재하지 않습니다.")))
@@ -71,7 +71,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         switch (type) {
             case "td":
-                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrDescriptionContainingOrderByCreatedAtDesc(
+                communityList = communityRepository.findByMountainAndCommunityCodeAndDeleteAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
                                 mountainRepository.findById(mountainId)
                                         .orElseThrow(() -> new MountainNotFoundException("산 정보가 존재하지 않습니다.")),
                                 communityCode, false, keyword, keyword, PageRequest.of(page - 1, 7)
@@ -87,7 +87,7 @@ public class CommunityServiceImpl implements CommunityService {
 
                 break;
             case "d":
-                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndDescriptionContainingOrderByCreatedAtDesc(
+                communityList = communityRepository.findByMountainIdAndCommunityCodeAndDeleteAndContentContainingOrderByCreatedAtDesc(
                                 mountainId, communityCode, false, keyword, PageRequest.of(page - 1, 7)
                         )
                         .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
@@ -122,7 +122,7 @@ public class CommunityServiceImpl implements CommunityService {
         return CommunityResponseDTO.builder()
                 .nickname(community.getUser().getNickname())
                 .title(community.getTitle())
-                .description(community.getDescription())
+                .content(community.getContent())
                 .views(community.getViews())
                 .createdAt(community.getCreatedAt())
                 .build();
@@ -135,7 +135,7 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = communityRepository.findByIdAndDelete(communityModifyRequestDTO.getCommunityId(), false)
                 .orElseThrow(() -> new CommunityNotFoundException("글 정보가 존재하지 않습니다."));
 
-        community.changeCommunity(communityModifyRequestDTO.getTitle(), communityModifyRequestDTO.getDescription());
+        community.changeCommunity(communityModifyRequestDTO.getTitle(), communityModifyRequestDTO.getContent());
 
         communityRepository.save(community);
 

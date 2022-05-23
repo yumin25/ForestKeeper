@@ -38,10 +38,10 @@ public class Matching extends BaseEntity {
     @Column(name = "views")
     private long views;
 
-    @Column(name = "is_closed")
+    @Column(name = "close_yn")
     private boolean close;
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)

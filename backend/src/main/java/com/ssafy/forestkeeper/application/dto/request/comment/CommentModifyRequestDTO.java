@@ -18,6 +18,6 @@ public class CommentModifyRequestDTO {
 
     @ApiModelProperty(name = "내용")
     @NotBlank
-    private String description;
+    private String content;
 
 }

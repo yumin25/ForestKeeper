@@ -21,7 +21,7 @@ public class CommentGetListResponseDTO {
     private String nickname;
 
     @ApiModelProperty(name = "내용")
-    private String description;
+    private String content;
 
     @ApiModelProperty(name = "작성 시간")
     private LocalDateTime createdAt;

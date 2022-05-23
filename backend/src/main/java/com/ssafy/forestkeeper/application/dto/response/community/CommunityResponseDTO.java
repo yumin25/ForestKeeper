@@ -22,12 +22,12 @@ public class CommunityResponseDTO extends BaseResponseDTO {
     private String title;
 
     @ApiModelProperty(name = "내용")
-    private String description;
+    private String content;
 
     @ApiModelProperty(name = "작성 시간")
     private LocalDateTime createdAt;
 
-    @ApiModelProperty(name = "조회수")
+    @ApiModelProperty(name = "조회 수")
     private long views;
 
 //    @ApiModelProperty(name = "댓글 목록")

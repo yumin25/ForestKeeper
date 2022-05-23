@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment extends BaseEntity {
 
-    @Column(name = "description")
+    @Column(name = "content")
     @Lob
-    private String description;
+    private String content;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "delete_yn")
     private boolean delete;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,8 +34,8 @@ public class Comment extends BaseEntity {
     private Community community;
 
     // 댓글 수정
-    public void changeComment(String description) {
-        this.description = description;
+    public void changeComment(String content) {
+        this.content = content;
     }
 
     // 댓글 삭제

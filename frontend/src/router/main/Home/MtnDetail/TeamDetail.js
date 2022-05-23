@@ -21,7 +21,7 @@ function TeamDetail({ userSlice }) {
     mountainCode: "",
     content: "",
     views: 0,
-    closed: false,
+    close: false,
   });
 
   const matchingId = window.localStorage.getItem("matchingId");
@@ -223,7 +223,7 @@ function TeamDetail({ userSlice }) {
 
         {detail.close == true ? (
           <>
-            <button style={clickdeBtnStyle}>마감완료</button>
+            <button style={clickdeBtnStyle}>마감 완료</button>
             <div style={{ height: "1vh" }}></div>
             <button style={clickdeBtnStyle} onClick={() => deleteMatching()}>
               삭제하기

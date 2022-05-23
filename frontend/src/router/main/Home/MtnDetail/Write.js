@@ -63,7 +63,7 @@ function Write() {
       mountainId: mountainId,
       communityCode: communityCode,
       title: title,
-      description: content,
+      content: content,
     };
 
     Send.post(`/community`, JSON.stringify(data))
