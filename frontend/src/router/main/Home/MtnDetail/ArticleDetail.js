@@ -8,7 +8,7 @@ function ArticleDetail({ userSlice }) {
   const [nickname, setNickname] = useState();
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
-  const [createTime, setCreateTime] = useState("2022-05-06T13:20:33.548201");
+  const [createdAt, setcreatedAt] = useState("2022-05-06T13:20:33.548201");
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState();
   const [commentId, setCommentId] = useState();
@@ -24,7 +24,7 @@ function ArticleDetail({ userSlice }) {
         setNickname(res.data.nickname);
         setTitle(res.data.title);
         setDescription(res.data.description);
-        setCreateTime(res.data.createTime);
+        setcreatedAt(res.data.createdAt);
         setComments(res.data.comments);
         Send.get(
           `https://k6a306.p.ssafy.io/api/comment/community/${communityId}`,
@@ -103,7 +103,7 @@ function ArticleDetail({ userSlice }) {
           <div style={{ fontWeight: "bolder" }}>{nickname}</div>
           <div style={{ color: "#ACACAC", display: "flex" }}>
             <div>
-              {createTime.substr(0, 10) + " " + createTime.substr(11, 8)}
+              {createdAt.substr(0, 10) + " " + createdAt.substr(11, 8)}
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ function ArticleDetail({ userSlice }) {
 
                   <div style={{ fontSize: "1.7vh" }}>{comment.description}</div>
                   <div style={{ color: "#ACACAC", marginBottom: "1.5vh" }}>
-                    {comment.createTime.substr(0, 10) + " " + comment.createTime.substr(11, 8)}
+                    {comment.createdAt.substr(0, 10) + " " + comment.createdAt.substr(11, 8)}
                   </div>
                 </div>
               ))}
