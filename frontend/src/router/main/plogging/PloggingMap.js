@@ -146,8 +146,8 @@ function PloggingMap({ getLocation, myLocation, tracking, stopTracking, tracking
     const formData = new FormData();
     const data = {
       mountainCode: mtCode,
-      startTime: watch(),
-      endTime: timeRecord(),
+      startedAt: watch(),
+      endedAt: timeRecord(),
       distance: allDistance.reduce(reducer).toFixed(2),
       coords: trackingPath ? trackingPath : [],
     };

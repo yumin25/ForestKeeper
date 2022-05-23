@@ -13,7 +13,7 @@ function TeamDetail({ userSlice }) {
     id: "",
     nickname: "",
     title: "",
-    createTime: "",
+    createdAt: "",
     ploggingDate: "",
     total: 0,
     participants: [],
@@ -160,9 +160,9 @@ function TeamDetail({ userSlice }) {
               marginBottom: "3vh",
             }}
           >
-            {detail.createTime.substr(0, 10) +
+            {detail.createdAt.substr(0, 10) +
               " " +
-              detail.createTime.substr(11, 8)}
+              detail.createdAt.substr(11, 8)}
           </div>
         </div>
 
