@@ -167,11 +167,11 @@
 
 |                                     메인 화면 (PC)                                      |
 | :-------------------------------------------------------------------------------------: |
-| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width="230" height="400"> |
+| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width=333> |
 
 |                                   메인 화면 (Mobile)                                    |
 | :-------------------------------------------------------------------------------------: |
-| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width="230" height="400"> |
+| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width=333> |
 
 <br/>
 
@@ -181,11 +181,11 @@
 
 |                         회원가입                         |
 | :------------------------------------------------------: |
-| <img src="./readme_assets/sign_up.gif" alt="회원가입" /> |
+| <img src="./readme_assets/sign_up.gif" alt="회원가입" width=333 /> |
 
 |                         로그인                         |
 | :----------------------------------------------------: |
-| <img src="./readme_assets/sign_in.gif" alt="로그인" /> |
+| <img src="./readme_assets/sign_in.gif" alt="로그인" width=333 /> |
 
 <br/>
 
@@ -197,16 +197,16 @@
   About 산(커뮤니티)은 등산 후기 와 Q&A 탭으로 구성되어 있다.
 
 |                             산 상세 정보                             |
-| :------------------------------------------------------------------: |
-| <img src="./readme_assets/mountain_detail.gif" alt="산 상세 정보" /> |
+| :----------------------------------------------------------------: |
+| <img src="./readme_assets/mountain_detail.gif" alt="산 상세 정보" width=333 /> |
 
 |                                 커뮤니티 글 등록                                  |
-| :-------------------------------------------------------------------------------: |
-| <img src="./readme_assets/mountain_community_write.gif" alt="커뮤니티 글 등록" /> |
+| :---------------------------------------------------------------------------: |
+| <img src="./readme_assets/mountain_community_write.gif" alt="커뮤니티 글 등록" width=333 /> |
 
 |                                커뮤니티 댓글 등록                                 |
-| :-------------------------------------------------------------------------------: |
-| <img src="./readme_assets/mountain_comment_write.gif" alt="커뮤니티 댓글 등록" /> |
+| :---------------------------------------------------------------------------: |
+| <img src="./readme_assets/mountain_comment_write.gif" alt="커뮤니티 댓글 등록" width=333 /> |
 
 <br/>
 
@@ -217,11 +217,11 @@
 
 |                            플로깅 진행 + 결과 확인                             |
 | :-----------------------------------------------------------------------: |
-| <img src="./readme_assets/plogging_start.gif" alt="플로깅 진행 + 결과 확인" /> |
+| <img src="./readme_assets/plogging_start.gif" alt="플로깅 진행 + 결과 확인" width=333 /> |
 
 |                                플로깅 인증 + 쓰레기 종류 분석 + 경험치 적립                                 |
 | :------------------------------------------------------------------------------------------------: |
-| <img src="./readme_assets/plogging_certification.gif" alt="플로깅 인증 + 쓰레기 종류 분석 + 경험치 적립" /> |
+| <img src="./readme_assets/plogging_certification.gif" alt="플로깅 인증 + 쓰레기 종류 분석 + 경험치 적립" width=333 /> |
 
 <br/>
 
@@ -232,11 +232,11 @@
 
 |                                 플로깅 팀원 모집 글 등록                                 |
 | :---------------------------------------------------------------------------------: |
-| <img src="./readme_assets/plogging_matching_write.gif" alt="플로깅 팀원 모집 글 등록" /> |
+| <img src="./readme_assets/plogging_matching_write.gif" alt="플로깅 팀원 모집 글 등록" width=333 /> |
 
 |                                 플로깅 팀원 모집 글 확인 및 신청                                 |
 | :---------------------------------------------------------------------------------------: |
-| <img src="./readme_assets/plogging_matching_apply.gif" alt="플로깅 팀원 모집 글 확인 및 신청" /> |
+| <img src="./readme_assets/plogging_matching_apply.gif" alt="플로깅 팀원 모집 글 확인 및 신청" width=333 /> |
 
 <br/><br/>
 
