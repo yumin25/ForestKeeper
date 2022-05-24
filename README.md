@@ -92,9 +92,9 @@
 <br>
 
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
+<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 <img src="https://img.shields.io/badge/Node.js-339939?style=for-the-badge&logo=Node.js&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
-<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white" style="height : auto; margin-left : 10px; margin-right : 10px;"/>
 
 <br>
 
@@ -163,15 +163,15 @@
 
 ### 메인 화면
 
-- 서비스 소개를 둘러보고 apk 를 다운받는다.
+- 서비스 및 주요 기능을 소개를 둘러보고 apk 를 다운받는다.
 
-|                              메인 화면 (PC)                              |
-| :----------------------------------------------------------------------: |
-| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width=333> |
+|                                    메인 화면 (PC)                                     |
+| :-----------------------------------------------------------------------------------: |
+| <img src="./readme_assets/forestkeeper_home_pc.gif" alt="메인 화면 (PC)" width=333 /> |
 
-|                            메인 화면 (Mobile)                            |
-| :----------------------------------------------------------------------: |
-| <img src="/uploads/a0054cac50f85dcb06498aef0672780e/main.PNG" width=333> |
+|                                      메인 화면 (MOBILE)                                       |
+| :-------------------------------------------------------------------------------------------: |
+| <img src="./readme_assets/forestkeeper_home_mobile.gif" alt="메인 화면 (MOBILE)" width=333 /> |
 
 <br/>
 
@@ -192,7 +192,8 @@
 ### 산
 
 - 산별 정보, 명예의 전당, About 산(커뮤니티)을 확인한다.  
-  산별 Home 은 해당 산의 누적 방문자 수와 거리를 확인할 수 있고 산의 위치가 지도에 표시되며 팀원 매칭 페이지로 이동할 수 있는 버튼을 통해 매칭 페이지로 이동할 수 있다.  
+  산별 Home 은 해당 산의 누적 방문자 수와 플로깅 한 누적 거리 및 산의 지도 상 위치를 확인할 수 있고,  
+  [ 함께 플로깅 할 팀원 구하기 ] 버튼을 눌러 팀원 매칭 페이지로 이동할 수 있다.  
   명예의 전당은 플로깅 횟수 / 경험치 기준으로 각각 확인할 수 있다.  
   About 산(커뮤니티)은 등산 후기 와 Q&A 탭으로 구성되어 있다.
 
