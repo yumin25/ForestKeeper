@@ -1,0 +1,184 @@
+## 목차
+
+1. [**Git**](#1)
+2. [**Jira**](#2)
+3. [**Coding**](#3)
+4. [**Versioning**](#4)
+
+<br /><br />
+
+<div id="1"></div>
+
+## ✨ Git
+
+### Branch 컨벤션
+
+- **master**
+
+  - 프로젝트 최종 결과를 관리하는 브랜치
+
+- **develop**
+
+  - 개발 완료한 기능(feature 브랜치)을 통합하는 브랜치
+
+- **feature/~~**
+
+  - 기능 단위로 개발을 진행하는 브랜치
+
+- **release-[version]**
+  - 배포하는 새로운 버전을 관리하는 브랜치
+
+<br />
+
+### Commit 컨벤션 ( 🖇️[https://udacity.github.io/git-styleguide/](https://udacity.github.io/git-styleguide/) 참고 )
+
+- **feat:** A new feature
+
+  - 새로운 기능
+
+- **fix:** A bug fix
+
+  - 버그 수정
+
+- **docs:** Changes to documentation
+
+  - 문서 내용
+
+- **style:** Formatting, missing semi colons, etc; no code change
+
+  - 문서 내용
+
+- **refactor:** Refactoring production code
+
+  - 코드 리팩토링
+
+- **test:** Adding tests, refactoring test; no production code change
+
+  - 문서 내용
+
+- **chore:** Updating build tasks, package manager configs, etc; no production code change
+
+  -
+
+> **Rules** <br />
+>
+> 1. feat: ~~~~~~~ 형태로 작성한다. <br />
+> 2. 끝에 마침표를 사용하지 않는다. <br />
+
+<br />
+
+<div id="2"></div>
+
+## ⭐ Jira
+
+- **Sprint**
+
+  - 업무 기간 단위
+
+  - Duration 1 Week (1주 단위로 진행)
+
+- **Epic**
+
+  - 업무의 큰 분류 (카테고리 느낌)
+
+  - 여러 Story들의 집합
+
+  - ex) 회원 관리 기능
+
+- **Story**
+
+  - 작은 업무를 구체적으로 명시
+
+  - Epic에 속하는 업무 단위
+
+  - 하나의 Sprint 안에서는 완료할 수 있도록 구성
+
+  - [FE], [BE], [INFRA], [공통] 라벨링
+
+  - ex) [FE] 로그인 페이지 구현 / [BE] 로그인 REST API 구축
+
+- **Sub Task**
+
+  - Story 하위 작업
+
+  - Story 단위가 클 경우, Story 진행에 있어 필요한 작업을 Sub Task 로 등록
+
+  - Sub Task 가 모두 완료되어야 Story 완료
+
+- **Assignee**
+
+  - 해당 업무의 담당자
+
+  - FE / BE 팀별 회의를 통해 해당 업무에 대한 담당자 배정
+
+- **Estimate**
+
+  - 해당 업무의 포인트
+
+  - 업무를 진행하는 데 걸리는 시간 (난이도)
+
+  - FE / BE 팀별 회의를 통해 해당 업무에 대한 점수 부여
+
+  - Sprint 1주 -> 인원당 최대 40 포인트
+
+- **Release**
+
+  - 프로젝트의 특정 시점 (Version)
+
+  - 각 Sprint별 버전 배포
+
+<br />
+
+<div id="3"></div>
+
+## 📜 Coding
+
+### **BE**
+
+- [Google Java Style Guide(구글 자바 컨벤션)](https://google.github.io/styleguide/javaguide.html)
+
+### **FE**
+
+- **파일명**
+
+  - PascalCase
+
+  - ex) App.js, Home.js
+
+- **변수 및 메서드**
+
+  - camelCase
+
+  - ex) onSubmit()
+
+- **Redux**
+
+  - **Action Type**
+
+    - SNAKE_CASE (대문자)
+
+    - ex) "ADD_TODO"
+
+<br />
+
+<div id="4"></div>
+
+## 🚀 Versioning
+
+💡 **Semantic Versioning** 소프트웨어 버전 변경 규칙 (SemVer)
+
+v1.0.0 **[Major]** . **[Minor]** . **[Patch]**
+
+**Major Version :** 기존 api 변경 및 삭제 / api 하위 호환이 되지 않는 변경 (Breaking changes) <br />
+
+**Minor Version :** 신규 기능(api) 추가 및 개선된 버전 <br />
+
+**Patch version :** 버그가 수정된 버전 <br />
+
+📜 **Semantic Versioning 규칙** 📜
+
+❗ Major Version이 올라가면 Minor Version, Patch Version은 0으로 변경한다.
+❗ Minor Version이 올라가면 Patch Version은 0으로 변경한다.
+❗ 각 Version은 자연수로 1씩 증가한다.
+❗ SemVer 사용하는 소프트웨어는 반드시 공개 API를 선언해야 한다.
+❗ API 코드 자체에 설명을 하거나, 공개 API 문서로 명시한다.
