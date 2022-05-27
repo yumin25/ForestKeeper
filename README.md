@@ -53,8 +53,8 @@
 
 <table>
     <tr>
-        <td height="140px" align="center"> <a href="https://github.com/gud_ejr">
-            <img src="https://avatars.githubusercontent.com/gud_ejr" width="140px" /> <br><br> 👑 염형덕 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/gudejr">
+            <img src="https://avatars.githubusercontent.com/gudejr" width="140px" /> <br><br> 👑 염형덕 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/rhddbsghks">
             <img src="https://avatars.githubusercontent.com/rhddbsghks" width="140px" /> <br><br> 🙂 공윤환 <br>(Back-End) </a> <br></td>
         <td height="140px" align="center"> <a href="https://github.com/sumini97">
@@ -67,8 +67,8 @@
             <img src="https://avatars.githubusercontent.com/sangjinCHOI" width="140px" /> <br><br> 😶 최상진 <br>(Front-End) </a> <br></td>
     </tr>
     <tr>
-        <td align="center">REST API<br/>DATABASE</td>
         <td align="center">REST API</td>
+        <td align="center">REST API<br/>DATA</td>
         <td align="center">UI/UX</td>
         <td align="center">REST API<br/>SECURITY<br/>ANDROID</td>
         <td align="center">REST API<br/>INFRA<br/>REDIS</td>
