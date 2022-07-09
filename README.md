@@ -126,7 +126,7 @@
 
 |                               시스템 아키텍처                               |
 | :-------------------------------------------------------------------------: |
-| ![architecture](/uploads/1357bf20f88e1a685f06c2c522bab993/architecture.jpg) |
+| ![architecture](https://user-images.githubusercontent.com/49578987/178098459-bfaf51c6-ab11-4927-846b-32d84b78ce1a.jpg) |
 
 <br/><br/>
 
